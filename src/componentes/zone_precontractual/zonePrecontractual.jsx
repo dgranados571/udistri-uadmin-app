@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Header from '../header/header';
+import Header from '../tvs/header/header';
 
 const ZonePrecontractual = ({ setRedirect, toast, setCargando }) => {
   

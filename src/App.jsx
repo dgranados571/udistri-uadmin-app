@@ -3,7 +3,7 @@ import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Login from './componentes/login/login';
-import { Cargando } from './componentes/loader/cargando';
+import { Cargando } from './componentes/tvs/loader/cargando';
 import ZoneRoot from './componentes/zone_root/zoneRoot';
 import ZoneJefeDependencia from './componentes/zone_jefe_dependencia/zoneJefeDependencia';
 import ZonePrecontractual from './componentes/zone_precontractual/zonePrecontractual';

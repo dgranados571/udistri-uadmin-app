@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Header from '../header/header'
-import UsuariosApp from '../zone_root/usuarios/usuariosApp';
+import Header from '../tvs/header/header'
+import UsuariosApp from '../tvs/usuarios/usuariosApp';
 
 const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
 

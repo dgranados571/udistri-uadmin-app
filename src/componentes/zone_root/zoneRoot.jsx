@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import Header from '../header/header'
+import Header from '../tvs/header/header'
 import './zoneRoot.css'
-import UsuariosApp from './usuarios/usuariosApp'
+import UsuariosApp from '../tvs/usuarios/usuariosApp'
 
 const ZoneRoot = ({ setRedirect, toast, setCargando }) => {
 
