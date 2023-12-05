@@ -1,0 +1,196 @@
+.div-container-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.div-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #5C5C5C;
+    flex-direction: column;
+}
+
+.div-login-elements {
+    background-color: white;
+    padding: 2rem;
+    width: 100%;
+    height: 100%;
+    clip-path: ellipse(90% 90% at 60% 8%);
+}
+
+.titulo-login {
+    text-align: center;
+    color: #5C5C5C;
+}
+
+.div-elements-children {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+}
+
+.div-inputs-login {
+    line-height: 40px;
+}
+
+.div-links-login {
+    display: flex;
+    justify-content: space-between;
+}
+
+.a-link-login {
+    color: #333333;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.a-link-login:hover {
+    color: orange;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.a-link-registra {
+    color: #333333;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    margin: 0 3rem;
+}
+
+.a-link-registra:hover {
+    color: orange;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    margin: 0 3rem;
+}
+
+.div-bottom-custom-login {
+    text-align: end;
+}
+
+.bottom-custom-login {
+    width: 200px;
+    background-color: orange;
+    color: white;
+    border: 1px solid orange;
+    border-radius: 20px;
+    padding: 5px 0px;
+    margin: 5px 0px;
+}
+
+.bottom-custom-login:hover {
+    width: 200px;
+    background-color: orange;
+    color: #333333;
+    border: 1px solid orange;
+    border-radius: 20px;
+    padding: 5px 0px;
+    margin: 5px 0px;
+}
+
+.p-info-login {
+    margin-bottom: 5px;
+    color: white;
+    font-size: 12px;
+}
+
+.div-container-registra {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-registra {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 55vw;
+    background: #5C5C5C;
+    flex-direction: column;
+    margin: 3rem 0px;
+}
+
+.div-registra-elements {
+    background-color: white;
+    padding: 2rem;
+    width: 100%;
+    height: 100%;
+    clip-path: ellipse(135% 87% at 55% 12%);
+}
+
+.div-bottom-custom-registra {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    text-align: end;
+}
+
+.p-label-form-login {
+    font-size: 18px;
+    color: #5C5C5C;
+    font-weight: 500;
+    margin-top: 1rem;
+}
+
+.div-telefono-regsitra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.p-indicatvo {
+    margin: 0 2rem;
+}
+
+.p-subtitulo-registra {
+    margin: 2rem 0rem 0 0;
+}
+
+.div-terminos-condiciones {
+    display: flex;
+    justify-content: initial;
+    align-items: center;
+    margin: 1rem 0px;
+}
+
+.p-terminos-condiciones {
+    margin: 0 10px;
+}
+
+.form-control-error {
+    border: 1px solid red;
+}
+
+@media (min-width: 760px) {
+    .div-login {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 70vw;
+        height: 80vh;
+        background: #5C5C5C;
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 1025px) {
+    .div-login {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40vw;
+        height: 80vh;
+        background: #5C5C5C;
+        flex-direction: column;
+    }
+
+}

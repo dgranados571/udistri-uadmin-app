@@ -1,0 +1,29 @@
+.div-cargando-active {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: auto;
+    display: block;
+    z-index: 1;
+    backdrop-filter: blur(5px);
+    background-color: rgba(207, 226, 255, 0.7);
+}
+
+.div-gift-element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.div-size-gift {
+    height: 5rem;
+    width: 5rem;
+}
+
+.gif-element {
+    max-width: 100%;
+}
