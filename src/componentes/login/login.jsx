@@ -170,7 +170,7 @@ const Login = ({ setRedirect, toast, setCargando }) => {
                 <div className='div-login'>
                     <div className='div-login-elements'>
                         <div className='div-elements-children' >
-                            <h3 className='titulo-login'>Login App</h3>
+                            <h3 className='titulo-login'>Ingreso a: Gestión contractual</h3>
                             <div className='div-inputs-login'>
                                 <p className='p-label-form-login'> Usuario </p>
                                 <input ref={usuarioRef} type="text" name='usuario' value={usuario} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Usuario' autoComplete='off' />
@@ -193,7 +193,7 @@ const Login = ({ setRedirect, toast, setCargando }) => {
                             </div>
                         </div>
                     </div>
-                    <p className='p-info-login'>dgc-software | Todos los derechos reservados </p>
+                    <p className='p-info-login'>Desarrollado por equipo de especialidad U-Distrital </p>
                 </div>
             </div>
             <div className='div-container-login' style={{ display: actionLogin === 'ACTUALIZA_PASS' ? 'flex' : 'none' }}>

@@ -147,7 +147,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
         if (!!sessionStorage.getItem('usuarioApp')) {
             const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
-            await axios.get(`${urlEntorno}/service/uadmin/getUsuariosAppLista?userApp=${usuarioLocalStorage.usuario}&elementosPorPagina=0&paginaActual=0`)
+            await axios.get(`${urlEntorno}/service/uadmin/getUsuariosApp?usuarioApp=${usuarioLocalStorage.usuario}&elementosPorPagina=0&paginaActual=0`)
                 .then((response) => {
                     setTimeout(() => {
                         setUsuariosList(response.data.objeto)
@@ -158,6 +158,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
                     }, 250)
                 }).catch(() => {
                     setTimeout(() => {
+                        toast('No es posible consultar la información, contacte al administrador')
                         setCargando(false)
                     }, 250)
                 })
@@ -169,7 +170,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
     return (
         <>
             <div className='div-style-form'>
-                <h3>Registro de usuarios aplicación</h3>
+                <h3 className='titulo-form'>Registro de usuarios aplicación</h3>
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
@@ -250,29 +251,29 @@ const UsuariosApp = ({ toast, setCargando }) => {
                             <>
                                 <div className="row">
                                     <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <div >{usuario.nombre} {usuario.apellidos}  </div>
+                                        <p >{usuario.nombre} {usuario.apellidos}  </p>
                                     </div>
                                     <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <div >{usuario.role}</div>
+                                        <p >{usuario.role}</p>
                                     </div>
                                     <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <div >
+                                        <p >
                                             {
                                                 usuario.usuario_activo ?
                                                     'ACTIVO'
                                                     :
                                                     'PENDIENTE DE ACTIVAR'
                                             }
-                                        </div>
+                                        </p>
                                     </div>
                                     <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <div >{usuario.usuario} </div>
+                                        <p >{usuario.usuario} </p>
                                     </div>
                                     <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <div >{usuario.contrasenia} </div>
+                                        <p >{usuario.contrasenia} </p>
                                     </div>
                                     <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <div >{usuario.correo} </div>
+                                        <p >{usuario.correo} </p>
                                     </div>
                                 </div>
                             </>

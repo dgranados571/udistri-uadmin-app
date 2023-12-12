@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import './header.css'
@@ -7,6 +7,28 @@ function Header({ setStateMenu, setRedirect, componentsHeader }) {
 
   const [menuTituloNav, setmenuTituloNav] = useState(componentsHeader[0].id)
   const [menuResponsive, setMenuResponsive] = useState(false)
+
+  const [showInfoMenuUsuario, setshowInfoMenuUsuario] = useState(false)
+  const [infoMenuUsuario, setInfoMenuUsuario] = useState({
+    iniciales_nombre: '',
+    usuario: '',
+    correo: '',
+    nombre_completo: '',
+    role: ''
+  })
+
+  useEffect(() => {
+    if (!!sessionStorage.getItem('usuarioApp')) {
+      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
+      setInfoMenuUsuario({
+        iniciales_nombre: usuarioLocalStorage.iniciales_nombre,
+        usuario: usuarioLocalStorage.usuario,
+        correo: usuarioLocalStorage.correo,
+        nombre_completo: usuarioLocalStorage.nombre + ' ' + usuarioLocalStorage.apellidos,
+        role: usuarioLocalStorage.role
+      })
+    }
+  }, [])
 
   const selectMenu = (e) => {
     selectedClearELement(e.target.name)
@@ -66,6 +88,10 @@ function Header({ setStateMenu, setRedirect, componentsHeader }) {
     });
   }
 
+  const muestraPanleInfoUusario = () => {
+    setshowInfoMenuUsuario(!showInfoMenuUsuario)
+  }
+
   return (
     <>
       <div className='div-header'>
@@ -81,9 +107,32 @@ function Header({ setStateMenu, setRedirect, componentsHeader }) {
                     )
                   })
                 }
-                <button className='btn btn-link a-link-cerrar-sesion' onClick={() => cierraSesion()} >
-                  Cerrar sesión
-                </button>
+                <div className="div-info-user-container">
+                  <div className="div-info-user" onClick={() => muestraPanleInfoUusario()}>
+                    {infoMenuUsuario.iniciales_nombre}
+                  </div>
+                  {
+                    showInfoMenuUsuario ?
+                      <div className="div-info-user-ditail">
+                        <div className="item-info-user-ditail" >
+                          <p>{infoMenuUsuario.usuario}</p>
+                        </div>
+                        <div className="item-info-user-ditail">
+                          {infoMenuUsuario.nombre_completo}
+                        </div>
+                        <div className="item-info-user-ditail">
+                          {infoMenuUsuario.correo}
+                        </div>
+                        <div className="item-info-user-ditail-botom">
+                          <button className='btn btn-link a-link-cerrar-sesion' onClick={() => cierraSesion()} >
+                            Cerrar sesión
+                          </button>
+                        </div>
+                      </div>
+                      :
+                      <></>
+                  }
+                </div>
               </nav>
             </div>
             <div className="col-12 col-sm-12 col-md-12 col-lg-1" ></div>

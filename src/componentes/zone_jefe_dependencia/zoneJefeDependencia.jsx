@@ -18,8 +18,8 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
             classNameResponse: 'btn btn-link a-buttom-responsive-active'
         },
         {
-            name: 'MENU2', 
-            label: 'Usuarios App', 
+            name: 'MENU2',
+            label: 'Usuarios App',
             id: 'Usuarios App',
             className: 'btn btn-link a-buttom',
             classNameResponse: 'btn btn-link a-buttom'
@@ -31,7 +31,9 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
             case 'MENU1':
                 return (
                     <div className='div-container'>
-                        
+                        <div className='div-style-form'>
+                            <h3>Zona Jefe de Dependencia</h3>
+                        </div>
                     </div>
                 )
             case 'MENU2':
@@ -43,7 +45,7 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
             case 'MENU3':
                 return (
                     <div className='div-container'>
-                        
+
                     </div>
                 )
             default:
@@ -56,11 +58,6 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
     return (
         <>
             <Header setStateMenu={setStateMenu} setRedirect={setRedirect} componentsHeader={componentsHeader} />
-            <div className='div-container'>
-                <div className='div-style-form'>
-                    <h3>Zona Jefe de Dependencia</h3>
-                </div>
-            </div>
             {
                 componentMenu()
             }

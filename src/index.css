@@ -16,3 +16,7 @@ code {
 p{
   margin: 0;
 }
+
+.titulo-form{
+  font-family: 'Ancizar sans', 'Tahoma', 'Geneva', 'sans-serif';
+}
