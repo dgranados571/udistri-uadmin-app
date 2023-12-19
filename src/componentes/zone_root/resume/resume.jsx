@@ -1,9 +1,11 @@
 import React from 'react'
 
-const resume = () => {
+const Resume = () => {
   return (
-    <>resume</>
+    <div className='div-style-form'>
+      <h3 className='titulo-form'>Solicitudes</h3>
+    </div>
   )
 }
 
-export default resume
+export default Resume

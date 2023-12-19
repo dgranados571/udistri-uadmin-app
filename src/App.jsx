@@ -10,7 +10,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ZonePublic />}></Route>
-          <Route path="publicZone" element={<ZonePublic />} />
+          <Route path="radica-solicitud" element={<ZonePublic />} />
           <Route path="privateZone" element={<ZonePrivate />} />
         </Routes>
       </BrowserRouter>

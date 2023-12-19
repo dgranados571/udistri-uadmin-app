@@ -61,7 +61,7 @@ const HeaderUnal = () => {
                     </div>
                     <div class="mainMenu d-flex justify-content-end">
                         <div class="btn-group">
-                            <a href="publicZone" class="btn btn-default" style={{ 'text-transform': 'none' }} >Radicar solicitud</a>
+                            <a href="radica-solicitud" class="btn btn-default" style={{ 'text-transform': 'none' }} >Radicar solicitud</a>
                         </div>
                         <div class="btn-group">
                             <a href="privateZone" class="btn btn-default" style={{ 'text-transform': 'none' }}>Ingresar</a>

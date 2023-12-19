@@ -46,6 +46,24 @@
     margin: 0rem 1rem;
 }
 
+.bottom-custom-secondary {
+    width: 10rem;
+    background-color: #5C5C5C;
+    color: white;
+    border: 1px solid #5C5C5C;
+    border-radius: 20px;
+    padding: 5px 0px;
+    margin: 0rem 1rem;
+}
+
+.bottom-custom-secondary:hover {
+    width: 10rem;
+    background-color: #E3E3E3;
+    color: #5C5C5C;
+    border: 1px solid #E3E3E3;
+    margin: 0rem 1rem;
+}
+
 hr {
     margin: 15px 0rem 0 0;
     color: inherit;
@@ -56,4 +74,23 @@ hr {
 
 .form-control-error {
     border: 1px solid red;
+}
+
+.table-info {
+    width: 100%;
+}
+
+.td-info {
+    padding: 5px;
+}
+
+.icons-table {
+    font-size: 20px;
+    color: #5C5C5C;
+    cursor: pointer;
+}
+
+.icons-table:hover {
+    font-size: 20px;
+    color: orange;
 }

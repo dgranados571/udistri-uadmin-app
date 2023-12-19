@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Header from '../tvs/header/header'
 import './zoneRoot.css'
 import UsuariosApp from '../tvs/usuarios/usuariosApp'
+import Resume from './resume/resume'
 
 const ZoneRoot = ({ setRedirect, toast, setCargando }) => {
 
@@ -32,7 +33,7 @@ const ZoneRoot = ({ setRedirect, toast, setCargando }) => {
             case 'MENU1':
                 return (
                     <div className='div-container'>
-
+                        <Resume />
                     </div>
                 )
             case 'MENU2':

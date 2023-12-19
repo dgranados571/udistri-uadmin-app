@@ -102,10 +102,11 @@ const Login = ({ setRedirect, toast, setCargando }) => {
 
     const getActivaCuentaService = async () => {
         setCargando(true)
-        const f = new FormData();
-        f.append('usuario', usuario);
-        f.append('contrasenia', confimaContrasenia);
-        await axios.post(`${urlEntorno}/service/uadmin/activacionUsuarioApp`, f)
+        const body = {
+            "usuario": usuario,
+            "contrasenia": confimaContrasenia
+        }
+        await axios.post(`${urlEntorno}/service/uadmin/activacionUsuarioApp`, body)
             .then((response) => {
                 setTimeout(() => {
                     if (response.data.estado) {
@@ -130,15 +131,16 @@ const Login = ({ setRedirect, toast, setCargando }) => {
 
     const getLoginService = async () => {
         setCargando(true)
-        const f = new FormData();
-        f.append('usuario', usuario);
-        f.append('contrasenia', contrasenia);
-        await axios.post(`${urlEntorno}/service/uadmin/loginApp`, f)
+        const body = {
+            "usuario": usuario,
+            "contrasenia": contrasenia
+        }
+        await axios.post(`${urlEntorno}/service/uadmin/loginApp`, body)
             .then((response) => {
                 setTimeout(() => {
                     if (response.data.estado) {
                         if (response.data.objeto.usuario_activo) {
-                            sessionStorage.setItem('usuarioApp', JSON.stringify(response.data.objeto) )
+                            sessionStorage.setItem('usuarioApp', JSON.stringify(response.data.objeto))
                             setRedirect({
                                 usuario: JSON.stringify(response.data.objeto),
                                 rol: response.data.objeto.role
@@ -151,7 +153,7 @@ const Login = ({ setRedirect, toast, setCargando }) => {
                             });
                             toast(response.data.mensaje)
                         }
-                    }else{
+                    } else {
                         toast(response.data.mensaje)
                     }
                     setCargando(false)

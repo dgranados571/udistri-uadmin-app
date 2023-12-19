@@ -1,12 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Select from 'react-select'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRotateLeft, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import './usuariosApp.css'
 import { UtilUrl } from '../../../utilUrl'
 import axios from 'axios'
+import Modal from '../modal/modal'
 
 const UsuariosApp = ({ toast, setCargando }) => {
 
     const { urlEntorno } = UtilUrl();
+    const [modal, setModal] = useState(false)
+
+    const [userEdita, setUserEdita] = useState({})
 
     const [usuariosList, setUsuariosList] = useState([])
 
@@ -108,21 +114,63 @@ const UsuariosApp = ({ toast, setCargando }) => {
         setUsuario('')
     }
 
+    const actualizaContrasenia = (usuario) => {
+        setModal(true)
+        setUserEdita(usuario)
+    }
+
+    const modalSi = () => {
+        setModal(false)
+        actualizaContraseniaUser()
+    }
+
+    const modalNo = () => {
+        setModal(false)
+        setUserEdita({})
+    }
+
+    const actualizaContraseniaUser = async () => {
+        if (!!sessionStorage.getItem('usuarioApp')) {
+            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
+            setCargando(true)
+            const body = {
+                "usuarioEdita": userEdita,
+                "usuarioApp": usuarioLocalStorage.usuario,
+            }
+            await axios.post(`${urlEntorno}/service/uadmin/actualizaContraseniaApp`, body)
+                .then((response) => {
+                    setTimeout(() => {
+                        toast(response.data.mensaje)
+                        consultaInformacionUsuariosApp()
+                        setCargando(false)
+                    }, 250)
+                }).catch(() => {
+                    setTimeout(() => {
+                        toast('No es posible actualizar la información, contacte al administrador')
+                        setCargando(false)
+                    }, 250)
+                })
+        } else {
+            toast('No es posible actualizar la información, contacte al administrador')
+        }
+    }
+
     const enviaCreacionUsuarioApp = async () => {
         if (!!sessionStorage.getItem('usuarioApp')) {
             const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
-            const f = new FormData();
-            f.append('nombres', nombres);
-            f.append('apellidos', apellidos);
-            f.append('tipoIdentificacion', tipoIdentificacion);
-            f.append('identificacion', identificacion);
-            f.append('correo', correo);
-            f.append('role', role);
-            f.append('usuario', usuario.toUpperCase());
-            f.append('fechaRegistro', new Date());
-            f.append('usuarioApp', usuarioLocalStorage.usuario);
-            await axios.post(`${urlEntorno}/service/uadmin/registroUsuarioApp`, f)
+            const body = {
+                "nombres": nombres,
+                "apellidos": apellidos,
+                "tipoIdentificacion": tipoIdentificacion,
+                "identificacion": identificacion,
+                "correo": correo,
+                "role": role,
+                "usuario": usuario.toUpperCase(),
+                "fechaRegistro": new Date(),
+                "usuarioApp": usuarioLocalStorage.usuario
+            }
+            await axios.post(`${urlEntorno}/service/uadmin/registroUsuarioApp`, body)
                 .then((response) => {
                     setTimeout(() => {
                         setCargando(false)
@@ -147,7 +195,10 @@ const UsuariosApp = ({ toast, setCargando }) => {
         if (!!sessionStorage.getItem('usuarioApp')) {
             const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
-            await axios.get(`${urlEntorno}/service/uadmin/getUsuariosApp?usuarioApp=${usuarioLocalStorage.usuario}&elementosPorPagina=0&paginaActual=0`)
+            const body = {
+                "usuarioApp": usuarioLocalStorage.usuario,
+            }
+            await axios.post(`${urlEntorno}/service/uadmin/getUsuariosApp`, body)
                 .then((response) => {
                     setTimeout(() => {
                         setUsuariosList(response.data.objeto)
@@ -162,7 +213,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
                         setCargando(false)
                     }, 250)
                 })
-        }else{
+        } else {
             toast('No es posible consultar la información, contacte al administrador')
         }
     }
@@ -225,62 +276,69 @@ const UsuariosApp = ({ toast, setCargando }) => {
                 </div>
             </div>
             <div className='div-style-form'>
-                <div className="row">
-                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                        <p className='p-label-form'> Nombres </p>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                        <p className='p-label-form'> Role </p>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                        <p className='p-label-form'> Estado</p>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                        <p className='p-label-form'> Usuario APP</p>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                        <p className='p-label-form'> Contraseña</p>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                        <p className='p-label-form'> Correo </p>
-                    </div>
-                </div>
-                {
-                    usuariosList.map((usuario) => {
-                        return (
-                            <>
-                                <div className="row">
-                                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <p >{usuario.nombre} {usuario.apellidos}  </p>
-                                    </div>
-                                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <p >{usuario.role}</p>
-                                    </div>
-                                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <p >
-                                            {
-                                                usuario.usuario_activo ?
-                                                    'ACTIVO'
-                                                    :
-                                                    'PENDIENTE DE ACTIVAR'
-                                            }
-                                        </p>
-                                    </div>
-                                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <p >{usuario.usuario} </p>
-                                    </div>
-                                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <p >{usuario.contrasenia} </p>
-                                    </div>
-                                    <div className="col-12 col-sm-12 col-md-2 col-lg-2" >
-                                        <p >{usuario.correo} </p>
-                                    </div>
-                                </div>
-                            </>
-                        )
-                    })
-                }
+                <table className='table-info'>
+                    <thead>
+                        <tr>
+                            <td className='td-info'><p className='p-label-form'> Nombres </p></td>
+                            <td className='td-info'><p className='p-label-form'> Role </p></td>
+                            <td className='td-info'><p className='p-label-form'> Estado </p></td>
+                            <td className='td-info'><p className='p-label-form'> Usuario APP </p></td>
+                            <td className='td-info'><p className='p-label-form'> Contraseña </p></td>
+                            <td className='td-info'><p className='p-label-form'> Correo </p></td>
+                            <td className='td-info'><p className='p-label-form'> Acciones </p></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            usuariosList.map((usuario) => {
+                                return (
+                                    <tr>
+                                        <td className='td-info'>
+                                            <p>{usuario.nombre} {usuario.apellidos}  </p>
+                                        </td>
+                                        <td className='td-info'>
+                                            <p>{usuario.role}</p>
+                                        </td>
+                                        <td className='td-info'>
+                                            <p className='mt-2'>
+                                                {
+                                                    usuario.usuario_activo ?
+                                                        'ACTIVO'
+                                                        :
+                                                        'PENDIENTE DE ACTIVAR'
+                                                }
+                                            </p>
+                                        </td>
+                                        <td className='td-info'>
+                                            <p>{usuario.usuario}</p>
+                                        </td>
+                                        <td className='td-info'>
+                                            <p>{usuario.contrasenia}</p>
+                                        </td>
+                                        <td className='td-info'>
+                                            <p>{usuario.correo}</p>
+                                        </td>
+                                        <td className='td-info d-flex justify-content-around'>
+                                            <a title='Reiniciar contraseña'>
+                                                <FontAwesomeIcon className='icons-table' icon={faRotateLeft} onClick={() => actualizaContrasenia(usuario)} />
+                                            </a>
+                                            <a title='Editar usuario'>
+                                                <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
+                                            </a>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </table>
             </div>
+            {
+                modal ?
+                    <Modal modalSi={modalSi} modalNo={modalNo} />
+                    :
+                    <></>
+            }
         </>
     )
 }
