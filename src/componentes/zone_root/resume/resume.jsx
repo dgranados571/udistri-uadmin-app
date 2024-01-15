@@ -1,10 +1,13 @@
 import React from 'react'
+import './resume.css'
+import Solicitudes from '../../tvs_private/solicitudes/solicitudes'
 
-const Resume = () => {
+const Resume = ({ toast, setCargando }) => {
+
   return (
-    <div className='div-style-form'>
-      <h3 className='titulo-form'>Solicitudes</h3>
-    </div>
+    <>
+      MODULO RESUMEN
+    </>
   )
 }
 

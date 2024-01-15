@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Header from '../tvs/header/header'
-import UsuariosApp from '../tvs/usuarios/usuariosApp';
+import UsuariosApp from '../tvs_private/usuarios/usuariosApp';
+import Solicitudes from '../tvs_private/solicitudes/solicitudes';
 
 const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
 
@@ -12,8 +13,8 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
     const componentsHeader = [
         {
             name: 'MENU1',
-            label: 'MENU1',
-            id: 'MENU1',
+            label: 'Solicitudes App',
+            id: 'Solicitudes App',
             className: 'btn btn-link a-buttom-active',
             classNameResponse: 'btn btn-link a-buttom-responsive-active'
         },
@@ -31,9 +32,7 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
             case 'MENU1':
                 return (
                     <div className='div-container'>
-                        <div className='div-style-form'>
-                            <h3>Zona Jefe de Dependencia</h3>
-                        </div>
+                        <Solicitudes toast={toast} setCargando={setCargando} />
                     </div>
                 )
             case 'MENU2':

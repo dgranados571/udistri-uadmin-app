@@ -1,0 +1,25 @@
+.div-icons-table{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.div-titulo-component{
+    display: flex;
+    justify-content: space-between;
+}
+
+.bottom-custom-link {
+    color: #5C5C5C;
+    display: flex;
+}
+
+.p-label-bottom-custom-link{
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.bottom-custom-link:hover {
+    color: orange;
+}

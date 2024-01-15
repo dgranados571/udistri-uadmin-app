@@ -81,7 +81,8 @@ hr {
 }
 
 .td-info {
-    padding: 5px;
+    padding: 10px;
+    border-bottom: 1px solid #5C5C5C;   
 }
 
 .icons-table {

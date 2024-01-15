@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import Header from '../tvs/header/header'
 import './zoneRoot.css'
-import UsuariosApp from '../tvs/usuarios/usuariosApp'
+import UsuariosApp from '../tvs_private/usuarios/usuariosApp'
 import Resume from './resume/resume'
+import Solicitudes from '../tvs_private/solicitudes/solicitudes'
 
 const ZoneRoot = ({ setRedirect, toast, setCargando }) => {
 
@@ -13,15 +14,22 @@ const ZoneRoot = ({ setRedirect, toast, setCargando }) => {
 
     const componentsHeader = [
         {
-            name: 'MENU1', 
-            label: 'Principal', 
+            name: 'MENU1',
+            label: 'Principal',
             id: 'Principal',
             className: 'btn btn-link a-buttom-active',
             classNameResponse: 'btn btn-link a-buttom-responsive-active'
         },
         {
-            name: 'MENU2', 
-            label: 'Usuarios App', 
+            name: 'MENU2',
+            label: 'Solicitudes App',
+            id: 'Solicitudes App',
+            className: 'btn btn-link a-buttom',
+            classNameResponse: 'btn btn-link a-buttom'
+        },
+        {
+            name: 'MENU3',
+            label: 'Usuarios App',
             id: 'Usuarios App',
             className: 'btn btn-link a-buttom',
             classNameResponse: 'btn btn-link a-buttom'
@@ -33,10 +41,16 @@ const ZoneRoot = ({ setRedirect, toast, setCargando }) => {
             case 'MENU1':
                 return (
                     <div className='div-container'>
-                        <Resume />
+                        <Resume toast={toast} setCargando={setCargando} />
                     </div>
                 )
             case 'MENU2':
+                return (
+                    <div className='div-container'>
+                        <Solicitudes toast={toast} setCargando={setCargando} />
+                    </div>
+                )
+            case 'MENU3':
                 return (
                     <div className='div-container'>
                         <UsuariosApp toast={toast} setCargando={setCargando} />

@@ -5,13 +5,15 @@ import { faRotateLeft, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import './usuariosApp.css'
 import { UtilUrl } from '../../../utilUrl'
 import axios from 'axios'
-import Modal from '../modal/modal'
+import Modal from '../../tvs/modal/modal'
 
 const UsuariosApp = ({ toast, setCargando }) => {
 
     const { urlEntorno } = UtilUrl();
     const [modal, setModal] = useState(false)
+    const [propsModal, setPropsModal] = useState({})
 
+    const [modoEditar, setModoEditar] = useState(false)
     const [userEdita, setUserEdita] = useState({})
 
     const [usuariosList, setUsuariosList] = useState([])
@@ -35,6 +37,17 @@ const UsuariosApp = ({ toast, setCargando }) => {
     useEffect(() => {
         consultaInformacionUsuariosApp()
     }, [])
+
+    const modalMensajes = [
+        {
+            titulo: 'Actualizar constraseña',
+            descripcion: 'Esta seguro de actualizar la contraseña del usuario: '
+        },
+        {
+            titulo: 'Actualizar usuario de aplicación',
+            descripcion: 'Esta seguro de actualizar la información del usuario: '
+        },
+    ]
 
     const tiposDeDocumento = [
         { value: 'INITIAL', label: 'Seleccione' },
@@ -97,7 +110,11 @@ const UsuariosApp = ({ toast, setCargando }) => {
         }
 
         if (formValidado.length === 0) {
-            enviaCreacionUsuarioApp()
+            if (modoEditar) {
+                modalActualizaUsuario()
+            } else {
+                enviaCreacionUsuarioApp()
+            }
         } else {
             formValidado.splice(0, formValidado.length)
             toast('Errores en el formulario de registro, valide la información')
@@ -112,16 +129,67 @@ const UsuariosApp = ({ toast, setCargando }) => {
         setCorreo('')
         roleRef.current.setValue(roles[0])
         setUsuario('')
+        nombresRef.current.className = 'form-control'
+        apellidosRef.current.className = 'form-control'
+        identificacionRef.current.className = 'form-control'
+        correoRef.current.className = 'form-control'
+        usuarioRef.current.className = 'form-control'
+    }
+
+    const actualizaUsuario = (usuario) => {
+        resetForm()
+        nombresRef.current.className = 'form-control'
+        apellidosRef.current.className = 'form-control'
+        identificacionRef.current.className = 'form-control'
+        correoRef.current.className = 'form-control'
+        usuarioRef.current.className = 'form-control'
+        setModoEditar(true)
+        setUserEdita(usuario)
+        setNombres(usuario.nombre)
+        setApellidos(usuario.apellidos)
+        for (let step = 0; step < tiposDeDocumento.length; step++) {
+            if (tiposDeDocumento[step].value === usuario.tipo_identificacion) {
+                tipoIdentificacionRef.current.setValue(tiposDeDocumento[step])
+                break
+            }
+        }
+        setIdentificacion(usuario.identificacion)
+        setCorreo(usuario.correo)
+        for (let step = 0; step < roles.length; step++) {
+            if (roles[step].value === usuario.role) {
+                roleRef.current.setValue(roles[step])
+                break
+            }
+        }
+        setUsuario(usuario.usuario)
+    }
+
+    const cancelaActualizaUsuario = () => {
+        setModoEditar(false)
+        setUserEdita({})
+        resetForm()
     }
 
     const actualizaContrasenia = (usuario) => {
+        modalMensajes[0].descripcion = modalMensajes[0].descripcion + usuario.usuario
+        setPropsModal(modalMensajes[0])
         setModal(true)
         setUserEdita(usuario)
     }
 
+    const modalActualizaUsuario = () => {
+        modalMensajes[1].descripcion = modalMensajes[1].descripcion + userEdita.usuario
+        setPropsModal(modalMensajes[1])
+        setModal(true)
+    }
+
     const modalSi = () => {
         setModal(false)
-        actualizaContraseniaUser()
+        if (modoEditar) {
+            enviaEdicionUsuarioApp()
+        } else {
+            actualizaContraseniaUser()
+        }
     }
 
     const modalNo = () => {
@@ -191,12 +259,50 @@ const UsuariosApp = ({ toast, setCargando }) => {
         }
     }
 
+    const enviaEdicionUsuarioApp = async () => {
+        if (!!sessionStorage.getItem('usuarioApp')) {
+            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
+            setCargando(true)
+            const body = {
+                "nombres": nombres,
+                "apellidos": apellidos,
+                "tipoIdentificacion": tipoIdentificacion,
+                "identificacion": identificacion,
+                "correo": correo,
+                "role": role,
+                "usuario": usuario.toUpperCase(),
+                "fechaRegistro": new Date(),
+                "usuarioApp": usuarioLocalStorage.usuario
+            }
+            await axios.post(`${urlEntorno}/service/uadmin/actualizaUsuarioApp`, body)
+                .then((response) => {
+                    setTimeout(() => {
+                        setCargando(false)
+                        if (response.data.estado) {
+                            consultaInformacionUsuariosApp()
+                            resetForm()
+                            setModoEditar(false)
+                        }
+                        toast(response.data.mensaje)
+                    }, 250)
+                }).catch(() => {
+                    setTimeout(() => {
+                        setCargando(false)
+                        toast('No es posible el registro, contacte al administrador')
+                    }, 250)
+                })
+        } else {
+            toast('No es posible el registro, contacte al administrador')
+        }
+    }
+
     const consultaInformacionUsuariosApp = async () => {
         if (!!sessionStorage.getItem('usuarioApp')) {
             const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
             const body = {
                 "usuarioApp": usuarioLocalStorage.usuario,
+                "role": '',
             }
             await axios.post(`${urlEntorno}/service/uadmin/getUsuariosApp`, body)
                 .then((response) => {
@@ -265,17 +371,31 @@ const UsuariosApp = ({ toast, setCargando }) => {
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Usuario: </p>
-                            <input ref={usuarioRef} value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
+                            {
+                                modoEditar ?
+                                    <input ref={usuarioRef} value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className='form-control' autoComplete='off' disabled />
+                                    :
+                                    <input ref={usuarioRef} value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
+                            }
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-buttom-registra'>
-                            <button className='btn btn-primary bottom-custom' onClick={() => guardaUsuarioAction()} >Guardar</button>
+                            {
+                                modoEditar ?
+                                    <>
+                                        <button className='btn btn-secondary bottom-custom-secondary' onClick={() => cancelaActualizaUsuario()} >Cancelar</button>
+                                        <button className='btn btn-primary bottom-custom' onClick={() => guardaUsuarioAction()} >Actualizar</button>
+                                    </>
+                                    :
+                                    <button className='btn btn-primary bottom-custom' onClick={() => guardaUsuarioAction()} >Guardar</button>
+                            }
                         </div>
                     </div>
                 </div>
             </div>
             <div className='div-style-form'>
+                <h3 className='titulo-form'>Usuarios App</h3>
                 <table className='table-info'>
                     <thead>
                         <tr>
@@ -292,7 +412,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
                         {
                             usuariosList.map((usuario) => {
                                 return (
-                                    <tr>
+                                    <tr >
                                         <td className='td-info'>
                                             <p>{usuario.nombre} {usuario.apellidos}  </p>
                                         </td>
@@ -318,13 +438,15 @@ const UsuariosApp = ({ toast, setCargando }) => {
                                         <td className='td-info'>
                                             <p>{usuario.correo}</p>
                                         </td>
-                                        <td className='td-info d-flex justify-content-around'>
-                                            <a title='Reiniciar contraseña'>
-                                                <FontAwesomeIcon className='icons-table' icon={faRotateLeft} onClick={() => actualizaContrasenia(usuario)} />
-                                            </a>
-                                            <a title='Editar usuario'>
-                                                <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
-                                            </a>
+                                        <td className='td-info'>
+                                            <div className='d-flex justify-content-around'>
+                                                <button className='btn btn-link' onClick={() => actualizaContrasenia(usuario)}>
+                                                    <FontAwesomeIcon className='icons-table' icon={faRotateLeft} />
+                                                </button>
+                                                <button className='btn btn-link' onClick={() => actualizaUsuario(usuario)}>
+                                                    <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 )
@@ -335,7 +457,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
             </div>
             {
                 modal ?
-                    <Modal modalSi={modalSi} modalNo={modalNo} />
+                    <Modal modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
                     :
                     <></>
             }
