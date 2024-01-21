@@ -66,7 +66,6 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
 
     const registraSolcitud = () => {
 
-
         let formValidado = [];
 
         nombresRef.current.className = 'form-control'
@@ -119,7 +118,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
                 }
             }
             if (validaErrorLongitud) {
-                toast('La longitud del campo descripción excede el limite permitido')
+                toast('La longitud del campo descripción excede el limite permitido, Max --> 250 Caracteres')
             } else {
                 toast('Errores en el formulario de registro, valide la información')
             }

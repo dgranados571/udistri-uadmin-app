@@ -19,8 +19,8 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
         consultaInformacionSolicitudesApp()
     }, [paginacionSolicitudes.paginaActual])
 
-    const detalleSolicitud = (solicitud) => {
-        setDetalleSolicitud(solicitud)
+    const detalleSolicitud = (idSolicitud) => {
+        setDetalleSolicitud(idSolicitud)
         setRedirectSolicitudes('DETALLE_SOLICITUD')
     }
 
@@ -35,7 +35,7 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
             }
             await axios.post(`${urlEntorno}/service/uadmin/getSolicitudesApp`, body)
                 .then((response) => {
-                    setSolicitudesList(response.data.objeto.listaSolicitudesApp)
+                    setSolicitudesList(response.data.objeto.listaSolicitudesAppDto)
                     setPaginacionSolicitudes({
                         ...paginacionSolicitudes,
                         totalElementos: response.data.objeto.totalElementos
@@ -90,26 +90,26 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
                                 return (
                                     <tr className='tr-tablet'>
                                         <td className='td-info'>
-                                            <p className=''>{solicitud.id_procesamiento}</p>
+                                            <p className=''>{solicitud.solicitud.id_procesamiento}</p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''>{solicitud.fecha_registro}</p>
+                                            <p className=''>{solicitud.solicitud.fecha_registro}</p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''>{solicitud.nombres} {solicitud.apellidos}</p>
+                                            <p className=''>{solicitud.solicitud.nombres} {solicitud.solicitud.apellidos}</p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''>{solicitud.dependencia}</p>
+                                            <p className=''>{solicitud.solicitud.dependencia}</p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''> {solicitud.estado} </p>
+                                            <p className=''> {solicitud.solicitud.estado} </p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''> {solicitud.descripcion} </p>
+                                            <p className=''> {solicitud.solicitud.descripcion} </p>
                                         </td>
                                         <td className='td-info'>
                                             <div className='div-icons-table'>
-                                                <button className='btn btn-link' onClick={() => detalleSolicitud(solicitud)}>
+                                                <button className='btn btn-link' onClick={() => detalleSolicitud(solicitud.solicitud.id_procesamiento)}>
                                                     <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
                                                 </button>
                                             </div>

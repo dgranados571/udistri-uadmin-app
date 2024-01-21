@@ -13,14 +13,14 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
     const componentsHeader = [
         {
             name: 'MENU1',
-            label: 'Solicitudes App',
+            label: 'Solicitudes',
             id: 'Solicitudes App',
             className: 'btn btn-link a-buttom-active',
             classNameResponse: 'btn btn-link a-buttom-responsive-active'
         },
         {
             name: 'MENU2',
-            label: 'Usuarios App',
+            label: 'Usuarios',
             id: 'Usuarios App',
             className: 'btn btn-link a-buttom',
             classNameResponse: 'btn btn-link a-buttom'
