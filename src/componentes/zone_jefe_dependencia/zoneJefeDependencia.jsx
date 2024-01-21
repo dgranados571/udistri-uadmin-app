@@ -32,7 +32,7 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
             case 'MENU1':
                 return (
                     <div className='div-container'>
-                        <Solicitudes toast={toast} setCargando={setCargando} />
+                        <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta= 'ZoneJefeDependencia' />
                     </div>
                 )
             case 'MENU2':

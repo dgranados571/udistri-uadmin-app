@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { Paginador } from '../../tvs/paginacion/paginador';
 
-const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetalleSolicitud }) => {
+const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetalleSolicitud, zonaConsulta }) => {
 
     const { urlEntorno } = UtilUrl();
 
@@ -16,12 +16,58 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
     );
 
     useEffect(() => {
-        consultaInformacionSolicitudesApp()
+        solicitudesPorZonaConsulta()
     }, [paginacionSolicitudes.paginaActual])
 
     const detalleSolicitud = (idSolicitud) => {
         setDetalleSolicitud(idSolicitud)
         setRedirectSolicitudes('DETALLE_SOLICITUD')
+    }
+
+    const solicitudesPorZonaConsulta = () => {
+        switch (zonaConsulta) {
+            case 'ROOT':
+                consultaInformacionSolicitudesApp()
+                break
+            case 'ZoneJefeDependencia':
+                consultaInformacionSolicitudesApp()
+                break
+            case 'ZonePrecontractual':
+                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRECONTRACTUAL')
+                break
+            default:
+                break
+        }
+    }
+
+    const consultaInformacionSolicitudesPorZonaApp = async (nombreOperacion) => {
+        if (!!sessionStorage.getItem('usuarioApp')) {
+            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
+            setCargando(true)
+            const body = {
+                "nombreOperacion": nombreOperacion,
+                "resultadoOperacion": usuarioLocalStorage.usuario
+            }
+            await axios.post(`${urlEntorno}/service/uadmin/getSolicitudesPorUsuarioApp`, body)
+                .then((response) => {
+                    setSolicitudesList(response.data.objeto.listaSolicitudesAppDto)
+                    setPaginacionSolicitudes({
+                        ...paginacionSolicitudes,
+                        totalElementos: response.data.objeto.totalElementos
+                    })
+                    if (!response.data.estado) {
+                        toast(response.data.mensaje)
+                    }
+                    setCargando(false)
+                }).catch(() => {
+                    setTimeout(() => {
+                        toast('No es posible consultar la información, contacte al administrador')
+                        setCargando(false)
+                    }, 250)
+                })
+        } else {
+            toast('No es posible consultar la información, contacte al administrador')
+        }
     }
 
     const consultaInformacionSolicitudesApp = async () => {

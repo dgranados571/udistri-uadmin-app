@@ -282,7 +282,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
                   <p className='p-label-form'> Nombre de Operación </p>
                 </td>
                 <td className='td-info'>
-                  <p className='p-label-form'> Resuslltado de Operación </p>
+                  <p className='p-label-form'> Resultado de Operación </p>
                 </td>
                 <td className='td-info'>
                   <p className='p-label-form'> Observaciones </p>

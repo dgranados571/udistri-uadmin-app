@@ -47,7 +47,7 @@ const ZoneRoot = ({ setRedirect, toast, setCargando }) => {
             case 'MENU2':
                 return (
                     <div className='div-container'>
-                        <Solicitudes toast={toast} setCargando={setCargando} />
+                        <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta= 'ROOT' />
                     </div>
                 )
             case 'MENU3':
