@@ -207,7 +207,7 @@ const Login = ({ setRedirect, toast, setCargando }) => {
                                 <p>Para activar tu cuenta debes actualizar tu constraseña</p>
                             </div>
                             <div className='div-inputs-login'>
-                                <p className='p-label-form-login'>Nueva constraseña  </p>
+                                <p className='p-label-form-login'>Nueva contraseña  </p>
                                 <input ref={contrasenaPreRef} type="password" name='newContrasenia' value={newContrasenia} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Constraseña' autoComplete='off' />
                                 <p className='p-label-form-login'>Confirma contraseña </p>
                                 <input ref={contrasenaPostRef} type="password" name='confimaContrasenia' value={confimaContrasenia} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Confirma Contraseña' autoComplete='off' />

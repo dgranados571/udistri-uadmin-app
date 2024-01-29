@@ -15,7 +15,18 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
   const [detalleSolicitud, setDetalleSolicitud] = useState({})
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false)
 
+  const [descripcion, setDescripcion] = useState('');
+
   const usuarioPrecontractualRef = useRef('')
+  const opcionesGestionPrecontractualRef = useRef('')
+  const descripcionRef = useRef('')
+
+  const opcionesGestionPrecontractual = [
+    { value: 'INITIAL', label: 'Seleccione' },
+    { value: 'AVANZA_A_PRESUPUESTO', label: 'Avanza a presupuesto' },
+    { value: 'CANCELA_SOLICTUD', label: 'Cancela solcitud' },
+    { value: 'DEVUELVE_JEFE_DEPENDENCIA', label: 'Devolver a Jefe de dependencia' },
+]
 
   useEffect(() => {
     consultaInformacionUsuariosPrecontractual()
@@ -120,6 +131,10 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     setDisabledButtom(false)
   }
 
+  const selectActionSolutionPrecontractual = (e) => {
+    
+  }
+
   return (
     <>
       <div className='div-style-form'>
@@ -214,39 +229,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
             </div>
           </div>
         </div>
-        {
-          showDetalleSolicitud ?
-            detalleSolicitud.eventoActual.nombre_operacion === 'CREA_SOLICITUD' ?
-              <>
-                <hr />
-                <div className="row">
-                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                    <div className='div-form'>
-                      <p className='mb-3'>Para continuar con la gestión de la presente solicitud, es requerido que le asigne un analista del area Precontractual:</p>
-                      <Select ref={usuarioPrecontractualRef} options={usuariosPrecontractual} onChange={(e) => selectAction(e)} placeholder='Seleccione' />
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                    <div className='div-buttom-registra '>
-                      {
-                        disabledButtom ?
-                          <button className='btn btn-primary bottom-custom' disabled >Asignar</button>
-                          :
-                          <button className='btn btn-primary bottom-custom' onClick={() => asignaUsuarioPrecontractual()} >Asignar</button>
-                      }
-                    </div>
-                  </div>
-                </div>
-              </>
-              :
-              <></>
-            :
-            'Cargando ...'
-        }
-      </div>
-      <div className='div-style-form'>
-        <h3 className='titulo-form mb-3'>Documentos de la solicitud {idDetalleSolicitud}: </h3>
-        <div className="row">
+        <div className="row mt-4">
           <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
             <p className='mb-1'>A continuación, encontrara el listado de documentos asociados a la solicitud {idDetalleSolicitud}. (Dar click en cada uno para visualizar el archivo): </p>
           </div>
@@ -266,6 +249,71 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
           }
         </div>
       </div>
+      {
+        showDetalleSolicitud ?
+          detalleSolicitud.detalleSolicitudVista.modulo2 ?
+            <>
+              <div className='div-style-form'>
+                <div className="row">
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                      <p className='mb-3'>Para continuar con la gestión de la presente solicitud, es requerido que le asigne un analista del area Precontractual:</p>
+                      <Select ref={usuarioPrecontractualRef} options={usuariosPrecontractual} onChange={(e) => selectAction(e)} placeholder='Seleccione' />
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-buttom-registra '>
+                      {
+                        disabledButtom ?
+                          <button className='btn btn-primary bottom-custom' disabled >Asignar</button>
+                          :
+                          <button className='btn btn-primary bottom-custom' onClick={() => asignaUsuarioPrecontractual()} >Asignar</button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+            :
+            <></>
+          :
+          'Cargando ...'
+      }
+      {
+        showDetalleSolicitud ?
+          detalleSolicitud.detalleSolicitudVista.modulo3 ?
+            <>
+              <div className='div-style-form'>
+                <h3 className='titulo-form mb-3'>Resolviendo la solicitud {idDetalleSolicitud}: </h3>
+                <div className="row">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                    <p className='mb-3'>A continuación, selecciona la tipificacion correcta de la solcitud y deja las observaciones correspondientes:</p>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                      <Select ref={opcionesGestionPrecontractualRef} options={opcionesGestionPrecontractual} onChange={(e) => selectActionSolutionPrecontractual(e)} placeholder='Seleccione' />
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                      <p className='p-label-form'> Observaciones: </p>
+                      <textarea ref={descripcionRef} placeholder='' className='form-control' value={descripcion} onChange={(e) => setDescripcion(e.target.value)} autoComplete='off' />
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='h-100 d-flex align-items-center justify-content-center'>
+                      <button className='btn btn-primary bottom-custom'>Enviar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+            :
+            <></>
+          :
+          'Cargando ...'
+      }
       <div className='div-style-form'>
         <h3 className='titulo-form mb-3'>En que anda mi solicitud {idDetalleSolicitud}: </h3>
         <div className="row">

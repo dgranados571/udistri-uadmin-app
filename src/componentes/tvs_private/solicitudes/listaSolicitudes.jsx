@@ -104,75 +104,83 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
     return (
         <>
             <div className='div-style-form'>
-                <table className='table-info'>
-                    <thead>
-                        <tr>
-                            <td className='td-info'>
-                                <p className='p-label-form'> ID Solictud </p>
-                            </td>
-                            <td className='td-info'>
-                                <p className='p-label-form'> Fecha de radicación </p>
-                            </td>
-                            <td className='td-info'>
-                                <p className='p-label-form'> Nombre </p>
-                            </td>
-                            <td className='td-info'>
-                                <p className='p-label-form'> Dependencia </p>
-                            </td>
-                            <td className='td-info'>
-                                <p className='p-label-form'> Estado </p>
-                            </td>
-                            <td className='td-info'>
-                                <p className='p-label-form'> Descripción </p>
-                            </td>
-                            <td className='td-info'>
-                                <p className='p-label-form'>  Acciones </p>
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            solicitudesList.map((solicitud) => {
-                                return (
-                                    <tr className='tr-tablet'>
+                {
+                    solicitudesList.length > 0 ?
+                        <>
+                            <table className='table-info'>
+                                <thead>
+                                    <tr>
                                         <td className='td-info'>
-                                            <p className=''>{solicitud.solicitud.id_procesamiento}</p>
+                                            <p className='p-label-form'> ID Solictud </p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''>{solicitud.solicitud.fecha_registro}</p>
+                                            <p className='p-label-form'> Fecha de radicación </p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''>{solicitud.solicitud.nombres} {solicitud.solicitud.apellidos}</p>
+                                            <p className='p-label-form'> Nombre </p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''>{solicitud.solicitud.dependencia}</p>
+                                            <p className='p-label-form'> Dependencia </p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''> {solicitud.solicitud.estado} </p>
+                                            <p className='p-label-form'> Estado </p>
                                         </td>
                                         <td className='td-info'>
-                                            <p className=''> {solicitud.solicitud.descripcion} </p>
+                                            <p className='p-label-form'> Descripción </p>
                                         </td>
                                         <td className='td-info'>
-                                            <div className='div-icons-table'>
-                                                <button className='btn btn-link' onClick={() => detalleSolicitud(solicitud.solicitud.id_procesamiento)}>
-                                                    <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
-                                                </button>
-                                            </div>
+                                            <p className='p-label-form'>  Acciones </p>
                                         </td>
                                     </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </table>
-                <div className="row ">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-3" ></div>
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
-                        <Paginador elementsPaginacion={paginacionSolicitudes} setElementsPaginacion={setPaginacionSolicitudes} />
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-3" ></div>
-                </div>
+                                </thead>
+                                <tbody>
+                                    {
+
+                                        solicitudesList.map((solicitud) => {
+                                            return (
+                                                <tr className='tr-tablet'>
+                                                    <td className='td-info'>
+                                                        <p className=''>{solicitud.solicitud.id_procesamiento}</p>
+                                                    </td>
+                                                    <td className='td-info'>
+                                                        <p className=''>{solicitud.solicitud.fecha_registro}</p>
+                                                    </td>
+                                                    <td className='td-info'>
+                                                        <p className=''>{solicitud.solicitud.nombres} {solicitud.solicitud.apellidos}</p>
+                                                    </td>
+                                                    <td className='td-info'>
+                                                        <p className=''>{solicitud.solicitud.dependencia}</p>
+                                                    </td>
+                                                    <td className='td-info'>
+                                                        <p className=''> {solicitud.solicitud.estado} </p>
+                                                    </td>
+                                                    <td className='td-info'>
+                                                        <p className=''> {solicitud.solicitud.descripcion} </p>
+                                                    </td>
+                                                    <td className='td-info'>
+                                                        <div className='div-icons-table'>
+                                                            <button className='btn btn-link' onClick={() => detalleSolicitud(solicitud.solicitud.id_procesamiento)}>
+                                                                <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </table>
+                            <div className="row ">
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-3" ></div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+                                    <Paginador elementsPaginacion={paginacionSolicitudes} setElementsPaginacion={setPaginacionSolicitudes} />
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-3" ></div>
+                            </div>
+                        </>
+                        :
+                        <p className=''>No hay información</p>        
+                }
             </div>
         </>
     )

@@ -28,7 +28,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
     const tiposDeFondo = [
         { value: 'INITIAL', label: 'Seleccione' },
         { value: 'FONDO_GENERICO', label: 'Fondo genérico - 2017' },
-        { value: 'FONDO_PROYECTO_EXTENCION', label: 'Proyecto de extención - 2067' }
+        { value: 'FONDO_PROYECTO_EXTENSION', label: 'Proyecto de extensión - 2067' }
     ]
 
     const dependiencias = [
@@ -215,7 +215,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
                         </div>
                         <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                             <div className='div-form'>
-                                <p className='p-label-form'> Descripción de la solictud: </p>
+                                <p className='p-label-form'> Descripción de la solicitud: </p>
                                 <textarea ref={descripcionRef} placeholder='' className='form-control' value={descripcion} onChange={(e) => setDescripcion(e.target.value)} autoComplete='off' />
                             </div>
                         </div>
