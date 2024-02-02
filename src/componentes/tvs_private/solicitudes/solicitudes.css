@@ -39,3 +39,16 @@
     line-height: 1.5;
     position: absolute;
 }
+
+.div-head-soluciona-precontractual{
+    display: flex;
+    justify-content: space-between;
+}
+
+.div-upload-file-precontractual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0rem;
+    height: 100%;
+}
