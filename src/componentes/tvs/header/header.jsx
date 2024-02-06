@@ -117,6 +117,9 @@ function Header({ setStateMenu, setRedirect, componentsHeader }) {
                         <div className="item-info-user-ditail" >
                           <p>{infoMenuUsuario.usuario}</p>
                         </div>
+                        <div className="item-info-user-ditail" >
+                          <p>{infoMenuUsuario.role}</p>
+                        </div>
                         <div className="item-info-user-ditail">
                           {infoMenuUsuario.nombre_completo}
                         </div>

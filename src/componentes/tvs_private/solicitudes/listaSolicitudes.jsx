@@ -35,6 +35,9 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
             case 'ZonePrecontractual':
                 consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRECONTRACTUAL')
                 break
+            case 'ZonePresupuesto':
+                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRESUPUESTO')
+                break
             default:
                 break
         }
@@ -179,7 +182,7 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
                             </div>
                         </>
                         :
-                        <p className=''>No hay información</p>        
+                        <p className=''>No hay información</p>
                 }
             </div>
         </>

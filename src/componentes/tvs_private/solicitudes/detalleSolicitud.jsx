@@ -11,23 +11,28 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
   const [disabledButtom, setDisabledButtom] = useState(true)
   const [usuariosPrecontractual, setUsuariosPrecontractual] = useState([])
   const [usuariosPresupuesto, setUsuariosPresupuesto] = useState([])
+  const [usuariosContractual, setUsuariosContractual] = useState([])
   const [usuariosJefeDependencia, setUsuariosJefeDependencia] = useState([])
 
   const [usuarioPrecontractual, setUsuarioPrecontractual] = useState('')
   const [usuarioPresupuesto, setUsuarioPresupuesto] = useState('')
+  const [usuarioContractual, setUsuarioContractual] = useState('')
   const [usuarioJefeDependencia, setUsuarioJefeDependencia] = useState('')
 
   const [detalleSolicitud, setDetalleSolicitud] = useState({})
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false)
 
   const [resuelvePrecontractual, setResuelvePrecontractual] = useState('');
+  const [resuelvePresupuesto, setResuelvePresupuesto] = useState('');
   const [descripcionObservaciones, setDescripcionObservaciones] = useState('');
   const [archivos, setArchivos] = useState([]);
 
   const usuarioPrecontractualRef = useRef('')
   const usuariosPresupuestoRef = useRef('')
+  const usuariosContractualRef = useRef('')
   const usuariosJefeDependenciaRef = useRef('')
   const opcionesGestionPrecontractualRef = useRef('')
+  const opcionesGestionPresupuestoRef = useRef('')
   const descripcionObservacionesRef = useRef('')
   const archivosRef = useRef('')
 
@@ -38,6 +43,14 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     { value: 'DEVUELVE_JEFE_DEPENDENCIA', label: 'Devolver a Jefe de dependencia' },
   ]
 
+  const opcionesGestionPresupuesto = [
+    { value: 'INITIAL', label: 'Seleccione' },
+    { value: 'AVANZA_A_CONTRACTUAL', label: 'Avanza a contratación' },
+    { value: 'RECHAZA_SOLICITUD', label: 'Solicitud rechazada' },
+    { value: 'DEVUELVE_JEFE_DEPENDENCIA', label: 'Devolver a Jefe de dependencia' },
+    { value: 'DEVUELVE_A_PRECONTRACTUAL', label: 'Devolver a precontractual' }
+  ]
+
   useEffect(() => {
     consultaInformacionGeneral()
   }, [])
@@ -46,6 +59,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     consultaInformacionUsuarios('PRECONTRATUAL_ROLE')
     consultaInformacionUsuarios('PRESUPUETO_ROLE')
     consultaInformacionUsuarios('JEFE_DEPENDENCIA_ROLE')
+    consultaInformacionUsuarios('CONTRATUAL_ROLE')
     consultaDetalleSolicitud()
   }
 
@@ -77,6 +91,9 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
                   break
                 case 'JEFE_DEPENDENCIA_ROLE':
                   setUsuariosJefeDependencia(usersPorRole)
+                  break
+                case 'CONTRATUAL_ROLE':
+                  setUsuariosContractual(usersPorRole)
                   break
                 default:
                   break
@@ -200,10 +217,18 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
   const selectActionSolutionPrecontractual = (e) => {
     archivosRef.current.className = 'form-control'
     archivosRef.current.value = []
-    usuariosPresupuestoRef.current.setValue({
-      value: '',
-      label: ''
-    })
+    if (!!usuariosPresupuestoRef.current) {
+      usuariosPresupuestoRef.current.setValue(
+        {
+          value: '', label: ''
+        })
+    }
+    if (!!usuariosJefeDependenciaRef.current) {
+      usuariosJefeDependenciaRef.current.setValue(
+        {
+          value: '', label: ''
+        })
+    }
     setDisabledButtom(true);
     setUsuarioPresupuesto('')
     setUsuarioJefeDependencia('')
@@ -211,6 +236,32 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     setArchivos([])
     setResuelvePrecontractual(e.value)
     if (e.value === 'AVANZA_A_PRESUPUESTO') {
+      setDisabledButtom(false);
+    }
+  }
+
+  const selectActionSolutionPresupuesto = (e) => {
+    archivosRef.current.className = 'form-control'
+    archivosRef.current.value = []
+    if (!!usuariosJefeDependenciaRef.current) {
+      usuariosJefeDependenciaRef.current.setValue(
+        {
+          value: '', label: ''
+        })
+    }
+    if (!!usuariosContractualRef.current) {
+      usuariosContractualRef.current.setValue(
+        {
+          value: '', label: ''
+        })
+    }
+    setDisabledButtom(true);
+    setUsuarioContractual('')
+    setUsuarioJefeDependencia('')
+    setDescripcionObservaciones('')
+    setArchivos([])
+    setResuelvePresupuesto(e.value)
+    if (e.value === 'AVANZA_A_CONTRACTUAL') {
       setDisabledButtom(false);
     }
   }
@@ -283,7 +334,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     }
   }
 
-  const labelUsuarioControl = () => {
+  const labelUsuarioControlPrecontractual = () => {
     switch (resuelvePrecontractual) {
       case 'AVANZA_A_PRESUPUESTO':
         return (
@@ -300,7 +351,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     }
   }
 
-  const selectUsuarioControl = () => {
+  const selectUsuarioControlPrecontractual = () => {
     switch (resuelvePrecontractual) {
       case 'AVANZA_A_PRESUPUESTO':
         return (
@@ -312,10 +363,68 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         )
       default:
         return (
-          <Select ref={usuariosPresupuestoRef} options={usuariosPresupuesto} isDisabled placeholder='Seleccione' />
+          <Select isDisabled value='Seleccione' placeholder='' />
         )
     }
   }
+
+  const labelUsuarioControlPresupuesto = () => {
+    switch (resuelvePresupuesto) {
+      case 'AVANZA_A_CONTRACTUAL':
+        return (
+          <p className='mt-3'>Para continuar con la gestión de la presente solicitud, es requerido que le asigne un analista del área de contratación:</p>
+        )
+      case 'DEVUELVE_JEFE_DEPENDENCIA':
+        return (
+          <p className='mt-3'>Para continuar con la gestión de la presente solicitud, es requerido que le asigne el Jefe de dependencia:</p>
+        )
+      default:
+        return (
+          <></>
+        )
+    }
+  }
+
+  const selectUsuarioControlPresupuesto = () => {
+    switch (resuelvePresupuesto) {
+      case 'AVANZA_A_CONTRACTUAL':
+        return (
+          <Select ref={usuariosContractualRef} options={usuariosContractual} onChange={(e) => setUsuarioContractual(e.value)} placeholder='Seleccione' />
+        )
+      case 'DEVUELVE_JEFE_DEPENDENCIA':
+        return (
+          <Select ref={usuariosJefeDependenciaRef} options={usuariosJefeDependencia} onChange={(e) => setUsuarioJefeDependencia(e.value)} placeholder='Seleccione' />
+        )
+      default:
+        return (
+          <Select isDisabled value='Seleccione' placeholder='' />
+        )
+    }
+  }
+
+  const validateIconDocumento = (urlDoc, i) => {
+    switch (urlDoc.typeArchivo) {
+      case 'PDF':
+        return (
+          <a className='a-bottom-custom-link' target='blank' href={urlDoc.nombreArchivo} >
+            <FontAwesomeIcon className='icons-table' icon={faFilePdf} /> <p className='p-label-bottom-custom-link'>Documento {i + 1} </p>
+          </a>
+        )
+      case 'XLS':
+        return (
+          <a className='a-bottom-custom-link' target='blank' href={urlDoc.nombreArchivo} >
+            <FontAwesomeIcon className='icons-table' icon={faFileExcel} /> <p className='p-label-bottom-custom-link'>Documento {i + 1} </p>
+          </a>
+        )
+      default:
+        return (
+          <a className='a-bottom-custom-link' target='blank' href={urlDoc.nombreArchivo} >
+            <FontAwesomeIcon className='icons-table' icon={faFilePdf} /> <p className='p-label-bottom-custom-link'>Documento {i + 1} </p>
+          </a>
+        )
+    }
+  }
+
 
   return (
     <>
@@ -420,9 +529,9 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
               detalleSolicitud.urlDocuments.map((urlDoc, i) => {
                 return (
                   <div className="col-12 col-sm-12 col-md-4 col-lg-4 mt-3" >
-                    <a className='a-bottom-custom-link' target='blank' href={urlDoc} >
-                      <FontAwesomeIcon className='icons-table' icon={faFilePdf} /> <p className='p-label-bottom-custom-link'>Documento {i + 1} </p>
-                    </a>
+                    {
+                      validateIconDocumento(urlDoc, i)
+                    }
                   </div>
                 )
               })
@@ -502,13 +611,13 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     {
-                      labelUsuarioControl()
+                      labelUsuarioControlPrecontractual()
                     }
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form mt-3'>
                       {
-                        selectUsuarioControl()
+                        selectUsuarioControlPrecontractual()
                       }
                     </div>
                   </div>
@@ -531,6 +640,68 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
           :
           'Cargando ...'
       }
+
+      {
+        showDetalleSolicitud ?
+          detalleSolicitud.detalleSolicitudVista.modulo4 ?
+            <>
+              <div className='div-style-form'>
+                <div className="row">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                    <h3 className='titulo-form mb-3'>Resolviendo la solicitud {idDetalleSolicitud}: </h3>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                    <p className='mb-3'>A continuación, selecciona la tipificación correcta de la solicitud y deja las observaciones correspondientes:</p>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                      <Select ref={opcionesGestionPresupuestoRef} options={opcionesGestionPresupuesto} onChange={(e) => selectActionSolutionPresupuesto(e)} placeholder='Seleccione' />
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-upload-file-precontractual'>
+                      {
+                        disabledButtom ?
+                          <input ref={archivosRef} type="file" className='form-control' disabled multiple onChange={(e) => eventInputFiles(e)} />
+                          :
+                          <input ref={archivosRef} type="file" className='form-control' multiple onChange={(e) => eventInputFiles(e)} />
+                      }
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    {
+                      labelUsuarioControlPresupuesto()
+                    }
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form mt-3'>
+                      {
+                        selectUsuarioControlPresupuesto()
+                      }
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                      <p className='p-label-form'> Observaciones: </p>
+                      <textarea ref={descripcionObservacionesRef} placeholder='' className='form-control' value={descripcionObservaciones} onChange={(e) => setDescripcionObservaciones(e.target.value)} autoComplete='off' />
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='h-100 d-flex align-items-center justify-content-center'>
+                      <button className='btn btn-primary bottom-custom' >Enviar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+            :
+            <></>
+          :
+          'Cargando ...'
+      }
+
       <div className='div-style-form'>
         <h3 className='titulo-form mb-3'>En que anda mi solicitud {idDetalleSolicitud}: </h3>
         <div className="row">
