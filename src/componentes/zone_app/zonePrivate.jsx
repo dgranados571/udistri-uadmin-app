@@ -37,7 +37,7 @@ const ZonePrivate = () => {
                 return (
                     <ZoneJefeDependencia setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
                 )
-            case 'PRECONTRATUAL_ROLE':
+            case 'PRECONTRACTUAL_ROLE':
                 return (
                     <ZonePrecontractual setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
                 )
@@ -49,7 +49,7 @@ const ZonePrivate = () => {
                 return (
                     <ZoneAfiliaciones setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
                 )
-            case 'CONTRATUAL_ROLE':
+            case 'CONTRACTUAL_ROLE':
                 return (
                     <ZoneContractual setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
                 )

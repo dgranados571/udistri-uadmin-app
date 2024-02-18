@@ -27,16 +27,19 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
     const solicitudesPorZonaConsulta = () => {
         switch (zonaConsulta) {
             case 'ROOT':
-                consultaInformacionSolicitudesApp()
+                consultaInformacionSolicitudesApp();
                 break
             case 'ZoneJefeDependencia':
-                consultaInformacionSolicitudesApp()
+                consultaInformacionSolicitudesApp();
                 break
             case 'ZonePrecontractual':
-                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRECONTRACTUAL')
+                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRECONTRACTUAL');
                 break
             case 'ZonePresupuesto':
-                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRESUPUESTO')
+                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRESUPUESTO');
+                break
+            case 'ZoneContractual':
+                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_CONTRACTUAL');                
                 break
             default:
                 break

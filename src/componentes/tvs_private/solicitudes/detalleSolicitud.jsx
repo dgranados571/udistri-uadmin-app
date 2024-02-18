@@ -8,33 +8,34 @@ import { UtilUrl } from '../../../utilUrl';
 const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud }) => {
 
   const { urlEntorno } = UtilUrl();
-  const [disabledButtom, setDisabledButtom] = useState(true)
-  const [usuariosPrecontractual, setUsuariosPrecontractual] = useState([])
-  const [usuariosPresupuesto, setUsuariosPresupuesto] = useState([])
-  const [usuariosContractual, setUsuariosContractual] = useState([])
-  const [usuariosJefeDependencia, setUsuariosJefeDependencia] = useState([])
+  const [disabledButtom, setDisabledButtom] = useState(true);
+  const [usuariosPrecontractual, setUsuariosPrecontractual] = useState([]);
+  const [usuariosPresupuesto, setUsuariosPresupuesto] = useState([]);
+  const [usuariosContractual, setUsuariosContractual] = useState([]);
+  const [usuariosJefeDependencia, setUsuariosJefeDependencia] = useState([]);
 
-  const [usuarioPrecontractual, setUsuarioPrecontractual] = useState('')
-  const [usuarioPresupuesto, setUsuarioPresupuesto] = useState('')
-  const [usuarioContractual, setUsuarioContractual] = useState('')
-  const [usuarioJefeDependencia, setUsuarioJefeDependencia] = useState('')
+  const [usuarioPrecontractual, setUsuarioPrecontractual] = useState('');
+  const [usuarioPresupuesto, setUsuarioPresupuesto] = useState('');
+  const [usuarioContractual, setUsuarioContractual] = useState('');
+  const [usuarioJefeDependencia, setUsuarioJefeDependencia] = useState('');
 
-  const [detalleSolicitud, setDetalleSolicitud] = useState({})
-  const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false)
+  const [detalleSolicitud, setDetalleSolicitud] = useState({});
+  const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false);
 
   const [resuelvePrecontractual, setResuelvePrecontractual] = useState('');
   const [resuelvePresupuesto, setResuelvePresupuesto] = useState('');
   const [descripcionObservaciones, setDescripcionObservaciones] = useState('');
   const [archivos, setArchivos] = useState([]);
 
-  const usuarioPrecontractualRef = useRef('')
-  const usuariosPresupuestoRef = useRef('')
-  const usuariosContractualRef = useRef('')
-  const usuariosJefeDependenciaRef = useRef('')
-  const opcionesGestionPrecontractualRef = useRef('')
-  const opcionesGestionPresupuestoRef = useRef('')
-  const descripcionObservacionesRef = useRef('')
-  const archivosRef = useRef('')
+  const usuarioPrecontractualRef = useRef('');
+  const usuariosPresupuestoRef = useRef('');
+  const usuariosContractualRef = useRef('');
+  const usuariosJefeDependenciaRef = useRef('');
+  const opcionesGestionPrecontractualRef = useRef('');
+  const opcionesGestionPresupuestoRef = useRef('');
+  const opcionesGestionContractualRef = useRef('');
+  const descripcionObservacionesRef = useRef('');
+  const archivosRef = useRef('');
 
   const opcionesGestionPrecontractual = [
     { value: 'INITIAL', label: 'Seleccione' },
@@ -51,22 +52,27 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     { value: 'DEVUELVE_A_PRECONTRACTUAL', label: 'Devolver a precontractual' }
   ]
 
+  const opcionesGestionContractual = [
+    { value: 'INITIAL', label: 'Seleccione' },
+    { value: 'CIERRA_SOLICITUD_SATISFACTORIA', label: 'Cierra solicitud' }
+  ]
+
   useEffect(() => {
-    consultaInformacionGeneral()
+    consultaInformacionGeneral();
   }, [])
 
   const consultaInformacionGeneral = () => {
-    consultaInformacionUsuarios('PRECONTRATUAL_ROLE')
-    consultaInformacionUsuarios('PRESUPUETO_ROLE')
-    consultaInformacionUsuarios('JEFE_DEPENDENCIA_ROLE')
-    consultaInformacionUsuarios('CONTRATUAL_ROLE')
-    consultaDetalleSolicitud()
+    consultaInformacionUsuarios('PRECONTRACTUAL_ROLE');
+    consultaInformacionUsuarios('PRESUPUETO_ROLE');
+    consultaInformacionUsuarios('JEFE_DEPENDENCIA_ROLE');
+    consultaInformacionUsuarios('CONTRACTUAL_ROLE');
+    consultaDetalleSolicitud();
   }
 
   const consultaInformacionUsuarios = async (role) => {
     if (!!sessionStorage.getItem('usuarioApp')) {
-      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
-      setCargando(true)
+      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
+      setCargando(true);
       const body = {
         "usuarioApp": usuarioLocalStorage.usuario,
         "role": role,
@@ -83,40 +89,40 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
             })
             if (response.data.estado) {
               switch (role) {
-                case 'PRECONTRATUAL_ROLE':
-                  setUsuariosPrecontractual(usersPorRole)
+                case 'PRECONTRACTUAL_ROLE':
+                  setUsuariosPrecontractual(usersPorRole);
                   break
                 case 'PRESUPUETO_ROLE':
-                  setUsuariosPresupuesto(usersPorRole)
+                  setUsuariosPresupuesto(usersPorRole);
                   break
                 case 'JEFE_DEPENDENCIA_ROLE':
-                  setUsuariosJefeDependencia(usersPorRole)
+                  setUsuariosJefeDependencia(usersPorRole);
                   break
-                case 'CONTRATUAL_ROLE':
-                  setUsuariosContractual(usersPorRole)
+                case 'CONTRACTUAL_ROLE':
+                  setUsuariosContractual(usersPorRole);
                   break
                 default:
                   break
               }
             } else {
-              toast(response.data.mensaje)
+              toast(response.data.mensaje);
             }
           }, 50)
         }).catch(() => {
           setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador')
-            setCargando(false)
+            toast('No es posible consultar la información, contacte al administrador');
+            setCargando(false);
           }, 50)
         })
     } else {
-      toast('No es posible consultar la información, contacte al administrador')
+      toast('No es posible consultar la información, contacte al administrador');
     }
   }
 
   const asignaUsuarioPrecontractual = async () => {
     if (!!sessionStorage.getItem('usuarioApp')) {
-      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
-      setCargando(true)
+      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
+      setCargando(true);
       const body = {
         "usuarioApp": usuarioLocalStorage.usuario,
         "usuarioPrecontractual": usuarioPrecontractual,
@@ -126,26 +132,26 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       await axios.post(`${urlEntorno}/service/uadmin/asignaUsuarioPrecontractual`, body)
         .then((response) => {
           setTimeout(() => {
-            toast(response.data.mensaje)
-            setCargando(false)
-            setRedirectSolicitudes('LISTA_SOLICITUDES')
+            toast(response.data.mensaje);
+            setCargando(false);
+            setRedirectSolicitudes('LISTA_SOLICITUDES');
           }, 250)
         }).catch(() => {
           setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador')
-            setCargando(false)
+            toast('No es posible consultar la información, contacte al administrador');
+            setCargando(false);
           }, 250)
         })
 
     } else {
-      toast('No es posible consultar la información, contacte al administrador')
+      toast('No es posible consultar la información, contacte al administrador');
     }
   }
 
   const resuelvePrecontractualAction = async () => {
     if (!!sessionStorage.getItem('usuarioApp')) {
-      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
-      setCargando(true)
+      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
+      setCargando(true);
       const f = new FormData();
       const body = {
         "usuarioApp": usuarioLocalStorage.usuario,
@@ -156,7 +162,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         "usuarioJefeDependencia": usuarioJefeDependencia,
         "fechaEvento": new Date()
       }
-      f.append('body', JSON.stringify(body))
+      f.append('body', JSON.stringify(body));
       for (let index = 0; index < archivos.length; index++) {
         f.append('files', archivos[index])
       }
@@ -164,14 +170,51 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       await axios.post(`${urlEntorno}/service/uadmin/resuelvePrecontractual`, f)
         .then((response) => {
           setTimeout(() => {
-            toast(response.data.mensaje)
-            setRedirectSolicitudes('LISTA_SOLICITUDES')
-            setCargando(false)
+            toast(response.data.mensaje);
+            setRedirectSolicitudes('LISTA_SOLICITUDES');
+            setCargando(false);
           }, 50)
         }).catch(() => {
           setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador')
-            setCargando(false)
+            toast('No es posible consultar la información, contacte al administrador');
+            setCargando(false);
+          }, 250)
+        })
+    } else {
+      toast('No es posible consultar la información, contacte al administrador');
+    }
+  }
+
+  const resuelvePresupuestoAction = async () => {
+    if (!!sessionStorage.getItem('usuarioApp')) {
+      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
+      setCargando(true);
+      const f = new FormData();
+      const body = {
+        "usuarioApp": usuarioLocalStorage.usuario,
+        "idProcesamiento": idDetalleSolicitud,
+        "resuelvePresupuesto": resuelvePresupuesto,
+        "descripcionObservaciones": descripcionObservaciones,
+        "usuarioContractual": usuarioContractual,
+        "usuarioJefeDependencia": usuarioJefeDependencia,
+        "usuarioPrecontractual": usuarioPrecontractual,
+        "fechaEvento": new Date()
+      }
+      f.append('body', JSON.stringify(body))
+      for (let index = 0; index < archivos.length; index++) {
+        f.append('files', archivos[index])
+      }
+      await axios.post(`${urlEntorno}/service/uadmin/resuelvePresupuesto`, f)
+        .then((response) => {
+          setTimeout(() => {
+            toast(response.data.mensaje);
+            setRedirectSolicitudes('LISTA_SOLICITUDES');
+            setCargando(false);
+          }, 50)
+        }).catch(() => {
+          setTimeout(() => {
+            toast('No es posible consultar la información, contacte al administrador');
+            setCargando(false);
           }, 250)
         })
     } else {
@@ -181,8 +224,8 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
 
   const consultaDetalleSolicitud = async () => {
     if (!!sessionStorage.getItem('usuarioApp')) {
-      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
-      setCargando(true)
+      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
+      setCargando(true);
       const body = {
         "usuarioApp": usuarioLocalStorage.usuario,
         "idProcesamiento": idDetalleSolicitud,
@@ -191,32 +234,32 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         .then((response) => {
           setTimeout(() => {
             if (response.data.estado) {
-              setDetalleSolicitud(response.data.objeto)
-              setShowDetalleSolicitud(true)
+              setDetalleSolicitud(response.data.objeto);
+              setShowDetalleSolicitud(true);
             } else {
-              toast(response.data.mensaje)
+              toast(response.data.mensaje);
             }
-            setCargando(false)
+            setCargando(false);
           }, 50)
         }).catch(() => {
           setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador')
-            setCargando(false)
+            toast('No es posible consultar la información, contacte al administrador');
+            setCargando(false);
           }, 250)
         })
     } else {
-      toast('No es posible consultar la información, contacte al administrador')
+      toast('No es posible consultar la información, contacte al administrador');
     }
   }
 
   const selectActionUsuarioPrecontractual = (e) => {
-    setUsuarioPrecontractual(e.value)
-    setDisabledButtom(false)
+    setUsuarioPrecontractual(e.value);
+    setDisabledButtom(false);
   }
 
   const selectActionSolutionPrecontractual = (e) => {
-    archivosRef.current.className = 'form-control'
-    archivosRef.current.value = []
+    archivosRef.current.className = 'form-control';
+    archivosRef.current.value = [];
     if (!!usuariosPresupuestoRef.current) {
       usuariosPresupuestoRef.current.setValue(
         {
@@ -230,19 +273,19 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         })
     }
     setDisabledButtom(true);
-    setUsuarioPresupuesto('')
-    setUsuarioJefeDependencia('')
-    setDescripcionObservaciones('')
-    setArchivos([])
-    setResuelvePrecontractual(e.value)
+    setUsuarioPresupuesto('');
+    setUsuarioJefeDependencia('');
+    setDescripcionObservaciones('');
+    setArchivos([]);
+    setResuelvePrecontractual(e.value);
     if (e.value === 'AVANZA_A_PRESUPUESTO') {
       setDisabledButtom(false);
     }
   }
 
   const selectActionSolutionPresupuesto = (e) => {
-    archivosRef.current.className = 'form-control'
-    archivosRef.current.value = []
+    archivosRef.current.className = 'form-control';
+    archivosRef.current.value = [];
     if (!!usuariosJefeDependenciaRef.current) {
       usuariosJefeDependenciaRef.current.setValue(
         {
@@ -256,14 +299,19 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         })
     }
     setDisabledButtom(true);
-    setUsuarioContractual('')
-    setUsuarioJefeDependencia('')
-    setDescripcionObservaciones('')
-    setArchivos([])
-    setResuelvePresupuesto(e.value)
+    setUsuarioContractual('');
+    setUsuarioJefeDependencia('');
+    setUsuarioPrecontractual('');
+    setDescripcionObservaciones('');
+    setArchivos([]);
+    setResuelvePresupuesto(e.value);
     if (e.value === 'AVANZA_A_CONTRACTUAL') {
       setDisabledButtom(false);
     }
+  }
+
+  const selectActionSolutionContractual = (e) => {
+
   }
 
   const eventInputFiles = (e) => {
@@ -274,16 +322,16 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       valorFinalMB = valorFinalMB + fileSizeMB;
     }
     if (valorFinalMB < 20) {
-      setArchivos(e.target.files)
+      setArchivos(e.target.files);
     } else {
-      toast("*Los archivos cargados superan las 20 MB")
+      toast("*Los archivos cargados superan las 20 MB");
     }
   }
 
   const solucionaPrecontractual = () => {
 
     let formValidado = [];
-    archivosRef.current.className = 'form-control'
+    archivosRef.current.className = 'form-control';
 
     if (resuelvePrecontractual.length === 0) {
       formValidado.push('resuelvePrecontractual');
@@ -305,7 +353,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       }
     }
 
-    descripcionObservacionesRef.current.className = 'form-control'
+    descripcionObservacionesRef.current.className = 'form-control';
     if (descripcionObservaciones.length === 0) {
       formValidado.push('Descripcion');
       descripcionObservacionesRef.current.className = 'form-control form-control-error';
@@ -317,7 +365,63 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     }
 
     if (formValidado.length === 0) {
-      resuelvePrecontractualAction()
+      resuelvePrecontractualAction();
+    } else {
+      let validaErrorLongitud = false;
+      if (formValidado.length === 1) {
+        if (formValidado[0] === 'Descripcion Longitud') {
+          validaErrorLongitud = true;
+        }
+      }
+      if (validaErrorLongitud) {
+        toast('La longitud del campo descripción excede el limite permitido, Max --> 250 Caracteres');
+      } else {
+        toast('Errores en el formulario de solución precontractual, valide la información');
+      }
+      formValidado.splice(0, formValidado.length);
+    }
+  }
+
+  const solucionaPresupuesto = () => {
+
+    let formValidado = [];
+    archivosRef.current.className = 'form-control';
+
+    if (resuelvePresupuesto.length === 0) {
+      formValidado.push('resuelvePresupuesto');
+    } else {
+      if (resuelvePresupuesto === 'INITIAL') {
+        formValidado.push('resuelvePresupuesto');
+      } else if (resuelvePresupuesto === 'AVANZA_A_CONTRACTUAL') {
+        if (archivos.length === 0) {
+          formValidado.push('Archivos');
+          archivosRef.current.className = 'form-control form-control-error';
+        }
+        if (usuarioContractual.length === 0) {
+          formValidado.push('usuarioContractual');
+        }
+      } else if (resuelvePresupuesto === 'DEVUELVE_JEFE_DEPENDENCIA') {
+        if (usuarioJefeDependencia.length === 0) {
+          formValidado.push('usuarioJefeDependencia');
+        }
+      } else if (resuelvePresupuesto === 'DEVUELVE_A_PRECONTRACTUAL') {
+        setUsuarioPrecontractual(detalleSolicitud.eventosSolicitud[detalleSolicitud.eventosSolicitud.length - 2].resultado_operacion);
+      }
+    }
+
+    descripcionObservacionesRef.current.className = 'form-control';
+    if (descripcionObservaciones.length === 0) {
+      formValidado.push('Descripcion');
+      descripcionObservacionesRef.current.className = 'form-control form-control-error';
+    }
+
+    if (descripcionObservaciones.length > 250) {
+      formValidado.push('Descripcion Longitud');
+      descripcionObservacionesRef.current.className = 'form-control form-control-error';
+    }
+
+    if (formValidado.length === 0) {
+      resuelvePresupuestoAction();
     } else {
       let validaErrorLongitud = false;
       if (formValidado.length === 1) {
@@ -328,10 +432,15 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       if (validaErrorLongitud) {
         toast('La longitud del campo descripción excede el limite permitido, Max --> 250 Caracteres')
       } else {
-        toast('Errores en el formulario de solución precontractual, valide la información')
+        toast('Errores en el formulario de solución presupuesto, valide la información')
       }
       formValidado.splice(0, formValidado.length)
     }
+
+  }
+
+  const solucionaContractual= () => {
+
   }
 
   const labelUsuarioControlPrecontractual = () => {
@@ -377,6 +486,10 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       case 'DEVUELVE_JEFE_DEPENDENCIA':
         return (
           <p className='mt-3'>Para continuar con la gestión de la presente solicitud, es requerido que le asigne el Jefe de dependencia:</p>
+        )
+      case 'DEVUELVE_A_PRECONTRACTUAL':
+        return (
+          <p className='mt-3'>La solcitud sera reasignada al Analista Precontractual: {detalleSolicitud.eventosSolicitud[detalleSolicitud.eventosSolicitud.length - 2].resultado_operacion} </p>
         )
       default:
         return (
@@ -424,7 +537,6 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         )
     }
   }
-
 
   return (
     <>
@@ -690,7 +802,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='h-100 d-flex align-items-center justify-content-center'>
-                      <button className='btn btn-primary bottom-custom' >Enviar</button>
+                      <button className='btn btn-primary bottom-custom' onClick={() => solucionaPresupuesto()} >Enviar</button>
                     </div>
                   </div>
                 </div>
@@ -701,6 +813,66 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
           :
           'Cargando ...'
       }
+
+
+      {
+        showDetalleSolicitud ?
+          detalleSolicitud.detalleSolicitudVista.modulo5 ?
+            <>
+              <div className='div-style-form'>
+                <div className="row">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                    <h3 className='titulo-form mb-3'>Resolviendo la solicitud {idDetalleSolicitud}: </h3>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                    <p className='mb-3'>A continuación, selecciona la tipificación correcta de la solicitud y deja las observaciones correspondientes:</p>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                      <Select ref={opcionesGestionContractualRef} options={opcionesGestionContractual} onChange={(e) => selectActionSolutionContractual(e)} placeholder='Seleccione' />
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-upload-file-precontractual'>
+                      {
+                        disabledButtom ?
+                          <input ref={archivosRef} type="file" className='form-control' disabled multiple onChange={(e) => eventInputFiles(e)} />
+                          :
+                          <input ref={archivosRef} type="file" className='form-control' multiple onChange={(e) => eventInputFiles(e)} />
+                      }
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form mt-3'>
+                      
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                      <p className='p-label-form'> Observaciones: </p>
+                      <textarea ref={descripcionObservacionesRef} placeholder='' className='form-control' value={descripcionObservaciones} onChange={(e) => setDescripcionObservaciones(e.target.value)} autoComplete='off' />
+                    </div>
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='h-100 d-flex align-items-center justify-content-center'>
+                      <button className='btn btn-primary bottom-custom' onClick={() => solucionaContractual()} >Enviar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+            :
+            <></>
+          :
+          'Cargando ...'
+      }
+
+
 
       <div className='div-style-form'>
         <h3 className='titulo-form mb-3'>En que anda mi solicitud {idDetalleSolicitud}: </h3>

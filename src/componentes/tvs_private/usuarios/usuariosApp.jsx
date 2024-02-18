@@ -62,10 +62,9 @@ const UsuariosApp = ({ toast, setCargando }) => {
     const roles = [
         { value: 'INITIAL', label: 'Seleccione' },
         { value: 'JEFE_DEPENDENCIA_ROLE', label: 'Jefe de dependencia' },
-        { value: 'PRECONTRATUAL_ROLE', label: 'Precontractual' },
+        { value: 'PRECONTRACTUAL_ROLE', label: 'Precontractual' },
         { value: 'PRESUPUETO_ROLE', label: 'Presupuesto' },
-        { value: 'AFILIACIONES_ROLE', label: 'Afiliaciones' },
-        { value: 'CONTRATUAL_ROLE', label: 'Contractual' }
+        { value: 'CONTRACTUAL_ROLE', label: 'Contractual' }
     ]
 
     const guardaUsuarioAction = () => {

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Header from '../tvs/header/header'
 import UsuariosApp from '../tvs_private/usuarios/usuariosApp';
 import Solicitudes from '../tvs_private/solicitudes/solicitudes';
+import ListaSolicitudes from '../tvs_private/solicitudes/listaSolicitudes';
 
 const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
 
@@ -32,7 +33,7 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
             case 'MENU1':
                 return (
                     <div className='div-container'>
-                        <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta= 'ZoneJefeDependencia' />
+                        <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta='ZoneJefeDependencia' />
                     </div>
                 )
             case 'MENU2':

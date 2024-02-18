@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Header from '../tvs/header/header';
+import Solicitudes from '../tvs_private/solicitudes/solicitudes';
 
 const ZoneContractual = ({ setRedirect, toast, setCargando }) => {
 
@@ -11,22 +12,15 @@ const ZoneContractual = ({ setRedirect, toast, setCargando }) => {
     const componentsHeader = [
         {
             name: 'MENU1',
-            label: 'MENU1',
-            id: 'MENU1',
+            label: 'Bandeja de entrada',
+            id: 'Bandeja de entrada',
             className: 'btn btn-link a-buttom-active',
             classNameResponse: 'btn btn-link a-buttom-responsive-active'
         },
         {
             name: 'MENU2',
-            label: 'MENU2',
-            id: 'MENU2',
-            className: 'btn btn-link a-buttom',
-            classNameResponse: 'btn btn-link a-buttom'
-        },
-        {
-            name: 'MENU3',
-            label: 'MENU3',
-            id: 'MENU3',
+            label: 'Histórico',
+            id: 'Histórico',
             className: 'btn btn-link a-buttom',
             classNameResponse: 'btn btn-link a-buttom'
         }
@@ -37,16 +31,10 @@ const ZoneContractual = ({ setRedirect, toast, setCargando }) => {
             case 'MENU1':
                 return (
                     <div className='div-container'>
-
+                          <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta= 'ZoneContractual' />
                     </div>
                 )
             case 'MENU2':
-                return (
-                    <div className='div-container'>
-
-                    </div>
-                )
-            case 'MENU3':
                 return (
                     <div className='div-container'>
 
@@ -61,12 +49,7 @@ const ZoneContractual = ({ setRedirect, toast, setCargando }) => {
 
     return (
         <>
-            <Header setStateMenu={setStateMenu} setRedirect={setRedirect} componentsHeader={componentsHeader} />
-            <div className='div-container'>
-                <div className='div-style-form'>
-                    <h3>Zona Contractual</h3>
-                </div>
-            </div>
+            <Header setStateMenu={setStateMenu} setRedirect={setRedirect} componentsHeader={componentsHeader} />            
             {
                 componentMenu()
             }

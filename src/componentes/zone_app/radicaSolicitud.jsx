@@ -64,7 +64,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
         }
     }
 
-    const registraSolcitud = () => {
+    const registraSolicitud = () => {
 
         let formValidado = [];
 
@@ -86,10 +86,18 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             correoRef.current.className = 'form-control form-control-error';
         }
 
+        if(dependencia.length === 0){
+            formValidado.push('dependencia');
+        }
+
         autorizadoRef.current.className = 'form-control'
         if (autorizado.length === 0) {
             formValidado.push('Autorizado');
             autorizadoRef.current.className = 'form-control form-control-error';
+        }
+
+        if(fondo.length === 0){
+            formValidado.push('fondo');
         }
 
         descripcionRef.current.className = 'form-control'
@@ -109,7 +117,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
         }
 
         if (formValidado.length === 0) {
-            enviaRegistroSolictud()
+            enviaRegistroSolicitud()
         } else {
             let validaErrorLongitud = false;
             if (formValidado.length === 1) {
@@ -137,7 +145,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
         setArchivos([])
     }
 
-    const enviaRegistroSolictud = async () => {
+    const enviaRegistroSolicitud = async () => {
         setCargando(true)
         const f = new FormData();
         const body = {
@@ -229,7 +237,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
                         </div>
                         <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                             <div className='div-buttom-registra'>
-                                <button className='btn btn-primary bottom-custom' onClick={() => registraSolcitud()}  >Registrar solicitud</button>
+                                <button className='btn btn-primary bottom-custom' onClick={() => registraSolicitud()}  >Registrar solicitud</button>
                             </div>
                         </div>
                     </div>
