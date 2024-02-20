@@ -19,11 +19,14 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
   const [usuarioContractual, setUsuarioContractual] = useState('');
   const [usuarioJefeDependencia, setUsuarioJefeDependencia] = useState('');
 
+  const [codigoQuipu, setCodigoQuipu] = useState('')
+
   const [detalleSolicitud, setDetalleSolicitud] = useState({});
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false);
 
   const [resuelvePrecontractual, setResuelvePrecontractual] = useState('');
   const [resuelvePresupuesto, setResuelvePresupuesto] = useState('');
+  const [resuelveContractual, setResuelveContractual] = useState('');
   const [descripcionObservaciones, setDescripcionObservaciones] = useState('');
   const [archivos, setArchivos] = useState([]);
 
@@ -34,6 +37,9 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
   const opcionesGestionPrecontractualRef = useRef('');
   const opcionesGestionPresupuestoRef = useRef('');
   const opcionesGestionContractualRef = useRef('');
+
+  const codigoQuipuRef = useRef('');
+
   const descripcionObservacionesRef = useRef('');
   const archivosRef = useRef('');
 
@@ -222,6 +228,41 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     }
   }
 
+  const resuelveContractualAction = async () => {
+    if (!!sessionStorage.getItem('usuarioApp')) {
+      const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
+      setCargando(true);
+      const f = new FormData();
+      const body = {
+        "usuarioApp": usuarioLocalStorage.usuario,
+        "idProcesamiento": idDetalleSolicitud,
+        "resuelveContractual": resuelveContractual,
+        "descripcionObservaciones": descripcionObservaciones,
+        "codigoQuipu": codigoQuipu,
+        "fechaEvento": new Date()
+      }
+      f.append('body', JSON.stringify(body))
+      for (let index = 0; index < archivos.length; index++) {
+        f.append('files', archivos[index])
+      }
+      await axios.post(`${urlEntorno}/service/uadmin/resuelveContractual`, f)
+        .then((response) => {
+          setTimeout(() => {
+            toast(response.data.mensaje);
+            setRedirectSolicitudes('LISTA_SOLICITUDES');
+            setCargando(false);
+          }, 50)
+        }).catch(() => {
+          setTimeout(() => {
+            toast('No es posible consultar la información, contacte al administrador');
+            setCargando(false);
+          }, 250)
+        })
+    } else {
+      toast('No es posible consultar la información, contacte al administrador')
+    }
+  }
+
   const consultaDetalleSolicitud = async () => {
     if (!!sessionStorage.getItem('usuarioApp')) {
       const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
@@ -260,6 +301,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
   const selectActionSolutionPrecontractual = (e) => {
     archivosRef.current.className = 'form-control';
     archivosRef.current.value = [];
+    descripcionObservacionesRef.current.className = 'form-control';
     if (!!usuariosPresupuestoRef.current) {
       usuariosPresupuestoRef.current.setValue(
         {
@@ -286,6 +328,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
   const selectActionSolutionPresupuesto = (e) => {
     archivosRef.current.className = 'form-control';
     archivosRef.current.value = [];
+    descripcionObservacionesRef.current.className = 'form-control';
     if (!!usuariosJefeDependenciaRef.current) {
       usuariosJefeDependenciaRef.current.setValue(
         {
@@ -311,7 +354,17 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
   }
 
   const selectActionSolutionContractual = (e) => {
-
+    archivosRef.current.className = 'form-control';
+    archivosRef.current.value = [];
+    descripcionObservacionesRef.current.className = 'form-control';
+    setDisabledButtom(true);
+    setDescripcionObservaciones('');
+    setCodigoQuipu('')
+    setArchivos([]);
+    setResuelveContractual(e.value);
+    if (e.value === 'CIERRA_SOLICITUD_SATISFACTORIA') {
+      setDisabledButtom(false);
+    }
   }
 
   const eventInputFiles = (e) => {
@@ -436,14 +489,58 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       }
       formValidado.splice(0, formValidado.length)
     }
-
   }
 
-  const solucionaContractual= () => {
+  const solucionaContractual = () => {
 
+    let formValidado = [];
+    archivosRef.current.className = 'form-control';
+    if(!!codigoQuipuRef.current){
+      codigoQuipuRef.current.className = 'form-control';
+    }
+    if (resuelveContractual.length === 0) {
+      formValidado.push('resuelveContractual');
+    } else {
+      if (resuelveContractual === 'INITIAL') {
+        formValidado.push('resuelveContractual');
+      } else {
+        if (codigoQuipu.length === 0) {
+          formValidado.push('codigoQuipu');
+          codigoQuipuRef.current.className = 'form-control form-control-error';
+        }
+      }
+    }
+
+    descripcionObservacionesRef.current.className = 'form-control';
+    if (descripcionObservaciones.length === 0) {
+      formValidado.push('Descripcion');
+      descripcionObservacionesRef.current.className = 'form-control form-control-error';
+    }
+
+    if (descripcionObservaciones.length > 250) {
+      formValidado.push('Descripcion Longitud');
+      descripcionObservacionesRef.current.className = 'form-control form-control-error';
+    }
+
+    if (formValidado.length === 0) {
+      resuelveContractualAction()
+    } else {
+      let validaErrorLongitud = false;
+      if (formValidado.length === 1) {
+        if (formValidado[0] === 'Descripcion Longitud') {
+          validaErrorLongitud = true;
+        }
+      }
+      if (validaErrorLongitud) {
+        toast('La longitud del campo descripción excede el limite permitido, Max --> 250 Caracteres')
+      } else {
+        toast('Errores en el formulario de solución contractual, valide la información')
+      }
+      formValidado.splice(0, formValidado.length)
+    }
   }
 
-  const labelUsuarioControlPrecontractual = () => {
+  const labelControlPrecontractual = () => {
     switch (resuelvePrecontractual) {
       case 'AVANZA_A_PRESUPUESTO':
         return (
@@ -460,7 +557,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     }
   }
 
-  const selectUsuarioControlPrecontractual = () => {
+  const selectControlPrecontractual = () => {
     switch (resuelvePrecontractual) {
       case 'AVANZA_A_PRESUPUESTO':
         return (
@@ -477,7 +574,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     }
   }
 
-  const labelUsuarioControlPresupuesto = () => {
+  const labelControlPresupuesto = () => {
     switch (resuelvePresupuesto) {
       case 'AVANZA_A_CONTRACTUAL':
         return (
@@ -498,7 +595,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     }
   }
 
-  const selectUsuarioControlPresupuesto = () => {
+  const selectControlPresupuesto = () => {
     switch (resuelvePresupuesto) {
       case 'AVANZA_A_CONTRACTUAL':
         return (
@@ -514,6 +611,33 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         )
     }
   }
+
+  const labelControlContractual = () => {
+    switch (resuelveContractual) {
+      case 'CIERRA_SOLICITUD_SATISFACTORIA':
+        return (
+          <p className='mt-3'>Para continuar con la gestión de la presente solicitud, es requerido que le el consecutivo de la plataforma QUIP:</p>
+        )
+      default:
+        return (
+          <></>
+        )
+    }
+  }
+
+  const selectControlContractual = () => {
+    switch (resuelveContractual) {
+      case 'CIERRA_SOLICITUD_SATISFACTORIA':
+        return (
+          <input ref={codigoQuipuRef} value={codigoQuipu} onChange={(e) => setCodigoQuipu(e.target.value)} type="text" className='form-control' placeholder='' autoComplete='off' />
+        )
+      default:
+        return (
+          <></>
+        )
+    }
+  }
+
 
   const validateIconDocumento = (urlDoc, i) => {
     switch (urlDoc.typeArchivo) {
@@ -723,13 +847,13 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     {
-                      labelUsuarioControlPrecontractual()
+                      labelControlPrecontractual()
                     }
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form mt-3'>
                       {
-                        selectUsuarioControlPrecontractual()
+                        selectControlPrecontractual()
                       }
                     </div>
                   </div>
@@ -784,13 +908,13 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     {
-                      labelUsuarioControlPresupuesto()
+                      labelControlPresupuesto()
                     }
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form mt-3'>
                       {
-                        selectUsuarioControlPresupuesto()
+                        selectControlPresupuesto()
                       }
                     </div>
                   </div>
@@ -813,7 +937,6 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
           :
           'Cargando ...'
       }
-
 
       {
         showDetalleSolicitud ?
@@ -845,11 +968,15 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
                     </div>
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                    
+                    {
+                      labelControlContractual()
+                    }
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form mt-3'>
-                      
+                      {
+                        selectControlContractual()
+                      }
                     </div>
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
