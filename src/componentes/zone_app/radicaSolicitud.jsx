@@ -153,7 +153,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
         }
         let urlRq;
         if (apiLambda) {
-            f.append('body', body)
+            f.append('body', JSON.stringify(body))
             f.append('urlPath', url[1].pathLambda)
             urlRq = `${url[1].urlEntornoLambda}`
         } else {
