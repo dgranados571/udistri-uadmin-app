@@ -163,14 +163,11 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             f.append('body', JSON.stringify(body))
             urlRq = `${url[1].urlEntornoLocal}${url[1].path}`
         }
-        console.log(urlRq)
-        console.log(body)
         await axios.post(`${urlRq}`, f, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }).then((response) => {
-            console.log(response)
             setTimeout(() => {
                 setCargando(false)
                 if (response.data.estado) {
