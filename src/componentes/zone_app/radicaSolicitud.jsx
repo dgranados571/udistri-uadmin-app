@@ -167,7 +167,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
         console.log(body)
         await axios.post(`${urlRq}`, f, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             }
         }).then((response) => {
             console.log(response)
