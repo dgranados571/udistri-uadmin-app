@@ -5,7 +5,7 @@ import { UtilUrl } from '../../utilUrl';
 
 const RadicaSolicitud = ({ toast, setCargando }) => {
 
-    const { urlEntorno } = UtilUrl();
+    const { url, apiLambda } = UtilUrl();
 
     const [nombres, setNombres] = useState('');
     const [apellidos, setApellidos] = useState('');
@@ -65,7 +65,6 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
     }
 
     const registraSolicitud = () => {
-
         let formValidado = [];
 
         nombresRef.current.className = 'form-control'
@@ -86,7 +85,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             correoRef.current.className = 'form-control form-control-error';
         }
 
-        if(dependencia.length === 0){
+        if (dependencia.length === 0) {
             formValidado.push('dependencia');
         }
 
@@ -96,7 +95,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             autorizadoRef.current.className = 'form-control form-control-error';
         }
 
-        if(fondo.length === 0){
+        if (fondo.length === 0) {
             formValidado.push('fondo');
         }
 
@@ -109,13 +108,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             formValidado.push('Descripcion Longitud');
             descripcionRef.current.className = 'form-control form-control-error';
         }
-
         archivosRef.current.className = 'form-control'
-        if (archivos.length === 0) {
-            formValidado.push('Archivos');
-            archivosRef.current.className = 'form-control form-control-error';
-        }
-
         if (formValidado.length === 0) {
             enviaRegistroSolicitud()
         } else {
@@ -148,7 +141,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
     const enviaRegistroSolicitud = async () => {
         setCargando(true)
         const f = new FormData();
-        const body = {
+        let body = {
             "nombres": nombres,
             "apellidos": apellidos,
             "correo": correo,
@@ -158,25 +151,41 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             "descripcion": descripcion,
             "fechaRegistro": new Date()
         }
-        f.append('body', JSON.stringify(body))
-        for (let index = 0; index < archivos.length; index++) {
-            f.append('files', archivos[index])
+        let urlRq;
+        if (apiLambda) {
+            f.append('body', body)
+            f.append('urlPath', url[1].pathLambda)
+            urlRq = `${url[1].urlEntornoLambda}`
+        } else {
+            for (let index = 0; index < archivos.length; index++) {
+                f.append('files', archivos[index])
+            }
+            f.append('body', JSON.stringify(body))
+            urlRq = `${url[1].urlEntornoLocal}${url[1].path}`
         }
-        await axios.post(`${urlEntorno}/service/uadmin/registraSolicitud`, f)
-            .then((response) => {
-                setTimeout(() => {
-                    setCargando(false)
-                    if (response.data.estado) {
-                        resetForm()
-                    }
-                    toast(response.data.mensaje)
-                }, 250)
-            }).catch(() => {
-                setTimeout((e) => {
-                    setCargando(false)
-                    toast('No es posible el registro, contacte al administrador')
-                }, 250)
-            })
+        console.log(urlRq)
+        console.log(body)
+        await axios.post(`${urlRq}`, f, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((response) => {
+            console.log(response)
+            setTimeout(() => {
+                setCargando(false)
+                if (response.data.estado) {
+                    resetForm()
+                }
+                toast(response.data.mensaje)
+            }, 250)
+        }).catch((e) => {
+            console.log(e)
+            setTimeout(() => {
+                setCargando(false)
+                toast('No es posible el registro, contacte al administrador')
+            }, 250)
+        })
+
     }
 
     return (
