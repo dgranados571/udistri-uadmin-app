@@ -167,9 +167,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
         console.log(body)
         await axios.post(`${urlRq}`, f, {
             headers: {
-                'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-                'Access-Control-Allow-Methods': 'OPTIONS,POST',
-                'Access-Control-Allow-Origin': '*,https://master.d1taqfmbkb963g.amplifyapp.com'
+                'Content-Type': 'application/json'
             }
         }).then((response) => {
             console.log(response)
