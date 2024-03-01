@@ -371,7 +371,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
                 headers = {
                     'Content-Type': 'application/json'
                 }
-                urlRq = `${url[4].urlEntornoLocal}${url[4].path}`
+                urlRq = `${url[4].urlEntornoLocal}${url[4].pathLambda}`
             }
             const rqBody = apiLambda ? f : body;
             await axios.post(`${urlRq}`, rqBody, {

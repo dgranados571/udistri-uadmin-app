@@ -161,7 +161,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
                 f.append('files', archivos[index])
             }
             f.append('body', JSON.stringify(body))
-            urlRq = `${url[1].urlEntornoLocal}${url[1].path}`
+            urlRq = `${url[1].urlEntornoLocal}${url[1].pathLambda}`
         }
         await axios.post(`${urlRq}`, f, {
             headers: {
