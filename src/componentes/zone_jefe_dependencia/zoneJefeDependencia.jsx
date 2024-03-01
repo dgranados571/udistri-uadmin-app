@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Header from '../tvs/header/header'
 import UsuariosApp from '../tvs_private/usuarios/usuariosApp';
 import Solicitudes from '../tvs_private/solicitudes/solicitudes';
-import ListaSolicitudes from '../tvs_private/solicitudes/listaSolicitudes';
 
 const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
 

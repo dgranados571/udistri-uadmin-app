@@ -9,7 +9,7 @@ import Modal from '../../tvs/modal/modal'
 
 const UsuariosApp = ({ toast, setCargando }) => {
 
-    const { urlEntorno } = UtilUrl();
+    const { url, apiLambda } = UtilUrl();
     const [modal, setModal] = useState(false)
     const [propsModal, setPropsModal] = useState({})
 
@@ -200,23 +200,41 @@ const UsuariosApp = ({ toast, setCargando }) => {
         if (!!sessionStorage.getItem('usuarioApp')) {
             const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
+            const f = new FormData();
             const body = {
                 "usuarioEdita": userEdita,
                 "usuarioApp": usuarioLocalStorage.usuario,
             }
-            await axios.post(`${urlEntorno}/service/uadmin/actualizaContraseniaApp`, body)
-                .then((response) => {
-                    setTimeout(() => {
-                        toast(response.data.mensaje)
-                        consultaInformacionUsuariosApp()
-                        setCargando(false)
-                    }, 250)
-                }).catch(() => {
-                    setTimeout(() => {
-                        toast('No es posible actualizar la información, contacte al administrador')
-                        setCargando(false)
-                    }, 250)
-                })
+            let urlRq;
+            let headers;
+            if (apiLambda) {
+                headers = {
+                    'Content-Type': 'multipart/form-data'
+                }
+                f.append('body', JSON.stringify(body))
+                f.append('urlPath', url[7].pathLambda)
+                urlRq = `${url[7].urlEntornoLambda}`;
+            } else {
+                headers = {
+                    'Content-Type': 'application/json'
+                }
+                urlRq = `${url[7].urlEntornoLocal}${url[7].pathLambda}`;
+            }
+            const rqBody = apiLambda ? f : body;
+            await axios.post(`${urlRq}`, rqBody, {
+                headers
+            }).then((response) => {
+                setTimeout(() => {
+                    toast(response.data.mensaje)
+                    consultaInformacionUsuariosApp()
+                    setCargando(false)
+                }, 250)
+            }).catch(() => {
+                setTimeout(() => {
+                    toast('No es posible actualizar la información, contacte al administrador')
+                    setCargando(false)
+                }, 250)
+            })
         } else {
             toast('No es posible actualizar la información, contacte al administrador')
         }
@@ -226,6 +244,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
         if (!!sessionStorage.getItem('usuarioApp')) {
             const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
+            const f = new FormData();
             const body = {
                 "nombres": nombres,
                 "apellidos": apellidos,
@@ -237,22 +256,39 @@ const UsuariosApp = ({ toast, setCargando }) => {
                 "fechaRegistro": new Date(),
                 "usuarioApp": usuarioLocalStorage.usuario
             }
-            await axios.post(`${urlEntorno}/service/uadmin/registroUsuarioApp`, body)
-                .then((response) => {
-                    setTimeout(() => {
-                        setCargando(false)
-                        if (response.data.estado) {
-                            consultaInformacionUsuariosApp()
-                            resetForm()
-                        }
-                        toast(response.data.mensaje)
-                    }, 250)
-                }).catch(() => {
-                    setTimeout(() => {
-                        setCargando(false)
-                        toast('No es posible el registro, contacte al administrador')
-                    }, 250)
-                })
+            let urlRq;
+            let headers;
+            if (apiLambda) {
+                headers = {
+                    'Content-Type': 'multipart/form-data'
+                }
+                f.append('body', JSON.stringify(body))
+                f.append('urlPath', url[6].pathLambda)
+                urlRq = `${url[6].urlEntornoLambda}`
+            } else {
+                headers = {
+                    'Content-Type': 'application/json'
+                }
+                urlRq = `${url[6].urlEntornoLocal}${url[6].pathLambda}`
+            }
+            const rqBody = apiLambda ? f : body;
+            await axios.post(`${urlRq}`, rqBody, {
+                headers
+            }).then((response) => {
+                setTimeout(() => {
+                    setCargando(false)
+                    if (response.data.estado) {
+                        consultaInformacionUsuariosApp()
+                        resetForm()
+                    }
+                    toast(response.data.mensaje)
+                }, 250)
+            }).catch(() => {
+                setTimeout(() => {
+                    setCargando(false)
+                    toast('No es posible el registro, contacte al administrador')
+                }, 250)
+            })
         } else {
             toast('No es posible el registro, contacte al administrador')
         }
@@ -262,6 +298,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
         if (!!sessionStorage.getItem('usuarioApp')) {
             const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
+            const f = new FormData();
             const body = {
                 "nombres": nombres,
                 "apellidos": apellidos,
@@ -273,23 +310,40 @@ const UsuariosApp = ({ toast, setCargando }) => {
                 "fechaRegistro": new Date(),
                 "usuarioApp": usuarioLocalStorage.usuario
             }
-            await axios.post(`${urlEntorno}/service/uadmin/actualizaUsuarioApp`, body)
-                .then((response) => {
-                    setTimeout(() => {
-                        setCargando(false)
-                        if (response.data.estado) {
-                            consultaInformacionUsuariosApp()
-                            resetForm()
-                            setModoEditar(false)
-                        }
-                        toast(response.data.mensaje)
-                    }, 250)
-                }).catch(() => {
-                    setTimeout(() => {
-                        setCargando(false)
-                        toast('No es posible el registro, contacte al administrador')
-                    }, 250)
-                })
+            let urlRq;
+            let headers;
+            if (apiLambda) {
+                headers = {
+                    'Content-Type': 'multipart/form-data'
+                }
+                f.append('body', JSON.stringify(body))
+                f.append('urlPath', url[5].pathLambda)
+                urlRq = `${url[5].urlEntornoLambda}`
+            } else {
+                headers = {
+                    'Content-Type': 'application/json'
+                }
+                urlRq = `${url[5].urlEntornoLocal}${url[5].pathLambda}`
+            }
+            const rqBody = apiLambda ? f : body;
+            await axios.post(`${urlRq}`, rqBody, {
+                headers
+            }).then((response) => {
+                setTimeout(() => {
+                    setCargando(false)
+                    if (response.data.estado) {
+                        consultaInformacionUsuariosApp()
+                        resetForm()
+                        setModoEditar(false)
+                    }
+                    toast(response.data.mensaje)
+                }, 250)
+            }).catch(() => {
+                setTimeout(() => {
+                    setCargando(false)
+                    toast('No es posible el registro, contacte al administrador')
+                }, 250)
+            })
         } else {
             toast('No es posible el registro, contacte al administrador')
         }
@@ -299,25 +353,44 @@ const UsuariosApp = ({ toast, setCargando }) => {
         if (!!sessionStorage.getItem('usuarioApp')) {
             const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
+            const f = new FormData();
             const body = {
                 "usuarioApp": usuarioLocalStorage.usuario,
                 "role": '',
             }
-            await axios.post(`${urlEntorno}/service/uadmin/getUsuariosApp`, body)
-                .then((response) => {
-                    setTimeout(() => {
-                        setUsuariosList(response.data.objeto)
-                        if (!response.data.estado) {
-                            toast(response.data.mensaje)
-                        }
-                        setCargando(false)
-                    }, 250)
-                }).catch(() => {
-                    setTimeout(() => {
-                        toast('No es posible consultar la información, contacte al administrador')
-                        setCargando(false)
-                    }, 250)
-                })
+            let urlRq;
+            let headers;
+            if (apiLambda) {
+                headers = {
+                    'Content-Type': 'multipart/form-data'
+                }
+                f.append('body', JSON.stringify(body))
+                f.append('urlPath', url[4].pathLambda)
+                urlRq = `${url[4].urlEntornoLambda}`
+            } else {
+                headers = {
+                    'Content-Type': 'application/json'
+                }
+                urlRq = `${url[4].urlEntornoLocal}${url[4].path}`
+            }
+            const rqBody = apiLambda ? f : body;
+            await axios.post(`${urlRq}`, rqBody, {
+                headers
+            }).then((response) => {
+                setTimeout(() => {
+                    console.log(response)
+                    setUsuariosList(response.data.objeto)
+                    if (!response.data.estado) {
+                        toast(response.data.mensaje)
+                    }
+                    setCargando(false)
+                }, 250)
+            }).catch(() => {
+                setTimeout(() => {
+                    toast('No es posible consultar la información, contacte al administrador')
+                    setCargando(false)
+                }, 250)
+            })
         } else {
             toast('No es posible consultar la información, contacte al administrador')
         }

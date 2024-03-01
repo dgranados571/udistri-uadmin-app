@@ -5,10 +5,9 @@ import axios from 'axios'
 
 const Login = ({ setRedirect, toast, setCargando }) => {
 
-    const { urlEntorno } = UtilUrl();
-
+    const { url, apiLambda } = UtilUrl();
     const [actionLogin, setActionLogin] = useState('LOGIN')
-
+    
     const [loginElements, setLoginElements] = useState({
         usuario: '',
         contrasenia: '',
@@ -102,68 +101,104 @@ const Login = ({ setRedirect, toast, setCargando }) => {
 
     const getActivaCuentaService = async () => {
         setCargando(true)
+        const f = new FormData();
         const body = {
             "usuario": usuario,
             "contrasenia": confimaContrasenia
         }
-        await axios.post(`${urlEntorno}/service/uadmin/activacionUsuarioApp`, body)
-            .then((response) => {
-                setTimeout(() => {
-                    if (response.data.estado) {
-                        setActionLogin('LOGIN')
-                        setLoginElements({
-                            usuario: '',
-                            contrasenia: '',
-                            newContrasenia: '',
-                            confimaContrasenia: ''
-                        })
-                    }
-                    toast(response.data.mensaje)
-                    setCargando(false)
-                }, 250)
-            }).catch(() => {
-                setTimeout(() => {
-                    toast('Error activando el usuario, contacte al administrador')
-                    setCargando(false)
-                }, 250)
-            })
+        let urlRq;
+        let headers;
+        if (apiLambda) {
+            headers = {
+                'Content-Type': 'multipart/form-data'
+            }
+            f.append('body', JSON.stringify(body))
+            f.append('urlPath', url[3].pathLambda)
+            urlRq = `${url[3].urlEntornoLambda}`
+        } else {
+            headers = {
+                'Content-Type': 'application/json'
+            }
+            urlRq = `${url[3].urlEntornoLocal}${url[3].pathLambda}`
+        }
+        const rqBody = apiLambda ? f : body;
+        await axios.post(`${urlRq}`, rqBody, {
+            headers
+        }).then((response) => {
+            setTimeout(() => {
+                if (response.data.estado) {
+                    setActionLogin('LOGIN')
+                    setLoginElements({
+                        usuario: '',
+                        contrasenia: '',
+                        newContrasenia: '',
+                        confimaContrasenia: ''
+                    })
+                }
+                toast(response.data.mensaje)
+                setCargando(false)
+            }, 250)
+        }).catch(() => {
+            setTimeout(() => {
+                toast('Error activando el usuario, contacte al administrador')
+                setCargando(false)
+            }, 250)
+        })
     }
 
     const getLoginService = async () => {
         setCargando(true)
+        const f = new FormData();
         const body = {
             "usuario": usuario,
             "contrasenia": contrasenia
         }
-        await axios.post(`${urlEntorno}/service/uadmin/loginApp`, body)
-            .then((response) => {
-                setTimeout(() => {
-                    if (response.data.estado) {
-                        if (response.data.objeto.usuario_activo) {
-                            sessionStorage.setItem('usuarioApp', JSON.stringify(response.data.objeto))
-                            setRedirect({
-                                usuario: JSON.stringify(response.data.objeto),
-                                rol: response.data.objeto.role
-                            });
-                        } else {
-                            setActionLogin('ACTUALIZA_PASS')
-                            setRedirect({
-                                usuario: response.data.objeto,
-                                rol: 'USUARIO_LOGIN'
-                            });
-                            toast(response.data.mensaje)
-                        }
+        let urlRq;
+        let headers;
+        if (apiLambda) {
+            headers = {
+                'Content-Type': 'multipart/form-data'
+            }
+            f.append('body', JSON.stringify(body))
+            f.append('urlPath', url[2].pathLambda)
+            urlRq = `${url[2].urlEntornoLambda}`;
+        } else {
+            headers = {
+                'Content-Type': 'application/json'
+            }
+            urlRq = `${url[2].urlEntornoLocal}${url[2].pathLambda}`;
+        }
+        const rqBody = apiLambda ? f : body;
+        await axios.post(`${urlRq}`, rqBody, {
+            headers
+        }).then((response) => {
+            setTimeout(() => {
+                if (response.data.estado) {
+                    if (response.data.objeto.usuario_activo) {
+                        sessionStorage.setItem('usuarioApp', JSON.stringify(response.data.objeto))
+                        setRedirect({
+                            usuario: JSON.stringify(response.data.objeto),
+                            rol: response.data.objeto.role
+                        });
                     } else {
+                        setActionLogin('ACTUALIZA_PASS')
+                        setRedirect({
+                            usuario: response.data.objeto,
+                            rol: 'USUARIO_LOGIN'
+                        });
                         toast(response.data.mensaje)
                     }
-                    setCargando(false)
-                }, 250)
-            }).catch(() => {
-                setTimeout(() => {
-                    toast('Error en la autenticación, contacte al administrador')
-                    setCargando(false)
-                }, 250)
-            })
+                } else {
+                    toast(response.data.mensaje)
+                }
+                setCargando(false)
+            }, 250)
+        }).catch(() => {
+            setTimeout(() => {
+                toast('Error en la autenticación, contacte al administrador')
+                setCargando(false)
+            }, 250)
+        })
     }
 
     return (

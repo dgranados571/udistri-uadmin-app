@@ -7,7 +7,7 @@ import { Paginador } from '../../tvs/paginacion/paginador';
 
 const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetalleSolicitud, zonaConsulta }) => {
 
-    const { urlEntorno } = UtilUrl();
+    const { url, apiLambda } = UtilUrl();
 
     const [solicitudesList, setSolicitudesList] = useState([])
 
@@ -39,7 +39,7 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
                 consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRESUPUESTO');
                 break
             case 'ZoneContractual':
-                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_CONTRACTUAL');                
+                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_CONTRACTUAL');
                 break
             default:
                 break
@@ -48,29 +48,47 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
 
     const consultaInformacionSolicitudesPorZonaApp = async (nombreOperacion) => {
         if (!!sessionStorage.getItem('usuarioApp')) {
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
-            setCargando(true)
+            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
+            setCargando(true);
+            const f = new FormData();
             const body = {
                 "nombreOperacion": nombreOperacion,
                 "resultadoOperacion": usuarioLocalStorage.usuario
             }
-            await axios.post(`${urlEntorno}/service/uadmin/getSolicitudesPorUsuarioApp`, body)
-                .then((response) => {
-                    setSolicitudesList(response.data.objeto.listaSolicitudesAppDto)
-                    setPaginacionSolicitudes({
-                        ...paginacionSolicitudes,
-                        totalElementos: response.data.objeto.totalElementos
-                    })
-                    if (!response.data.estado) {
-                        toast(response.data.mensaje)
-                    }
-                    setCargando(false)
-                }).catch(() => {
-                    setTimeout(() => {
-                        toast('No es posible consultar la información, contacte al administrador')
-                        setCargando(false)
-                    }, 250)
+            let urlRq;
+            let headers;
+            if (apiLambda) {
+                headers = {
+                    'Content-Type': 'multipart/form-data'
+                }
+                f.append('body', JSON.stringify(body))
+                f.append('urlPath', url[9].pathLambda)
+                urlRq = `${url[9].urlEntornoLambda}`;
+            } else {
+                headers = {
+                    'Content-Type': 'application/json'
+                }
+                urlRq = `${url[9].urlEntornoLocal}${url[9].pathLambda}`;
+            }
+            const rqBody = apiLambda ? f : body;
+            await axios.post(`${urlRq}`, rqBody, {
+                headers
+            }).then((response) => {
+                setSolicitudesList(response.data.objeto.listaSolicitudesAppDto)
+                setPaginacionSolicitudes({
+                    ...paginacionSolicitudes,
+                    totalElementos: response.data.objeto.totalElementos
                 })
+                if (!response.data.estado) {
+                    toast(response.data.mensaje)
+                }
+                setCargando(false)
+            }).catch(() => {
+                setTimeout(() => {
+                    toast('No es posible consultar la información, contacte al administrador')
+                    setCargando(false)
+                }, 250)
+            })
         } else {
             toast('No es posible consultar la información, contacte al administrador')
         }
@@ -80,28 +98,46 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
         if (!!sessionStorage.getItem('usuarioApp')) {
             const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
+            const f = new FormData();
             const body = {
                 "usuarioApp": usuarioLocalStorage.usuario,
                 "elementosPorPagina": paginacionSolicitudes.elementosPorPagina,
                 "paginaActual": paginacionSolicitudes.paginaActual,
             }
-            await axios.post(`${urlEntorno}/service/uadmin/getSolicitudesApp`, body)
-                .then((response) => {
-                    setSolicitudesList(response.data.objeto.listaSolicitudesAppDto)
-                    setPaginacionSolicitudes({
-                        ...paginacionSolicitudes,
-                        totalElementos: response.data.objeto.totalElementos
-                    })
-                    if (!response.data.estado) {
-                        toast(response.data.mensaje)
-                    }
-                    setCargando(false)
-                }).catch(() => {
-                    setTimeout(() => {
-                        toast('No es posible consultar la información, contacte al administrador')
-                        setCargando(false)
-                    }, 250)
+            let urlRq;
+            let headers;
+            if (apiLambda) {
+                headers = {
+                    'Content-Type': 'multipart/form-data'
+                }
+                f.append('body', JSON.stringify(body))
+                f.append('urlPath', url[8].pathLambda)
+                urlRq = `${url[8].urlEntornoLambda}`;
+            } else {
+                headers = {
+                    'Content-Type': 'application/json'
+                }
+                urlRq = `${url[8].urlEntornoLocal}${url[8].pathLambda}`;
+            }
+            const rqBody = apiLambda ? f : body;
+            await axios.post(`${urlRq}`, rqBody, {
+                headers
+            }).then((response) => {
+                setSolicitudesList(response.data.objeto.listaSolicitudesAppDto)
+                setPaginacionSolicitudes({
+                    ...paginacionSolicitudes,
+                    totalElementos: response.data.objeto.totalElementos
                 })
+                if (!response.data.estado) {
+                    toast(response.data.mensaje)
+                }
+                setCargando(false)
+            }).catch(() => {
+                setTimeout(() => {
+                    toast('No es posible consultar la información, contacte al administrador')
+                    setCargando(false)
+                }, 250)
+            })
         } else {
             toast('No es posible consultar la información, contacte al administrador')
         }
