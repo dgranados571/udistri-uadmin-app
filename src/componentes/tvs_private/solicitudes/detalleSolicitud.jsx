@@ -7,7 +7,7 @@ import { UtilUrl } from '../../../utilUrl';
 
 const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud }) => {
 
-  const { urlEntorno } = UtilUrl();
+  const { url, apiLambda } = UtilUrl();
   const [disabledButtom, setDisabledButtom] = useState(true);
   const [usuariosPrecontractual, setUsuariosPrecontractual] = useState([]);
   const [usuariosPresupuesto, setUsuariosPresupuesto] = useState([]);
@@ -79,47 +79,65 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     if (!!sessionStorage.getItem('usuarioApp')) {
       const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
       setCargando(true);
+      const f = new FormData();
       const body = {
         "usuarioApp": usuarioLocalStorage.usuario,
         "role": role,
       }
-      await axios.post(`${urlEntorno}/service/uadmin/getUsuariosApp`, body)
-        .then((response) => {
-          setTimeout(() => {
-            const arrayUsers = Array.from(response.data.objeto);
-            const usersPorRole = arrayUsers.map((element) => {
-              return {
-                value: element.usuario,
-                label: element.nombre + ' ' + element.apellidos
-              }
-            })
-            if (response.data.estado) {
-              switch (role) {
-                case 'PRECONTRACTUAL_ROLE':
-                  setUsuariosPrecontractual(usersPorRole);
-                  break
-                case 'PRESUPUETO_ROLE':
-                  setUsuariosPresupuesto(usersPorRole);
-                  break
-                case 'JEFE_DEPENDENCIA_ROLE':
-                  setUsuariosJefeDependencia(usersPorRole);
-                  break
-                case 'CONTRACTUAL_ROLE':
-                  setUsuariosContractual(usersPorRole);
-                  break
-                default:
-                  break
-              }
-            } else {
-              toast(response.data.mensaje);
+      let urlRq;
+      let headers;
+      if (apiLambda) {
+        headers = {
+          'Content-Type': 'multipart/form-data'
+        }
+        f.append('body', JSON.stringify(body))
+        f.append('urlPath', url[10].pathLambda)
+        urlRq = `${url[10].urlEntornoLambda}`;
+      } else {
+        headers = {
+          'Content-Type': 'application/json'
+        }
+        urlRq = `${url[10].urlEntornoLocal}${url[10].pathLambda}`;
+      }
+      const rqBody = apiLambda ? f : body;
+      await axios.post(`${urlRq}`, rqBody, {
+        headers
+      }).then((response) => {
+        setTimeout(() => {
+          const arrayUsers = Array.from(response.data.objeto);
+          const usersPorRole = arrayUsers.map((element) => {
+            return {
+              value: element.usuario,
+              label: element.nombre + ' ' + element.apellidos
             }
-          }, 50)
-        }).catch(() => {
-          setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador');
-            setCargando(false);
-          }, 50)
-        })
+          })
+          if (response.data.estado) {
+            switch (role) {
+              case 'PRECONTRACTUAL_ROLE':
+                setUsuariosPrecontractual(usersPorRole);
+                break
+              case 'PRESUPUETO_ROLE':
+                setUsuariosPresupuesto(usersPorRole);
+                break
+              case 'JEFE_DEPENDENCIA_ROLE':
+                setUsuariosJefeDependencia(usersPorRole);
+                break
+              case 'CONTRACTUAL_ROLE':
+                setUsuariosContractual(usersPorRole);
+                break
+              default:
+                break
+            }
+          } else {
+            toast(response.data.mensaje);
+          }
+        }, 50)
+      }).catch(() => {
+        setTimeout(() => {
+          toast('No es posible consultar la información, contacte al administrador');
+          setCargando(false);
+        }, 50)
+      })
     } else {
       toast('No es posible consultar la información, contacte al administrador');
     }
@@ -129,25 +147,43 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     if (!!sessionStorage.getItem('usuarioApp')) {
       const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
       setCargando(true);
+      const f = new FormData();
       const body = {
         "usuarioApp": usuarioLocalStorage.usuario,
         "usuarioPrecontractual": usuarioPrecontractual,
         "idProcesamiento": idDetalleSolicitud,
         "fechaEvento": new Date()
       }
-      await axios.post(`${urlEntorno}/service/uadmin/asignaUsuarioPrecontractual`, body)
-        .then((response) => {
-          setTimeout(() => {
-            toast(response.data.mensaje);
-            setCargando(false);
-            setRedirectSolicitudes('LISTA_SOLICITUDES');
-          }, 250)
-        }).catch(() => {
-          setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador');
-            setCargando(false);
-          }, 250)
-        })
+      let urlRq;
+      let headers;
+      if (apiLambda) {
+        headers = {
+          'Content-Type': 'multipart/form-data'
+        }
+        f.append('body', JSON.stringify(body))
+        f.append('urlPath', url[12].pathLambda)
+        urlRq = `${url[12].urlEntornoLambda}`;
+      } else {
+        headers = {
+          'Content-Type': 'application/json'
+        }
+        urlRq = `${url[12].urlEntornoLocal}${url[12].pathLambda}`;
+      }
+      const rqBody = apiLambda ? f : body;
+      await axios.post(`${urlRq}`, rqBody, {
+        headers
+      }).then((response) => {
+        setTimeout(() => {
+          toast(response.data.mensaje);
+          setCargando(false);
+          setRedirectSolicitudes('LISTA_SOLICITUDES');
+        }, 250)
+      }).catch(() => {
+        setTimeout(() => {
+          toast('No es posible consultar la información, contacte al administrador');
+          setCargando(false);
+        }, 250)
+      })
 
     } else {
       toast('No es posible consultar la información, contacte al administrador');
@@ -168,24 +204,34 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         "usuarioJefeDependencia": usuarioJefeDependencia,
         "fechaEvento": new Date()
       }
+      let urlRq;
       f.append('body', JSON.stringify(body));
       for (let index = 0; index < archivos.length; index++) {
         f.append('files', archivos[index])
       }
+      if (apiLambda) {
+        f.append('urlPath', url[13].pathLambda)
+        urlRq = `${url[13].urlEntornoLambda}`
+      } else {
+        urlRq = `${url[13].urlEntornoLocal}${url[13].pathLambda}`
+      }
+      await axios.post(`${urlRq}`, f, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((response) => {
 
-      await axios.post(`${urlEntorno}/service/uadmin/resuelvePrecontractual`, f)
-        .then((response) => {
-          setTimeout(() => {
-            toast(response.data.mensaje);
-            setRedirectSolicitudes('LISTA_SOLICITUDES');
-            setCargando(false);
-          }, 50)
-        }).catch(() => {
-          setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador');
-            setCargando(false);
-          }, 250)
-        })
+        setTimeout(() => {
+          toast(response.data.mensaje);
+          setRedirectSolicitudes('LISTA_SOLICITUDES');
+          setCargando(false);
+        }, 50)
+      }).catch(() => {
+        setTimeout(() => {
+          toast('No es posible consultar la información, contacte al administrador');
+          setCargando(false);
+        }, 250)
+      })
     } else {
       toast('No es posible consultar la información, contacte al administrador');
     }
@@ -206,23 +252,33 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         "usuarioPrecontractual": usuarioPrecontractual,
         "fechaEvento": new Date()
       }
+      let urlRq;
       f.append('body', JSON.stringify(body))
       for (let index = 0; index < archivos.length; index++) {
         f.append('files', archivos[index])
       }
-      await axios.post(`${urlEntorno}/service/uadmin/resuelvePresupuesto`, f)
-        .then((response) => {
-          setTimeout(() => {
-            toast(response.data.mensaje);
-            setRedirectSolicitudes('LISTA_SOLICITUDES');
-            setCargando(false);
-          }, 50)
-        }).catch(() => {
-          setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador');
-            setCargando(false);
-          }, 250)
-        })
+      if (apiLambda) {
+        f.append('urlPath', url[14].pathLambda)
+        urlRq = `${url[14].urlEntornoLambda}`
+      } else {
+        urlRq = `${url[14].urlEntornoLocal}${url[14].pathLambda}`
+      }
+      await axios.post(`${urlRq}`, f, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((response) => {
+        setTimeout(() => {
+          toast(response.data.mensaje);
+          setRedirectSolicitudes('LISTA_SOLICITUDES');
+          setCargando(false);
+        }, 50)
+      }).catch(() => {
+        setTimeout(() => {
+          toast('No es posible consultar la información, contacte al administrador');
+          setCargando(false);
+        }, 250)
+      })
     } else {
       toast('No es posible consultar la información, contacte al administrador')
     }
@@ -241,23 +297,33 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         "codigoQuipu": codigoQuipu,
         "fechaEvento": new Date()
       }
+      let urlRq;
       f.append('body', JSON.stringify(body))
       for (let index = 0; index < archivos.length; index++) {
         f.append('files', archivos[index])
       }
-      await axios.post(`${urlEntorno}/service/uadmin/resuelveContractual`, f)
-        .then((response) => {
-          setTimeout(() => {
-            toast(response.data.mensaje);
-            setRedirectSolicitudes('LISTA_SOLICITUDES');
-            setCargando(false);
-          }, 50)
-        }).catch(() => {
-          setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador');
-            setCargando(false);
-          }, 250)
-        })
+      if (apiLambda) {
+        f.append('urlPath', url[15].pathLambda)
+        urlRq = `${url[15].urlEntornoLambda}`
+      } else {
+        urlRq = `${url[15].urlEntornoLocal}${url[15].pathLambda}`
+      }
+      await axios.post(`${urlRq}`, f, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((response) => {
+        setTimeout(() => {
+          toast(response.data.mensaje);
+          setRedirectSolicitudes('LISTA_SOLICITUDES');
+          setCargando(false);
+        }, 50)
+      }).catch(() => {
+        setTimeout(() => {
+          toast('No es posible consultar la información, contacte al administrador');
+          setCargando(false);
+        }, 250)
+      })
     } else {
       toast('No es posible consultar la información, contacte al administrador')
     }
@@ -267,27 +333,45 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     if (!!sessionStorage.getItem('usuarioApp')) {
       const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
       setCargando(true);
+      const f = new FormData();
       const body = {
         "usuarioApp": usuarioLocalStorage.usuario,
         "idProcesamiento": idDetalleSolicitud,
       }
-      await axios.post(`${urlEntorno}/service/uadmin/getSolicitudApp`, body)
-        .then((response) => {
-          setTimeout(() => {
-            if (response.data.estado) {
-              setDetalleSolicitud(response.data.objeto);
-              setShowDetalleSolicitud(true);
-            } else {
-              toast(response.data.mensaje);
-            }
-            setCargando(false);
-          }, 50)
-        }).catch(() => {
-          setTimeout(() => {
-            toast('No es posible consultar la información, contacte al administrador');
-            setCargando(false);
-          }, 250)
-        })
+      let urlRq;
+      let headers;
+      if (apiLambda) {
+        headers = {
+          'Content-Type': 'multipart/form-data'
+        }
+        f.append('body', JSON.stringify(body))
+        f.append('urlPath', url[11].pathLambda)
+        urlRq = `${url[11].urlEntornoLambda}`;
+      } else {
+        headers = {
+          'Content-Type': 'application/json'
+        }
+        urlRq = `${url[11].urlEntornoLocal}${url[11].pathLambda}`;
+      }
+      const rqBody = apiLambda ? f : body;
+      await axios.post(`${urlRq}`, rqBody, {
+        headers
+      }).then((response) => {
+        setTimeout(() => {
+          if (response.data.estado) {
+            setDetalleSolicitud(response.data.objeto);
+            setShowDetalleSolicitud(true);
+          } else {
+            toast(response.data.mensaje);
+          }
+          setCargando(false);
+        }, 50)
+      }).catch(() => {
+        setTimeout(() => {
+          toast('No es posible consultar la información, contacte al administrador');
+          setCargando(false);
+        }, 250)
+      })
     } else {
       toast('No es posible consultar la información, contacte al administrador');
     }
@@ -495,7 +579,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
 
     let formValidado = [];
     archivosRef.current.className = 'form-control';
-    if(!!codigoQuipuRef.current){
+    if (!!codigoQuipuRef.current) {
       codigoQuipuRef.current.className = 'form-control';
     }
     if (resuelveContractual.length === 0) {

@@ -152,15 +152,14 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             "fechaRegistro": new Date()
         }
         let urlRq;
+        f.append('body', JSON.stringify(body))
+        for (let index = 0; index < archivos.length; index++) {
+            f.append('files', archivos[index])
+        }
         if (apiLambda) {
-            f.append('body', JSON.stringify(body))
             f.append('urlPath', url[1].pathLambda)
             urlRq = `${url[1].urlEntornoLambda}`
         } else {
-            for (let index = 0; index < archivos.length; index++) {
-                f.append('files', archivos[index])
-            }
-            f.append('body', JSON.stringify(body))
             urlRq = `${url[1].urlEntornoLocal}${url[1].pathLambda}`
         }
         await axios.post(`${urlRq}`, f, {

@@ -49,14 +49,42 @@ export const UtilUrl = () => {
       urlEntornoLocal,
       urlEntornoLambda,
       pathLambda: '/service/uadmin/getSolicitudesPorUsuarioApp'
+    },
+    10: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/getUsuariosApp'
+    },
+    11: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/getSolicitudApp'
+    },
+    12: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/asignaUsuarioPrecontractual'
+    },
+    13: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/resuelvePrecontractual'
+    },
+    14: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/resuelvePresupuesto'
+    },
+    15: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/resuelveContractual'
     }
-
   }
 
   return {
     apiLambda: true,
-    url,
-    urlEntorno: 'http://localhost:8080'
+    url
   }
 
 }
