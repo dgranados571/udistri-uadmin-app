@@ -25,8 +25,14 @@ const ZonePrivate = () => {
             case 'USUARIO_LOGIN':
                 return (
                     <>
-                        <HeaderUnal />
-                        <Login setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
+                        <div className='div-container-header-unal-uadmin'>
+                            <div className='div-header-unal'>
+                                <HeaderUnal />
+                            </div>
+                            <div className='div-login-component'>
+                                <Login setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
+                            </div>
+                        </div>
                     </>
                 )
             case 'USUARIO_ROOT':

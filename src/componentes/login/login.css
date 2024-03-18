@@ -1,8 +1,19 @@
 .div-container-login {
-    display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 35rem;
+}
+
+.div-container-header-unal-uadmin{
+    height: 100%;
+}
+
+.div-header-unal{
+    margin-top: 0rem;
+}
+
+.div-login-component{
+    margin-top: 100px;
 }
 
 .div-login {
@@ -181,6 +192,10 @@
         height: 80vh;
         background: #5C5C5C;
         flex-direction: column;
+    }
+
+    .div-login-component{
+        margin-top: 0px;
     }
 }
 
