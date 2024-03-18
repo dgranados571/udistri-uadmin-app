@@ -13,7 +13,9 @@ const ZonePublic = () => {
     <>
       <ToastContainer autoClose={4000} hideProgressBar={true} />
       <HeaderUnal />
-      <RadicaSolicitud toast={toast} setCargando={setCargando} />
+      <div className='div-registra-sol-component'>
+        <RadicaSolicitud toast={toast} setCargando={setCargando} />
+      </div>
       {
         cargando ?
           <Cargando />

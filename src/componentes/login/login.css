@@ -15,6 +15,10 @@
     margin-top: 85px;
 }
 
+.div-registra-sol-component{
+    margin-top: 85px;
+}
+
 .div-login {
     display: flex;
     justify-content: center;
@@ -190,6 +194,10 @@
    
     .div-login-component{
         margin-top: 25px;
+    }
+
+    .div-registra-sol-component{
+        margin-top: 0px;
     }
 
 }
