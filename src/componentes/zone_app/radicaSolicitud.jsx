@@ -57,10 +57,11 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             var fileSizeMB = fileList[step].size / 1024 / 1024;
             valorFinalMB = valorFinalMB + fileSizeMB;
         }
-        if (valorFinalMB < 20) {
+        console.log('LONGITUD ARCHIVOS --> ', valorFinalMB)
+        if (valorFinalMB < 10) {
             setArchivos(e.target.files)
         } else {
-            toast("*Los archivos cargados superan las 20 MB")
+            toast("*Los archivos cargados superan las 10 MB")
         }
     }
 
@@ -153,13 +154,17 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
         }
         let urlRq;
         f.append('body', JSON.stringify(body))
-        for (let index = 0; index < archivos.length; index++) {
-            f.append('files', archivos[index])
-        }
         if (apiLambda) {
+            f.append('files', archivos.length)
+            for (let index = 0; index < archivos.length; index++) {
+                f.append(`file_${index}`, archivos[index])
+            }
             f.append('urlPath', url[1].pathLambda)
             urlRq = `${url[1].urlEntornoLambda}`
         } else {
+            for (let index = 0; index < archivos.length; index++) {
+                f.append('files', archivos[index])
+            }
             urlRq = `${url[1].urlEntornoLocal}${url[1].pathLambda}`
         }
         await axios.post(`${urlRq}`, f, {

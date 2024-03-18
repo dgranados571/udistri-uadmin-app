@@ -206,13 +206,19 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       }
       let urlRq;
       f.append('body', JSON.stringify(body));
-      for (let index = 0; index < archivos.length; index++) {
-        f.append('files', archivos[index])
-      }
       if (apiLambda) {
+        if (archivos.length > 0) {
+          f.append('files', archivos.length)
+          for (let index = 0; index < archivos.length; index++) {
+            f.append(`file_${index}`, archivos[index])
+          }
+        }
         f.append('urlPath', url[13].pathLambda)
         urlRq = `${url[13].urlEntornoLambda}`
       } else {
+        for (let index = 0; index < archivos.length; index++) {
+          f.append('files', archivos[index])
+        }
         urlRq = `${url[13].urlEntornoLocal}${url[13].pathLambda}`
       }
       await axios.post(`${urlRq}`, f, {
@@ -254,13 +260,19 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       }
       let urlRq;
       f.append('body', JSON.stringify(body))
-      for (let index = 0; index < archivos.length; index++) {
-        f.append('files', archivos[index])
-      }
       if (apiLambda) {
+        if (archivos.length > 0) {
+          f.append('files', archivos.length)
+          for (let index = 0; index < archivos.length; index++) {
+            f.append(`file_${index}`, archivos[index])
+          }
+        }
         f.append('urlPath', url[14].pathLambda)
         urlRq = `${url[14].urlEntornoLambda}`
       } else {
+        for (let index = 0; index < archivos.length; index++) {
+          f.append('files', archivos[index])
+        }
         urlRq = `${url[14].urlEntornoLocal}${url[14].pathLambda}`
       }
       await axios.post(`${urlRq}`, f, {
@@ -299,13 +311,19 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
       }
       let urlRq;
       f.append('body', JSON.stringify(body))
-      for (let index = 0; index < archivos.length; index++) {
-        f.append('files', archivos[index])
-      }
       if (apiLambda) {
+        if (archivos.length > 0) {
+          f.append('files', archivos.length)
+          for (let index = 0; index < archivos.length; index++) {
+            f.append(`file_${index}`, archivos[index])
+          }
+        }
         f.append('urlPath', url[15].pathLambda)
         urlRq = `${url[15].urlEntornoLambda}`
       } else {
+        for (let index = 0; index < archivos.length; index++) {
+          f.append('files', archivos[index])
+        }
         urlRq = `${url[15].urlEntornoLocal}${url[15].pathLambda}`
       }
       await axios.post(`${urlRq}`, f, {

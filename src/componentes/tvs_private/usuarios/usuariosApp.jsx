@@ -378,7 +378,6 @@ const UsuariosApp = ({ toast, setCargando }) => {
                 headers
             }).then((response) => {
                 setTimeout(() => {
-                    console.log(response)
                     setUsuariosList(response.data.objeto)
                     if (!response.data.estado) {
                         toast(response.data.mensaje)

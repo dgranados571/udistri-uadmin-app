@@ -2,7 +2,7 @@
 export const UtilUrl = () => {
 
   const urlEntornoLocal = 'http://localhost:8080';
-  const urlEntornoLambda = 'https://rc5bq7717c.execute-api.us-east-1.amazonaws.com/Stage/unadmin';
+  const urlEntornoLambda = 'https://6h1u1ul3nb.execute-api.us-east-1.amazonaws.com/Stage/unadmin';
 
   const url = {
     1: {
