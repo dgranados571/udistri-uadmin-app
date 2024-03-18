@@ -1109,48 +1109,50 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
           <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
             <p className='mb-1'>A continuación, encontrara el histórico de la gestión asociada a la solicitud {idDetalleSolicitud} </p>
           </div>
-          <table className='table-info'>
-            <thead>
-              <tr>
-                <td className='td-info'>
-                  <p className='p-label-form'> Fecha del Evento </p>
-                </td>
-                <td className='td-info'>
-                  <p className='p-label-form'> Nombre de Operación </p>
-                </td>
-                <td className='td-info'>
-                  <p className='p-label-form'> Resultado de Operación </p>
-                </td>
-                <td className='td-info'>
-                  <p className='p-label-form'> Observaciones </p>
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                showDetalleSolicitud ?
-                  detalleSolicitud.eventosSolicitud.map((evento) => {
-                    return (
-                      <tr className='tr-tablet'>
-                        <td className='td-info'>
-                          <p className=''>{evento.fecha_evento}</p>
-                        </td>
-                        <td className='td-info'>
-                          <p className=''>{evento.nombre_operacion}</p>
-                        </td>
-                        <td className='td-info'>
-                          <p className=''>{evento.resultado_operacion}</p>
-                        </td>
-                        <td className='td-info'>
-                          <p className=''>{evento.observaciones}</p>
-                        </td>
-                      </tr>)
-                  })
-                  :
-                  'Cargando ...'
-              }
-            </tbody>
-          </table>
+          <div className='div-style-form-whit-table'>
+            <table className='table-info'>
+              <thead>
+                <tr>
+                  <td className='td-info'>
+                    <p className='p-label-form'> Fecha del Evento </p>
+                  </td>
+                  <td className='td-info'>
+                    <p className='p-label-form'> Nombre de Operación </p>
+                  </td>
+                  <td className='td-info'>
+                    <p className='p-label-form'> Resultado de Operación </p>
+                  </td>
+                  <td className='td-info'>
+                    <p className='p-label-form'> Observaciones </p>
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  showDetalleSolicitud ?
+                    detalleSolicitud.eventosSolicitud.map((evento) => {
+                      return (
+                        <tr className='tr-tablet'>
+                          <td className='td-info'>
+                            <p className=''>{evento.fecha_evento}</p>
+                          </td>
+                          <td className='td-info'>
+                            <p className=''>{evento.nombre_operacion}</p>
+                          </td>
+                          <td className='td-info'>
+                            <p className=''>{evento.resultado_operacion}</p>
+                          </td>
+                          <td className='td-info'>
+                            <p className=''>{evento.observaciones}</p>
+                          </td>
+                        </tr>)
+                    })
+                    :
+                    'Cargando ...'
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </>

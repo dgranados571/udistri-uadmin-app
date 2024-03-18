@@ -465,66 +465,70 @@ const UsuariosApp = ({ toast, setCargando }) => {
                     </div>
                 </div>
             </div>
+
+
             <div className='div-style-form'>
                 <h3 className='titulo-form'>Usuarios App</h3>
-                <table className='table-info'>
-                    <thead>
-                        <tr>
-                            <td className='td-info'><p className='p-label-form'> Nombres </p></td>
-                            <td className='td-info'><p className='p-label-form'> Role </p></td>
-                            <td className='td-info'><p className='p-label-form'> Estado </p></td>
-                            <td className='td-info'><p className='p-label-form'> Usuario APP </p></td>
-                            <td className='td-info'><p className='p-label-form'> Contraseña </p></td>
-                            <td className='td-info'><p className='p-label-form'> Correo </p></td>
-                            <td className='td-info'><p className='p-label-form'> Acciones </p></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            usuariosList.map((usuario) => {
-                                return (
-                                    <tr >
-                                        <td className='td-info'>
-                                            <p>{usuario.nombre} {usuario.apellidos}  </p>
-                                        </td>
-                                        <td className='td-info'>
-                                            <p>{usuario.role}</p>
-                                        </td>
-                                        <td className='td-info'>
-                                            <p className='mt-2'>
-                                                {
-                                                    usuario.usuario_activo ?
-                                                        'ACTIVO'
-                                                        :
-                                                        'PENDIENTE DE ACTIVAR'
-                                                }
-                                            </p>
-                                        </td>
-                                        <td className='td-info'>
-                                            <p>{usuario.usuario}</p>
-                                        </td>
-                                        <td className='td-info'>
-                                            <p>{usuario.contrasenia}</p>
-                                        </td>
-                                        <td className='td-info'>
-                                            <p>{usuario.correo}</p>
-                                        </td>
-                                        <td className='td-info'>
-                                            <div className='d-flex justify-content-around'>
-                                                <button className='btn btn-link' onClick={() => actualizaContrasenia(usuario)}>
-                                                    <FontAwesomeIcon className='icons-table' icon={faRotateLeft} />
-                                                </button>
-                                                <button className='btn btn-link' onClick={() => actualizaUsuario(usuario)}>
-                                                    <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </table>
+                <div className='div-style-form-whit-table'>
+                    <table className='table-info'>
+                        <thead>
+                            <tr>
+                                <td className='td-info'><p className='p-label-form'> Nombres </p></td>
+                                <td className='td-info'><p className='p-label-form'> Role </p></td>
+                                <td className='td-info'><p className='p-label-form'> Estado </p></td>
+                                <td className='td-info'><p className='p-label-form'> Usuario APP </p></td>
+                                <td className='td-info'><p className='p-label-form'> Contraseña </p></td>
+                                <td className='td-info'><p className='p-label-form'> Correo </p></td>
+                                <td className='td-info'><p className='p-label-form'> Acciones </p></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                usuariosList.map((usuario) => {
+                                    return (
+                                        <tr >
+                                            <td className='td-info'>
+                                                <p>{usuario.nombre} {usuario.apellidos}  </p>
+                                            </td>
+                                            <td className='td-info'>
+                                                <p>{usuario.role}</p>
+                                            </td>
+                                            <td className='td-info'>
+                                                <p className='mt-2'>
+                                                    {
+                                                        usuario.usuario_activo ?
+                                                            'ACTIVO'
+                                                            :
+                                                            'PENDIENTE DE ACTIVAR'
+                                                    }
+                                                </p>
+                                            </td>
+                                            <td className='td-info'>
+                                                <p>{usuario.usuario}</p>
+                                            </td>
+                                            <td className='td-info'>
+                                                <p>{usuario.contrasenia}</p>
+                                            </td>
+                                            <td className='td-info'>
+                                                <p>{usuario.correo}</p>
+                                            </td>
+                                            <td className='td-info'>
+                                                <div className='d-flex justify-content-around'>
+                                                    <button className='btn btn-link' onClick={() => actualizaContrasenia(usuario)}>
+                                                        <FontAwesomeIcon className='icons-table' icon={faRotateLeft} />
+                                                    </button>
+                                                    <button className='btn btn-link' onClick={() => actualizaUsuario(usuario)}>
+                                                        <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             {
                 modal ?

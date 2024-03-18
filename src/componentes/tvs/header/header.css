@@ -200,12 +200,12 @@
     opacity: 1;
     border-radius: 0px;
     padding: 0px;
-    margin-top: -47px;
+    margin-top: 0px;
     transition: all 350ms;
 }
 
 .div-menu-responsive {
-    margin-top: 6rem;
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     background-color: #5C5C5C;

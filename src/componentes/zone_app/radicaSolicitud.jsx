@@ -57,7 +57,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             var fileSizeMB = fileList[step].size / 1024 / 1024;
             valorFinalMB = valorFinalMB + fileSizeMB;
         }
-        console.log('LONGITUD ARCHIVOS --> ', valorFinalMB)
+        console.log('Longitud de archivos --> ', valorFinalMB)
         if (valorFinalMB < 10) {
             setArchivos(e.target.files)
         } else {
