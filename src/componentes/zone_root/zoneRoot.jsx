@@ -23,7 +23,7 @@ const ZoneRoot = ({ setRedirect, toast, setCargando }) => {
         {
             name: 'MENU2',
             label: 'Solicitudes App',
-            id: 'Solicitudes App',
+            id: 'Solicitudes',
             className: 'btn btn-link a-buttom',
             classNameResponse: 'btn btn-link a-buttom'
         },

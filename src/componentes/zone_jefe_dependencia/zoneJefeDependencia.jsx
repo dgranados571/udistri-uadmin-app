@@ -14,7 +14,7 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
         {
             name: 'MENU1',
             label: 'Solicitudes',
-            id: 'Solicitudes App',
+            id: 'Solicitudes',
             className: 'btn btn-link a-buttom-active',
             classNameResponse: 'btn btn-link a-buttom-responsive-active'
         },
