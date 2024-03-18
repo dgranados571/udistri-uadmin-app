@@ -7,7 +7,7 @@ const Login = ({ setRedirect, toast, setCargando }) => {
 
     const { url, apiLambda } = UtilUrl();
     const [actionLogin, setActionLogin] = useState('LOGIN')
-    
+
     const [loginElements, setLoginElements] = useState({
         usuario: '',
         contrasenia: '',
@@ -203,58 +203,71 @@ const Login = ({ setRedirect, toast, setCargando }) => {
 
     return (
         <>
-            <div className='div-container-login' style={{ display: actionLogin === 'LOGIN' ? 'flex' : 'none' }}>
-                <div className='div-login'>
-                    <div className='div-login-elements'>
-                        <div className='div-elements-children' >
-                            <h3 className='titulo-login'>Ingreso a: Gestión contractual</h3>
-                            <div className='div-inputs-login'>
-                                <p className='p-label-form-login'> Usuario </p>
-                                <input ref={usuarioRef} type="text" name='usuario' value={usuario} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Usuario' autoComplete='off' />
-                                <p className='p-label-form-login'> Contraseña </p>
-                                <input ref={contrasenaRef} type="password" name='contrasenia' value={contrasenia} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Contraseña' autoComplete='off' />
-                            </div>
-                            {
-                                /*
-                                <div className='div-links-login'>
-                                    <button className='btn btn-link a-link-login'>
-                                        Olvide mi contraseña
-                                    </button>
+            <div className='div-container-login' style={{ display: actionLogin === 'LOGIN' ? 'block' : 'none' }}>
+                <div className="row p-0 m-0">
+                    <div className="col-12 col-sm-2 col-md-2 col-lg-3 p-0 m-0" ></div>
+                    <div className="col-12 col-sm-8 col-md-8 col-lg-6 p-0 m-0" >
+                        <div className='div-login'>
+                            <div className='div-login-elements'>
+                                <div className='div-elements-children' >
+                                    <h3 className='titulo-login'>Ingreso a: Gestión contractual</h3>
+                                    <div className='div-inputs-login'>
+                                        <p className='p-label-form-login'> Usuario </p>
+                                        <input ref={usuarioRef} type="text" name='usuario' value={usuario} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Usuario' autoComplete='off' />
+                                        <p className='p-label-form-login'> Contraseña </p>
+                                        <input ref={contrasenaRef} type="password" name='contrasenia' value={contrasenia} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Contraseña' autoComplete='off' />
+                                    </div>
+                                    {
+                                        /*
+                                        <div className='div-links-login'>
+                                            <button className='btn btn-link a-link-login'>
+                                                Olvide mi contraseña
+                                            </button>
+                                        </div>
+                                        */
+                                    }
+                                    <div className='div-bottom-custom-login'>
+                                        <button className='bottom-custom-login' onClick={() => clickLogin()} >
+                                            Ingresar
+                                        </button>
+                                    </div>
                                 </div>
-                                */
-                            }
-                            <div className='div-bottom-custom-login'>
-                                <button className='bottom-custom-login' onClick={() => clickLogin()} >
-                                    Ingresar
-                                </button>
                             </div>
+                            <p className='p-info-login'>Desarrollado por equipo de especialidad U-Distrital </p>
                         </div>
                     </div>
-                    <p className='p-info-login'>Desarrollado por equipo de especialidad U-Distrital </p>
+                    <div className="col-12 col-sm-2 col-md-2 col-lg-3 p-0 m-0" ></div>
                 </div>
+
             </div>
-            <div className='div-container-login' style={{ display: actionLogin === 'ACTUALIZA_PASS' ? 'flex' : 'none' }}>
-                <div className='div-login'>
-                    <div className='div-login-elements'>
-                        <div className='div-elements-children' >
-                            <h3 className='titulo-login'>Activar cuenta</h3>
-                            <div>
-                                <p>Para activar tu cuenta debes actualizar tu constraseña</p>
+            <div className='div-container-login' style={{ display: actionLogin === 'ACTUALIZA_PASS' ? 'block' : 'none' }}>
+                <div className="row p-0 m-0">
+                    <div className="col-12 col-sm-2 col-md-2 col-lg-3 p-0 m-0" ></div>
+                    <div className="col-12 col-sm-8 col-md-8 col-lg-6 p-0 m-0" >
+                        <div className='div-login'>
+                            <div className='div-login-elements'>
+                                <div className='div-elements-children' >
+                                    <h3 className='titulo-login'>Activar cuenta</h3>
+                                    <div>
+                                        <p>Para activar tu cuenta debes actualizar tu constraseña</p>
+                                    </div>
+                                    <div className='div-inputs-login'>
+                                        <p className='p-label-form-login'>Nueva contraseña  </p>
+                                        <input ref={contrasenaPreRef} type="password" name='newContrasenia' value={newContrasenia} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Constraseña' autoComplete='off' />
+                                        <p className='p-label-form-login'>Confirma contraseña </p>
+                                        <input ref={contrasenaPostRef} type="password" name='confimaContrasenia' value={confimaContrasenia} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Confirma Contraseña' autoComplete='off' />
+                                    </div>
+                                    <div className='div-bottom-custom-login'>
+                                        <button className='bottom-custom-login' onClick={() => clickActualizaPass()} >
+                                            Activar
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div className='div-inputs-login'>
-                                <p className='p-label-form-login'>Nueva contraseña  </p>
-                                <input ref={contrasenaPreRef} type="password" name='newContrasenia' value={newContrasenia} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Constraseña' autoComplete='off' />
-                                <p className='p-label-form-login'>Confirma contraseña </p>
-                                <input ref={contrasenaPostRef} type="password" name='confimaContrasenia' value={confimaContrasenia} onChange={(e) => inputEvent(e)} className='form-control' placeholder='Confirma Contraseña' autoComplete='off' />
-                            </div>
-                            <div className='div-bottom-custom-login'>
-                                <button className='bottom-custom-login' onClick={() => clickActualizaPass()} >
-                                    Activar
-                                </button>
-                            </div>
+                            <p className='p-info-login'>Desarrollado por equipo de especialidad U-Distrital </p>
                         </div>
                     </div>
-                    <p className='p-info-login'>dgc-software | Todos los derechos reservados </p>
+                    <div className="col-12 col-sm-2 col-md-2 col-lg-3 p-0 m-0" ></div>
                 </div>
             </div>
         </>
