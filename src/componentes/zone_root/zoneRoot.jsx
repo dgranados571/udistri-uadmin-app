@@ -22,15 +22,15 @@ const ZoneRoot = ({ setRedirect, toast, setCargando }) => {
         },
         {
             name: 'MENU2',
-            label: 'Solicitudes App',
+            label: 'Solicitudes',
             id: 'Solicitudes',
             className: 'btn btn-link a-buttom',
             classNameResponse: 'btn btn-link a-buttom'
         },
         {
             name: 'MENU3',
-            label: 'Usuarios App',
-            id: 'Usuarios App',
+            label: 'Usuarios',
+            id: 'Usuarios',
             className: 'btn btn-link a-buttom',
             classNameResponse: 'btn btn-link a-buttom'
         }
