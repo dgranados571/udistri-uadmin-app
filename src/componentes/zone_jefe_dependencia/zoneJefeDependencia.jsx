@@ -21,7 +21,7 @@ const ZoneJefeDependencia = ({ setRedirect, toast, setCargando }) => {
         {
             name: 'MENU2',
             label: 'Usuarios',
-            id: 'Usuarios App',
+            id: 'Usuarios',
             className: 'btn btn-link a-buttom',
             classNameResponse: 'btn btn-link a-buttom'
         }
