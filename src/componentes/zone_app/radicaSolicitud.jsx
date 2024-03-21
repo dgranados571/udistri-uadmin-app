@@ -152,9 +152,13 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             "descripcion": descripcion,
             "fechaRegistro": new Date()
         }
-        let urlRq;
-        f.append('body', JSON.stringify(body))
+        let urlRq
+        let headers
         if (apiLambda) {
+            headers = {
+                'Content-Type': 'multipart/form-data'
+            }
+            f.append('body', JSON.stringify(body))
             f.append('files', archivos.length)
             for (let index = 0; index < archivos.length; index++) {
                 f.append(`file_${index}`, archivos[index])
@@ -162,19 +166,21 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             f.append('urlPath', url[1].pathLambda)
             urlRq = `${url[1].urlEntornoLambda}`
         } else {
-            for (let index = 0; index < archivos.length; index++) {
-                f.append('files', archivos[index])
+            headers = {
+                'Content-Type': 'application/json'
             }
             urlRq = `${url[1].urlEntornoLocal}${url[1].pathLambda}`
         }
-        await axios.post(`${urlRq}`, f, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+        const rqBody = apiLambda ? f : body;
+        await axios.post(`${urlRq}`, rqBody, {
+            headers
         }).then((response) => {
             setTimeout(() => {
                 setCargando(false)
                 if (response.data.estado) {
+                    if (!apiLambda) {
+                        cargaDocumentos(response.data.objeto)
+                    }
                     resetForm()
                 }
                 toast(response.data.mensaje)
@@ -187,6 +193,36 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
             }, 250)
         })
 
+    }
+
+    const cargaDocumentos = async (idProcesamiento) => {
+        setCargando(true)
+        const f = new FormData();
+        let body = {
+            "idProcesamiento": idProcesamiento,
+        }
+        let urlRq
+        f.append('body', JSON.stringify(body))
+        for (let index = 0; index < archivos.length; index++) {
+            f.append('files', archivos[index])
+        }
+        urlRq = `${url[16].urlEntornoLocal}${url[16].pathLambda}`
+        await axios.post(`${urlRq}`, f, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((response) => {
+            setTimeout(() => {
+                setCargando(false)
+                toast(response.data.mensaje)
+            }, 250)
+        }).catch((e) => {
+            console.log(e)
+            setTimeout(() => {
+                setCargando(false)
+                toast('No es posible cargar los documentos, contacte al administrador')
+            }, 250)
+        })
     }
 
     return (

@@ -204,9 +204,13 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         "usuarioJefeDependencia": usuarioJefeDependencia,
         "fechaEvento": new Date()
       }
-      let urlRq;
-      f.append('body', JSON.stringify(body));
+      let urlRq
+      let headers
       if (apiLambda) {
+        headers = {
+          'Content-Type': 'multipart/form-data'
+        }
+        f.append('body', JSON.stringify(body));
         if (archivos.length > 0) {
           f.append('files', archivos.length)
           for (let index = 0; index < archivos.length; index++) {
@@ -216,18 +220,19 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         f.append('urlPath', url[13].pathLambda)
         urlRq = `${url[13].urlEntornoLambda}`
       } else {
-        for (let index = 0; index < archivos.length; index++) {
-          f.append('files', archivos[index])
+        headers = {
+          'Content-Type': 'application/json'
         }
         urlRq = `${url[13].urlEntornoLocal}${url[13].pathLambda}`
       }
-      await axios.post(`${urlRq}`, f, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      const rqBody = apiLambda ? f : body;
+      await axios.post(`${urlRq}`, rqBody, {
+        headers
       }).then((response) => {
-
         setTimeout(() => {
+          if (!apiLambda) {
+            cargaDocumentos(response.data.objeto)
+          }
           toast(response.data.mensaje);
           setRedirectSolicitudes('LISTA_SOLICITUDES');
           setCargando(false);
@@ -258,9 +263,13 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         "usuarioPrecontractual": usuarioPrecontractual,
         "fechaEvento": new Date()
       }
-      let urlRq;
-      f.append('body', JSON.stringify(body))
+      let urlRq
+      let headers
       if (apiLambda) {
+        headers = {
+          'Content-Type': 'multipart/form-data'
+        }
+        f.append('body', JSON.stringify(body))
         if (archivos.length > 0) {
           f.append('files', archivos.length)
           for (let index = 0; index < archivos.length; index++) {
@@ -270,17 +279,19 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         f.append('urlPath', url[14].pathLambda)
         urlRq = `${url[14].urlEntornoLambda}`
       } else {
-        for (let index = 0; index < archivos.length; index++) {
-          f.append('files', archivos[index])
+        headers = {
+          'Content-Type': 'application/json'
         }
         urlRq = `${url[14].urlEntornoLocal}${url[14].pathLambda}`
       }
-      await axios.post(`${urlRq}`, f, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      const rqBody = apiLambda ? f : body;
+      await axios.post(`${urlRq}`, rqBody, {
+        headers
       }).then((response) => {
         setTimeout(() => {
+          if (!apiLambda) {
+            cargaDocumentos(response.data.objeto)
+          }
           toast(response.data.mensaje);
           setRedirectSolicitudes('LISTA_SOLICITUDES');
           setCargando(false);
@@ -310,8 +321,12 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         "fechaEvento": new Date()
       }
       let urlRq;
-      f.append('body', JSON.stringify(body))
+      let headers
       if (apiLambda) {
+        headers = {
+          'Content-Type': 'multipart/form-data'
+        }
+        f.append('body', JSON.stringify(body))
         if (archivos.length > 0) {
           f.append('files', archivos.length)
           for (let index = 0; index < archivos.length; index++) {
@@ -321,17 +336,19 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         f.append('urlPath', url[15].pathLambda)
         urlRq = `${url[15].urlEntornoLambda}`
       } else {
-        for (let index = 0; index < archivos.length; index++) {
-          f.append('files', archivos[index])
+        headers = {
+          'Content-Type': 'application/json'
         }
         urlRq = `${url[15].urlEntornoLocal}${url[15].pathLambda}`
       }
-      await axios.post(`${urlRq}`, f, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      const rqBody = apiLambda ? f : body;
+      await axios.post(`${urlRq}`, rqBody, {
+        headers
       }).then((response) => {
         setTimeout(() => {
+          if (!apiLambda) {
+            cargaDocumentos(response.data.objeto)
+          }
           toast(response.data.mensaje);
           setRedirectSolicitudes('LISTA_SOLICITUDES');
           setCargando(false);
@@ -345,6 +362,36 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     } else {
       toast('No es posible consultar la información, contacte al administrador')
     }
+  }
+
+  const cargaDocumentos = async (idProcesamiento) => {
+    setCargando(true)
+    const f = new FormData();
+    let body = {
+      "idProcesamiento": idProcesamiento,
+    }
+    let urlRq
+    f.append('body', JSON.stringify(body))
+    for (let index = 0; index < archivos.length; index++) {
+      f.append('files', archivos[index])
+    }
+    urlRq = `${url[16].urlEntornoLocal}${url[16].pathLambda}`
+    await axios.post(`${urlRq}`, f, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then((response) => {
+      setTimeout(() => {
+        setCargando(false)
+        toast(response.data.mensaje)
+      }, 250)
+    }).catch((e) => {
+      console.log(e)
+      setTimeout(() => {
+        setCargando(false)
+        toast('No es posible cargar los documentos, contacte al administrador')
+      }, 250)
+    })
   }
 
   const consultaDetalleSolicitud = async () => {
