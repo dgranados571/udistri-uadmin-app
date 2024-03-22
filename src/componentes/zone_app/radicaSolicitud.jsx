@@ -177,13 +177,18 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
         }).then((response) => {
             setTimeout(() => {
                 setCargando(false)
+                toast(response.data.mensaje)
                 if (response.data.estado) {
                     if (!apiLambda) {
-                        cargaDocumentos(response.data.objeto)
+                        cargaDocumentos(response.data.objeto.idProcesamiento)
+                    }
+                    if (!!response.data.objeto.errorS3) {
+                        setTimeout(() => {
+                            toast(response.data.objeto.errorS3)    
+                        }, 250)
                     }
                     resetForm()
                 }
-                toast(response.data.mensaje)
             }, 250)
         }).catch((e) => {
             console.log(e)

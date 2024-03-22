@@ -398,7 +398,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
     return (
         <>
             <div className='div-style-form'>
-                <h3 className='titulo-form'>Registro de usuarios aplicación</h3>
+                <h3 className='titulo-form'>Registro de usuarios de aplicación</h3>
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
@@ -465,10 +465,8 @@ const UsuariosApp = ({ toast, setCargando }) => {
                     </div>
                 </div>
             </div>
-
-
             <div className='div-style-form'>
-                <h3 className='titulo-form'>Usuarios App</h3>
+                <h3 className='titulo-form'>Usuarios de aplicación</h3>
                 <div className='div-style-form-whit-table'>
                     <table className='table-info'>
                         <thead>
@@ -476,7 +474,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
                                 <td className='td-info'><p className='p-label-form'> Nombres </p></td>
                                 <td className='td-info'><p className='p-label-form'> Role </p></td>
                                 <td className='td-info'><p className='p-label-form'> Estado </p></td>
-                                <td className='td-info'><p className='p-label-form'> Usuario APP </p></td>
+                                <td className='td-info'><p className='p-label-form'> Usuario de aplicación </p></td>
                                 <td className='td-info'><p className='p-label-form'> Contraseña </p></td>
                                 <td className='td-info'><p className='p-label-form'> Correo </p></td>
                                 <td className='td-info'><p className='p-label-form'> Acciones </p></td>

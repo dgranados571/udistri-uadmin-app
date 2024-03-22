@@ -184,7 +184,6 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
           setCargando(false);
         }, 250)
       })
-
     } else {
       toast('No es posible consultar la información, contacte al administrador');
     }
@@ -230,10 +229,15 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         headers
       }).then((response) => {
         setTimeout(() => {
+          toast(response.data.mensaje);
           if (!apiLambda) {
             cargaDocumentos(response.data.objeto)
           }
-          toast(response.data.mensaje);
+          if (!!response.data.objeto.errorS3) {
+            setTimeout(() => {
+              toast(response.data.objeto.errorS3)
+            }, 250)
+          }          
           setRedirectSolicitudes('LISTA_SOLICITUDES');
           setCargando(false);
         }, 50)
@@ -289,10 +293,15 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         headers
       }).then((response) => {
         setTimeout(() => {
+          toast(response.data.mensaje);
           if (!apiLambda) {
             cargaDocumentos(response.data.objeto)
           }
-          toast(response.data.mensaje);
+          if (!!response.data.objeto.errorS3) {
+            setTimeout(() => {
+              toast(response.data.objeto.errorS3)
+            }, 250)
+          }          
           setRedirectSolicitudes('LISTA_SOLICITUDES');
           setCargando(false);
         }, 50)
@@ -346,10 +355,15 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         headers
       }).then((response) => {
         setTimeout(() => {
+          toast(response.data.mensaje);
           if (!apiLambda) {
             cargaDocumentos(response.data.objeto)
           }
-          toast(response.data.mensaje);
+          if (!!response.data.objeto.errorS3) {
+            setTimeout(() => {
+              toast(response.data.objeto.errorS3)
+            }, 250)
+          }
           setRedirectSolicitudes('LISTA_SOLICITUDES');
           setCargando(false);
         }, 50)
