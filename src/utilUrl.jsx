@@ -84,6 +84,11 @@ export const UtilUrl = () => {
       urlEntornoLocal,
       urlEntornoLambda,
       pathLambda: '/service/uadmin/cargaDocumentos'
+    },
+    17: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/eliminarSolicitud'
     }
   }
 
