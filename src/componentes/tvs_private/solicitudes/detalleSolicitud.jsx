@@ -779,7 +779,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
     switch (resuelveContractual) {
       case 'CIERRA_SOLICITUD_SATISFACTORIA':
         return (
-          <p className='mt-3'>Para continuar con la gestión de la presente solicitud, es requerido que le el consecutivo de la plataforma QUIP:</p>
+          <p className='mt-3'>Para continuar con la gestión de la presente solicitud, es requerido que le el consecutivo de la plataforma QUIPU:</p>
         )
       default:
         return (

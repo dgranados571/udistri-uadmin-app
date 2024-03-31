@@ -92,7 +92,7 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
                 setTimeout(() => {
                     solicitudesPorZonaConsulta()
                     toast(response.data.mensaje)
-                    setCargando(false)    
+                    setCargando(false)
                 }, 250)
             }).catch(() => {
                 setTimeout(() => {
@@ -204,7 +204,7 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
 
     const modalSi = () => {
         setModal(false)
-        eliminarSolicitudAction()        
+        eliminarSolicitudAction()
     }
 
     const modalNo = () => {
@@ -273,9 +273,14 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
                                                                 <button className='btn btn-link' onClick={() => detalleSolicitud(solicitud.solicitud.id_procesamiento)}>
                                                                     <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
                                                                 </button>
-                                                                <button className='btn btn-link' onClick={() => eliminarSolicitud(solicitud.solicitud.id_procesamiento)}>
-                                                                    <FontAwesomeIcon className='icons-table' icon={faTrash} />
-                                                                </button>
+                                                                {
+                                                                    zonaConsulta === 'ROOT' ?
+                                                                        <button className='btn btn-link' onClick={() => eliminarSolicitud(solicitud.solicitud.id_procesamiento)}>
+                                                                            <FontAwesomeIcon className='icons-table' icon={faTrash} />
+                                                                        </button>
+                                                                        :
+                                                                        <></>
+                                                                }
                                                             </div>
                                                         </td>
                                                     </tr>
