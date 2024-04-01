@@ -4,7 +4,6 @@ import ZoneRoot from '../zone_root/zoneRoot'
 import ZoneJefeDependencia from '../zone_jefe_dependencia/zoneJefeDependencia'
 import ZonePrecontractual from '../zone_precontractual/zonePrecontractual'
 import ZonePresupuesto from '../zone_presupuesto/zonePresupuesto'
-import ZoneAfiliaciones from '../zone_afiliaciones/zoneAfiliaciones'
 import ZoneContractual from '../zone_contractual/zoneContractual'
 import { Cargando } from '../tvs/loader/cargando'
 import { ToastContainer, toast } from 'react-toastify';
@@ -50,10 +49,6 @@ const ZonePrivate = () => {
             case 'PRESUPUETO_ROLE':
                 return (
                     <ZonePresupuesto setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
-                )
-            case 'AFILIACIONES_ROLE':
-                return (
-                    <ZoneAfiliaciones setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
                 )
             case 'CONTRACTUAL_ROLE':
                 return (
