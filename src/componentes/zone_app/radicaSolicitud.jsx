@@ -184,30 +184,25 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
                     }
                     if (!!response.data.objeto.errorS3) {
                         setTimeout(() => {
-                            toast(response.data.objeto.errorS3)    
+                            toast(response.data.objeto.errorS3)
                         }, 250)
                     }
                     resetForm()
                 }
             }, 250)
         }).catch((e) => {
-            console.log(e)
             setTimeout(() => {
                 setCargando(false)
                 toast('No es posible el registro, contacte al administrador')
             }, 250)
         })
-
     }
 
     const cargaDocumentos = async (idProcesamiento) => {
         setCargando(true)
         const f = new FormData();
-        let body = {
-            "idProcesamiento": idProcesamiento,
-        }
         let urlRq
-        f.append('body', JSON.stringify(body))
+        f.append('idProcesamiento', idProcesamiento)
         for (let index = 0; index < archivos.length; index++) {
             f.append('files', archivos[index])
         }
@@ -222,7 +217,6 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
                 toast(response.data.mensaje)
             }, 250)
         }).catch((e) => {
-            console.log(e)
             setTimeout(() => {
                 setCargando(false)
                 toast('No es posible cargar los documentos, contacte al administrador')

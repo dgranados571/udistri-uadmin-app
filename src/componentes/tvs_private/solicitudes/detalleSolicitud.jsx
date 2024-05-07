@@ -231,13 +231,13 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         setTimeout(() => {
           toast(response.data.mensaje);
           if (!apiLambda) {
-            cargaDocumentos(response.data.objeto)
+            cargaDocumentos(response.data.objeto.idProcesamiento)
           }
           if (!!response.data.objeto.errorS3) {
             setTimeout(() => {
               toast(response.data.objeto.errorS3)
             }, 250)
-          }          
+          }
           setRedirectSolicitudes('LISTA_SOLICITUDES');
           setCargando(false);
         }, 50)
@@ -295,13 +295,13 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         setTimeout(() => {
           toast(response.data.mensaje);
           if (!apiLambda) {
-            cargaDocumentos(response.data.objeto)
+            cargaDocumentos(response.data.objeto.idProcesamiento)
           }
           if (!!response.data.objeto.errorS3) {
             setTimeout(() => {
               toast(response.data.objeto.errorS3)
             }, 250)
-          }          
+          }
           setRedirectSolicitudes('LISTA_SOLICITUDES');
           setCargando(false);
         }, 50)
@@ -357,7 +357,7 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
         setTimeout(() => {
           toast(response.data.mensaje);
           if (!apiLambda) {
-            cargaDocumentos(response.data.objeto)
+            cargaDocumentos(response.data.objeto.idProcesamiento)
           }
           if (!!response.data.objeto.errorS3) {
             setTimeout(() => {
@@ -381,11 +381,8 @@ const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetall
   const cargaDocumentos = async (idProcesamiento) => {
     setCargando(true)
     const f = new FormData();
-    let body = {
-      "idProcesamiento": idProcesamiento,
-    }
     let urlRq
-    f.append('body', JSON.stringify(body))
+    f.append('idProcesamiento', idProcesamiento)
     for (let index = 0; index < archivos.length; index++) {
       f.append('files', archivos[index])
     }
