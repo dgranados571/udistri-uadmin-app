@@ -228,7 +228,7 @@ const RadicaSolicitud = ({ toast, setCargando }) => {
         <>
             <div className='div-container'>
                 <div className='div-style-form'>
-                    <h3 className='titulo-form'>Registro de solicitud contractual</h3>
+                    <h3 className='titulo-form'>Registrar solicitud</h3>
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                             <div className='div-form'>

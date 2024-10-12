@@ -3,19 +3,11 @@
     align-items: center;
 }
 
-.div-container-header-unal-uadmin{
-    height: 100%;
-}
-
 .div-header-unal{
     margin-top: 0rem;
 }
 
 .div-login-component{
-    margin-top: 85px;
-}
-
-.div-registra-sol-component{
     margin-top: 85px;
 }
 
@@ -194,10 +186,6 @@
    
     .div-login-component{
         margin-top: 25px;
-    }
-
-    .div-registra-sol-component{
-        margin-top: 0px;
     }
 
 }

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import HeaderUnal from '../tvs/header_unal/headerUnal'
 import RadicaSolicitud from './radicaSolicitud'
 import { Cargando } from '../tvs/loader/cargando'
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,10 +11,7 @@ const ZonePublic = () => {
   return (
     <>
       <ToastContainer autoClose={4000} hideProgressBar={true} />
-      <HeaderUnal />
-      <div className='div-registra-sol-component'>
-        <RadicaSolicitud toast={toast} setCargando={setCargando} />
-      </div>
+      <RadicaSolicitud toast={toast} setCargando={setCargando} />
       {
         cargando ?
           <Cargando />

@@ -8,7 +8,6 @@ import ZoneContractual from '../zone_contractual/zoneContractual'
 import { Cargando } from '../tvs/loader/cargando'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import HeaderUnal from '../tvs/header_unal/headerUnal'
 
 const ZonePrivate = () => {
 
@@ -24,13 +23,8 @@ const ZonePrivate = () => {
             case 'USUARIO_LOGIN':
                 return (
                     <>
-                        <div className='div-container-header-unal-uadmin'>
-                            <div className='div-header-unal'>
-                                <HeaderUnal />
-                            </div>
-                            <div className='div-login-component'>
-                                <Login setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
-                            </div>
+                        <div className='div-login-component'>
+                            <Login setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
                         </div>
                     </>
                 )
@@ -57,7 +51,6 @@ const ZonePrivate = () => {
             default:
                 return (
                     <>
-                        <HeaderUnal />
                         <Login setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
                     </>
                 )
