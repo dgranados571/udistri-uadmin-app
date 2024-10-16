@@ -84,7 +84,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                 </div>
                 <div className='div-style-form'>
                     <p >A continuación, ingresa la información de la solicitud que deseas registrar:</p>
-                    <br />
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                             <div className='div-form'>
