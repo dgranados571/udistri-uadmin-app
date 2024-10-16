@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import logo from '../../img/logo.jpeg'
+import {logoBase64} from './imgLogo'
 import { UtilUrl } from '../../utilUrl';
 import { IRadicaSolicitudProps } from '../../models/IProps';
 import './radicaSolicitud.css'
@@ -72,7 +72,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-12 col-lg-4" >
                         <div className='div-logo'>
-                            <img src={logo} alt='logoFranco' className='img-logo-franco-osorio'></img>
+                            <img src={logoBase64} alt='logoFranco' className='img-logo-franco-osorio'></img>
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-8" >
