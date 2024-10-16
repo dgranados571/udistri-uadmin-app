@@ -51,19 +51,7 @@
     justify-content: space-between;
 }
 
-.a-link-login {
-    color: #333333;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: 500;
-}
 
-.a-link-login:hover {
-    color: orange;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: 500;
-}
 
 .a-link-registra {
     color: #333333;

@@ -1,0 +1,22 @@
+.div-menu-principal {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 100%;
+    padding: 0px 10px;
+}
+
+.p-menu-principal-item{
+    margin-left: 2rem;
+    font-size: 19px;
+    color: #5C5C5C;
+    cursor: pointer;
+}
+
+.p-menu-principal-item-active{
+    margin-left: 2rem;
+    font-size: 19px;
+    color: #5C5C5C;
+    cursor: pointer;
+    font-weight: bold;
+}

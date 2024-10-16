@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './solicitudes.css'
 import ListaSolicitudes from './listaSolicitudes'
 import DetalleSolicitud from './detalleSolicitud'
 
