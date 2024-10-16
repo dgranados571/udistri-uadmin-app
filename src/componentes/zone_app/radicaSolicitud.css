@@ -1,22 +1,38 @@
 .div-menu-principal {
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
+    justify-content: space-evenly;
+    align-items: center;
     height: 100%;
     padding: 0px 10px;
+    margin: 8px 0px;
 }
 
-.p-menu-principal-item{
+.p-menu-principal-item {
     margin-left: 2rem;
     font-size: 19px;
     color: #5C5C5C;
     cursor: pointer;
 }
 
-.p-menu-principal-item-active{
+.p-menu-principal-item-active {
     margin-left: 2rem;
     font-size: 19px;
     color: #5C5C5C;
     cursor: pointer;
     font-weight: bold;
+}
+
+@media (min-width: 760px) {}
+
+@media (min-width: 1025px) {
+
+    .div-menu-principal {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        height: 100%;
+        padding: 0px 10px;
+        margin: 0px 0px;
+    }
+
 }

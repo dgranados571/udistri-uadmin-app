@@ -63,7 +63,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             default:
                 break;
         }
-
     }
 
     return (
