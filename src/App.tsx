@@ -1,4 +1,3 @@
-import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ZonePrivate from './componentes/zone_app/zonePrivate';
 import ZonePublic from './componentes/zone_app/zonePublic';
