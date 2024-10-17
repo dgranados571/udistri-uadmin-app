@@ -10,7 +10,6 @@ const ZonePublic = () => {
 
   const [cargando, setCargando] = useState(false)
   const [menuSelected, setMenuSelected] = useState('REGISTRA_SOLICITUD');
-  const [redirect, setRedirect] = useState('USUARIO_LOGIN')
 
   const controlMenuAction = () => {
     switch (menuSelected) {
@@ -44,7 +43,7 @@ const ZonePublic = () => {
       case 'GESTIONAR_SOLCITUD':
         return (
           <>
-            <Login setRedirect={setRedirect} toast={toast} setCargando={setCargando} />
+            <Login toast={toast} setCargando={setCargando} />
           </>
         )
       default:

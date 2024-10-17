@@ -1,19 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Select from 'react-select'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRotateLeft, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
-import { UtilUrl } from '../../../utilUrl'
-import axios from 'axios'
 import Modal from '../../tvs/modal/modal'
+import { IGenericResponse, IUsuariosAppProps } from '../../../models/IProps'
+import { AuthServices } from '../../services/authServices'
 
-const UsuariosApp = ({ toast, setCargando }) => {
+const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
 
-    const { url, apiLambda } = UtilUrl();
     const [modal, setModal] = useState(false)
     const [propsModal, setPropsModal] = useState({})
 
     const [modoEditar, setModoEditar] = useState(false)
-    const [userEdita, setUserEdita] = useState({})
+    const [userEdita, setUserEdita] = useState<any>({})
 
     const [usuariosList, setUsuariosList] = useState([])
 
@@ -25,13 +23,14 @@ const UsuariosApp = ({ toast, setCargando }) => {
     const [role, setRole] = useState('')
     const [usuario, setUsuario] = useState('')
 
-    const nombresRef = useRef('')
-    const apellidosRef = useRef('')
-    const tipoIdentificacionRef = useRef('')
-    const identificacionRef = useRef('')
-    const correoRef = useRef('')
-    const roleRef = useRef('')
-    const usuarioRef = useRef('')
+
+    const [nombresRef, setNombresRef] = useState(false)
+    const [apellidosRef, setApellidosRef] = useState(false)
+    const [tipoIdentificacionRef, setTipoIdentificacionRef] = useState(false)
+    const [identificacionRef, setIdentificacionRef] = useState(false)
+    const [correoRef, setCorreoRef] = useState(false)
+    const [roleRef, setRoleRef] = useState(false)
+    const [usuarioRef, setUsuarioRef] = useState(false)
 
     useEffect(() => {
         consultaInformacionUsuariosApp()
@@ -51,62 +50,52 @@ const UsuariosApp = ({ toast, setCargando }) => {
     const tiposDeDocumento = [
         { value: 'INITIAL', label: 'Seleccione' },
         { value: 'CC', label: 'Cedula de ciudadania' },
-        { value: 'CE', label: 'Cedula de extranjeria' },
-        { value: 'NIP', label: 'Número identificación personal' },
-        { value: 'NIT', label: 'Número identificación tributaria' },
-        { value: 'TI', label: 'Tarjeta identidad' },
-        { value: 'PAP', label: 'Pasaporte' },
+        { value: 'CE', label: 'Cedula de extranjeria' }
     ]
 
     const roles = [
         { value: 'INITIAL', label: 'Seleccione' },
-        { value: 'JEFE_DEPENDENCIA_ROLE', label: 'Jefe de dependencia' },
-        { value: 'PRECONTRACTUAL_ROLE', label: 'Precontractual' },
-        { value: 'PRESUPUETO_ROLE', label: 'Presupuesto' },
-        { value: 'CONTRACTUAL_ROLE', label: 'Contractual' }
+        { value: 'ROLE_1', label: 'Gestor documental' },
+        { value: 'ROLE_2', label: 'Revisor documental' }
     ]
 
     const guardaUsuarioAction = () => {
         let formValidado = [];
-
-        nombresRef.current.className = 'form-control'
+        setNombresRef(false)
         if (nombres.length === 0) {
             formValidado.push('Nombres');
-            nombresRef.current.className = 'form-control form-control-error';
+            setNombresRef(true)
         }
-
-        apellidosRef.current.className = 'form-control'
+        setApellidosRef(false)
         if (apellidos.length === 0) {
             formValidado.push('Apellidos');
-            apellidosRef.current.className = 'form-control form-control-error'
+            setApellidosRef(true)
         }
-
+        setTipoIdentificacionRef(false)
         if (tipoIdentificacion.length === 0 || tipoIdentificacion === 'INITIAL') {
             formValidado.push('Tipo identificacion');
+            setTipoIdentificacionRef(true)
         }
-
-        identificacionRef.current.className = 'form-control'
+        setIdentificacionRef(false)
         if (identificacion.length === 0) {
             formValidado.push('identificacion');
-            identificacionRef.current.className = 'form-control form-control-error'
+            setIdentificacionRef(true)
         }
-
-        correoRef.current.className = 'form-control'
+        setCorreoRef(false)
         if (correo.length === 0) {
             formValidado.push('Correo');
-            correoRef.current.className = 'form-control form-control-error'
+            setCorreoRef(true)
         }
-
+        setRoleRef(false)
         if (role.length === 0 || role === 'INITIAL') {
             formValidado.push('Tipo identificacion');
+            setRoleRef(true)
         }
-
-        usuarioRef.current.className = 'form-control'
+        setUsuarioRef(false)
         if (usuario.length === 0) {
             formValidado.push('Usuario');
-            usuarioRef.current.className = 'form-control form-control-error'
+            setUsuarioRef(true)
         }
-
         if (formValidado.length === 0) {
             if (modoEditar) {
                 modalActualizaUsuario()
@@ -122,32 +111,28 @@ const UsuariosApp = ({ toast, setCargando }) => {
     const resetForm = () => {
         setNombres('')
         setApellidos('')
-        tipoIdentificacionRef.current.setValue(tiposDeDocumento[0])
+        setTipoIdentificacion('INITIAL')
         setIdentificacion('')
         setCorreo('')
-        roleRef.current.setValue(roles[0])
+        setRole('INITIAL')
         setUsuario('')
-        nombresRef.current.className = 'form-control'
-        apellidosRef.current.className = 'form-control'
-        identificacionRef.current.className = 'form-control'
-        correoRef.current.className = 'form-control'
-        usuarioRef.current.className = 'form-control'
+
+        setNombresRef(false)
+        setApellidosRef(false)
+        setIdentificacionRef(false)
+        setCorreoRef(false)
+        setUsuarioRef(false)
     }
 
-    const actualizaUsuario = (usuario) => {
+    const actualizaUsuario = (usuario: any) => {
         resetForm()
-        nombresRef.current.className = 'form-control'
-        apellidosRef.current.className = 'form-control'
-        identificacionRef.current.className = 'form-control'
-        correoRef.current.className = 'form-control'
-        usuarioRef.current.className = 'form-control'
         setModoEditar(true)
         setUserEdita(usuario)
         setNombres(usuario.nombre)
         setApellidos(usuario.apellidos)
         for (let step = 0; step < tiposDeDocumento.length; step++) {
             if (tiposDeDocumento[step].value === usuario.tipo_identificacion) {
-                tipoIdentificacionRef.current.setValue(tiposDeDocumento[step])
+                setTipoIdentificacion(usuario.tipo_identificacion)
                 break
             }
         }
@@ -155,7 +140,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
         setCorreo(usuario.correo)
         for (let step = 0; step < roles.length; step++) {
             if (roles[step].value === usuario.role) {
-                roleRef.current.setValue(roles[step])
+                setRole(usuario.role)
                 break
             }
         }
@@ -168,7 +153,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
         resetForm()
     }
 
-    const actualizaContrasenia = (usuario) => {
+    const actualizaContrasenia = (usuario: any) => {
         modalMensajes[0].descripcion = modalMensajes[0].descripcion + usuario.usuario
         setPropsModal(modalMensajes[0])
         setModal(true)
@@ -197,43 +182,25 @@ const UsuariosApp = ({ toast, setCargando }) => {
 
     const actualizaContraseniaUser = async () => {
         if (!!sessionStorage.getItem('usuarioApp')) {
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
-            const f = new FormData();
+            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp') || '')
+            const authServices = new AuthServices();
             const body = {
                 "usuarioEdita": userEdita,
                 "usuarioApp": usuarioLocalStorage.usuario,
             }
-            let urlRq;
-            let headers;
-            if (apiLambda) {
-                headers = {
-                    'Content-Type': 'multipart/form-data'
-                }
-                f.append('body', JSON.stringify(body))
-                f.append('urlPath', url[7].pathLambda)
-                urlRq = `${url[7].urlEntornoLambda}`;
-            } else {
-                headers = {
-                    'Content-Type': 'application/json'
-                }
-                urlRq = `${url[7].urlEntornoLocal}${url[7].pathLambda}`;
-            }
-            const rqBody = apiLambda ? f : body;
-            await axios.post(`${urlRq}`, rqBody, {
-                headers
-            }).then((response) => {
-                setTimeout(() => {
-                    toast(response.data.mensaje)
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 7);
+                setCargando(false);
+                if (response.estado) {
+                    toast(response.mensaje)
                     consultaInformacionUsuariosApp()
                     setCargando(false)
-                }, 250)
-            }).catch(() => {
-                setTimeout(() => {
-                    toast('No es posible actualizar la información, contacte al administrador')
-                    setCargando(false)
-                }, 250)
-            })
+                }
+            } catch (error) {
+                toast('No es posible actualizar la información, contacte al administrador')
+                setCargando(false)
+            }
         } else {
             toast('No es posible actualizar la información, contacte al administrador')
         }
@@ -241,9 +208,9 @@ const UsuariosApp = ({ toast, setCargando }) => {
 
     const enviaCreacionUsuarioApp = async () => {
         if (!!sessionStorage.getItem('usuarioApp')) {
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
-            const f = new FormData();
+            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp') || '')
+            const authServices = new AuthServices();
             const body = {
                 "nombres": nombres,
                 "apellidos": apellidos,
@@ -255,39 +222,18 @@ const UsuariosApp = ({ toast, setCargando }) => {
                 "fechaRegistro": new Date(),
                 "usuarioApp": usuarioLocalStorage.usuario
             }
-            let urlRq;
-            let headers;
-            if (apiLambda) {
-                headers = {
-                    'Content-Type': 'multipart/form-data'
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 6);
+                setCargando(false);
+                if (response.estado) {
+                    consultaInformacionUsuariosApp()
+                    resetForm()
                 }
-                f.append('body', JSON.stringify(body))
-                f.append('urlPath', url[6].pathLambda)
-                urlRq = `${url[6].urlEntornoLambda}`
-            } else {
-                headers = {
-                    'Content-Type': 'application/json'
-                }
-                urlRq = `${url[6].urlEntornoLocal}${url[6].pathLambda}`
+                toast(response.mensaje)
+            } catch (error) {
+                setCargando(false)
+                toast('No es posible el registro, contacte al administrador')
             }
-            const rqBody = apiLambda ? f : body;
-            await axios.post(`${urlRq}`, rqBody, {
-                headers
-            }).then((response) => {
-                setTimeout(() => {
-                    setCargando(false)
-                    if (response.data.estado) {
-                        consultaInformacionUsuariosApp()
-                        resetForm()
-                    }
-                    toast(response.data.mensaje)
-                }, 250)
-            }).catch(() => {
-                setTimeout(() => {
-                    setCargando(false)
-                    toast('No es posible el registro, contacte al administrador')
-                }, 250)
-            })
         } else {
             toast('No es posible el registro, contacte al administrador')
         }
@@ -295,9 +241,9 @@ const UsuariosApp = ({ toast, setCargando }) => {
 
     const enviaEdicionUsuarioApp = async () => {
         if (!!sessionStorage.getItem('usuarioApp')) {
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
-            const f = new FormData();
+            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp') || '')
+            const authServices = new AuthServices();
             const body = {
                 "nombres": nombres,
                 "apellidos": apellidos,
@@ -309,40 +255,19 @@ const UsuariosApp = ({ toast, setCargando }) => {
                 "fechaRegistro": new Date(),
                 "usuarioApp": usuarioLocalStorage.usuario
             }
-            let urlRq;
-            let headers;
-            if (apiLambda) {
-                headers = {
-                    'Content-Type': 'multipart/form-data'
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 5);
+                setCargando(false);
+                if (response.estado) {
+                    consultaInformacionUsuariosApp()
+                    resetForm()
+                    setModoEditar(false)
                 }
-                f.append('body', JSON.stringify(body))
-                f.append('urlPath', url[5].pathLambda)
-                urlRq = `${url[5].urlEntornoLambda}`
-            } else {
-                headers = {
-                    'Content-Type': 'application/json'
-                }
-                urlRq = `${url[5].urlEntornoLocal}${url[5].pathLambda}`
+                toast(response.mensaje)
+            } catch (error) {
+                setCargando(false)
+                toast('No es posible el registro, contacte al administrador')
             }
-            const rqBody = apiLambda ? f : body;
-            await axios.post(`${urlRq}`, rqBody, {
-                headers
-            }).then((response) => {
-                setTimeout(() => {
-                    setCargando(false)
-                    if (response.data.estado) {
-                        consultaInformacionUsuariosApp()
-                        resetForm()
-                        setModoEditar(false)
-                    }
-                    toast(response.data.mensaje)
-                }, 250)
-            }).catch(() => {
-                setTimeout(() => {
-                    setCargando(false)
-                    toast('No es posible el registro, contacte al administrador')
-                }, 250)
-            })
         } else {
             toast('No es posible el registro, contacte al administrador')
         }
@@ -350,45 +275,25 @@ const UsuariosApp = ({ toast, setCargando }) => {
 
     const consultaInformacionUsuariosApp = async () => {
         if (!!sessionStorage.getItem('usuarioApp')) {
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
             setCargando(true)
-            const f = new FormData();
+            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp') || '')
+            const authServices = new AuthServices();
             const body = {
                 "usuarioApp": usuarioLocalStorage.usuario,
                 "role": '',
             }
-            let urlRq;
-            let headers;
-            if (apiLambda) {
-                headers = {
-                    'Content-Type': 'multipart/form-data'
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 4);
+                if (response.estado) {
+                    setUsuariosList(response.objeto)
+                } else {
+                    toast(response.mensaje)
                 }
-                f.append('body', JSON.stringify(body))
-                f.append('urlPath', url[4].pathLambda)
-                urlRq = `${url[4].urlEntornoLambda}`
-            } else {
-                headers = {
-                    'Content-Type': 'application/json'
-                }
-                urlRq = `${url[4].urlEntornoLocal}${url[4].pathLambda}`
+                setCargando(false);
+            } catch (error) {
+                toast('No es posible consultar la información, contacte al administrador')
+                setCargando(false)
             }
-            const rqBody = apiLambda ? f : body;
-            await axios.post(`${urlRq}`, rqBody, {
-                headers
-            }).then((response) => {
-                setTimeout(() => {
-                    setUsuariosList(response.data.objeto)
-                    if (!response.data.estado) {
-                        toast(response.data.mensaje)
-                    }
-                    setCargando(false)
-                }, 250)
-            }).catch(() => {
-                setTimeout(() => {
-                    toast('No es posible consultar la información, contacte al administrador')
-                    setCargando(false)
-                }, 250)
-            })
         } else {
             toast('No es posible consultar la información, contacte al administrador')
         }
@@ -402,37 +307,54 @@ const UsuariosApp = ({ toast, setCargando }) => {
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Nombres: </p>
-                            <input ref={nombresRef} value={nombres} onChange={(e) => setNombres(e.target.value)} type="text" className='form-control' placeholder='' autoComplete='off' />
+                            <input value={nombres} onChange={(e) => setNombres(e.target.value)} type="text" className='form-control' placeholder='' autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Apellidos: </p>
-                            <input ref={apellidosRef} value={apellidos} onChange={(e) => setApellidos(e.target.value)} type="text" className='form-control' placeholder='' autoComplete='off' />
+                            <input value={apellidos} onChange={(e) => setApellidos(e.target.value)} type="text" className='form-control' placeholder='' autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Tipo identificación: </p>
-                            <Select ref={tipoIdentificacionRef} options={tiposDeDocumento} onChange={(e) => setTipoIdentificacion(e.value)} placeholder='Seleccione' />
+                            <select className='form-control' value={tipoIdentificacion} onChange={(e) => setTipoIdentificacion(e.target.value)} >
+                                {
+                                    tiposDeDocumento.map((key, i) => {
+                                        return (
+                                            <option key={i} value={key.value}>{key.label}</option>
+                                        )
+                                    })
+                                }
+                            </select>
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Identificación: </p>
-                            <input ref={identificacionRef} value={identificacion} onChange={(e) => setIdentificacion(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
+                            <input value={identificacion} onChange={(e) => setIdentificacion(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Correo: </p>
-                            <input ref={correoRef} value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
+                            <input value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Role: </p>
-                            <Select ref={roleRef} options={roles} onChange={(e) => setRole(e.value)} placeholder='Seleccione' />
+                            <select className='form-control' value={role} onChange={(e) => setRole(e.target.value)} >
+                                {
+                                    roles.map((key, i) => {
+                                        return (
+                                            <option key={i} value={key.value}>{key.label}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+
                         </div>
                     </div>
                 </div>
@@ -443,14 +365,14 @@ const UsuariosApp = ({ toast, setCargando }) => {
                             <p className='p-label-form'> Usuario: </p>
                             {
                                 modoEditar ?
-                                    <input ref={usuarioRef} value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className='form-control' autoComplete='off' disabled />
+                                    <input value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className='form-control' autoComplete='off' disabled />
                                     :
-                                    <input ref={usuarioRef} value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
+                                    <input value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
                             }
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <div className='div-buttom-registra'>
+                        <div className='div-bottom-custom'>
                             {
                                 modoEditar ?
                                     <>
@@ -464,7 +386,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
                     </div>
                 </div>
             </div>
-            <div className='div-style-form'>
+            <div className='div-style-form mt-3'>
                 <h3 className='titulo-form'>Usuarios de aplicación</h3>
                 <div className='div-style-form-whit-table'>
                     <table className='table-info'>
@@ -481,7 +403,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
                         </thead>
                         <tbody>
                             {
-                                usuariosList.map((usuario) => {
+                                usuariosList.map((usuario: any) => {
                                     return (
                                         <tr >
                                             <td className='td-info'>
@@ -491,7 +413,7 @@ const UsuariosApp = ({ toast, setCargando }) => {
                                                 <p>{usuario.role}</p>
                                             </td>
                                             <td className='td-info'>
-                                                <p className='mt-2'>
+                                                <p className='mt-0'>
                                                     {
                                                         usuario.usuario_activo ?
                                                             'ACTIVO'

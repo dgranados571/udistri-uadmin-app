@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from "react-router-dom";
 import './header.css'
 
 function Header({ setStateMenu, setRedirect, componentsHeader }) {
+
+  const navigate = useNavigate();
 
   const [menuTituloNav, setmenuTituloNav] = useState(componentsHeader[0].id)
   const [menuResponsive, setMenuResponsive] = useState(false)
@@ -82,10 +85,7 @@ function Header({ setStateMenu, setRedirect, componentsHeader }) {
 
   const cierraSesion = () => {
     sessionStorage.removeItem('usuarioApp')
-    setRedirect({
-      usuario: '',
-      rol: 'USUARIO_LOGIN'
-    });
+    navigate('/publicZone');
   }
 
   const muestraPanleInfoUusario = () => {

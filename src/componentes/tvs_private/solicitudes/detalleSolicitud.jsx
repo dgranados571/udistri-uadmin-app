@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileExcel, faFilePdf, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select'
 import axios from 'axios'
-import { UtilUrl } from '../../../utilUrl';
+import { UtilUrl } from '../../services/utilUrl';
 
 const DetalleSolicitud = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud }) => {
 

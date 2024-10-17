@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
-import { UtilUrl } from '../../utilUrl';
-import { IRadicaSolicitudProps } from '../../models/IProps';
 import './radicaSolicitud.css'
+import { IRadicaSolicitudProps } from '../../models/IProps';
 
 const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }) => {
-
-    const { url, apiLambda } = UtilUrl();
 
     const [nombres, setNombres] = useState('');
     const [apellidos, setApellidos] = useState('');
@@ -43,8 +40,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     return (
         <>
-
-            <div className='div-style-form'>
+            <div className='div-style-form mt-3'>
                 <p >A continuación, ingresa la información de la solicitud que deseas registrar:</p>
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >

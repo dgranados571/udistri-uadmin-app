@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { UtilUrl } from '../../../utilUrl';
+import { UtilUrl } from '../../services/utilUrl';
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
