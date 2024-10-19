@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { UtilUrl } from '../../services/utilUrl';
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Paginador } from '../../tvs/paginacion/paginador';
 import Modal from '../../tvs/modal/modal';
+import { IGenericResponse, IListaSolicitudesProps } from '../../../models/IProps';
+import { AuthServices } from '../../services/authServices';
 
-const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetalleSolicitud, zonaConsulta }) => {
-
-    const { url, apiLambda } = UtilUrl();
+const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando, setRedirectSolicitudes, setIdDetalleSolicitud, zonaConsulta }) => {
 
     const [modal, setModal] = useState(false)
     const [propsModal, setPropsModal] = useState({})
 
-    const [solicitudesList, setSolicitudesList] = useState([])
+    const [solicitudesList, setSolicitudesList] = useState<any[]>([])
 
     const [paginacionSolicitudes, setPaginacionSolicitudes] = useState(
         { totalElementos: '', elementosPorPagina: '10', paginaActual: '1' }
@@ -25,8 +24,8 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
         solicitudesPorZonaConsulta()
     }, [paginacionSolicitudes.paginaActual])
 
-    const detalleSolicitud = (idSolicitud) => {
-        setDetalleSolicitud(idSolicitud)
+    const detalleSolicitud = (idSolicitud: string) => {
+        setIdDetalleSolicitud(idSolicitud)
         setRedirectSolicitudes('DETALLE_SOLICITUD')
     }
 
@@ -38,21 +37,12 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
             case 'ZoneJefeDependencia':
                 consultaInformacionSolicitudesApp();
                 break
-            case 'ZonePrecontractual':
-                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRECONTRACTUAL');
-                break
-            case 'ZonePresupuesto':
-                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_PRESUPUESTO');
-                break
-            case 'ZoneContractual':
-                consultaInformacionSolicitudesPorZonaApp('ASIGNA_USUARIO_CONTRACTUAL');
-                break
             default:
                 break
         }
     }
 
-    const eliminarSolicitud = (idSolicitud) => {
+    const eliminarSolicitud = (idSolicitud: string) => {
         setModal(true)
         setIdSolicitudEliminar(idSolicitud)
         setPropsModal({
@@ -62,141 +52,84 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
     }
 
     const eliminarSolicitudAction = async () => {
-        if (!!sessionStorage.getItem('usuarioApp')) {
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
-            setCargando(true);
-            const f = new FormData();
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
+            const authServices = new AuthServices();
             const body = {
                 "usuarioApp": usuarioLocalStorage.usuario,
                 "idProcesamiento": idSolicitudEliminar,
             }
-            let urlRq;
-            let headers;
-            if (apiLambda) {
-                headers = {
-                    'Content-Type': 'multipart/form-data'
-                }
-                f.append('body', JSON.stringify(body))
-                f.append('urlPath', url[17].pathLambda)
-                urlRq = `${url[17].urlEntornoLambda}`;
-            } else {
-                headers = {
-                    'Content-Type': 'application/json'
-                }
-                urlRq = `${url[17].urlEntornoLocal}${url[17].pathLambda}`;
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 17);
+                solicitudesPorZonaConsulta()
+                toast(response.mensaje)
+                setCargando(false)
+            } catch (error) {
+                toast('No es posible eliminar la solicitud, contacte al administrador')
+                setCargando(false)
             }
-            const rqBody = apiLambda ? f : body;
-            await axios.post(`${urlRq}`, rqBody, {
-                headers
-            }).then((response) => {
-                setTimeout(() => {
-                    solicitudesPorZonaConsulta()
-                    toast(response.data.mensaje)
-                    setCargando(false)
-                }, 250)
-            }).catch(() => {
-                setTimeout(() => {
-                    toast('No es posible eliminar la solicitud, contacte al administrador')
-                    setCargando(false)
-                }, 250)
-            })
         } else {
             toast('No es posible eliminar la solicitud, contacte al administrador')
         }
     }
 
-    const consultaInformacionSolicitudesPorZonaApp = async (nombreOperacion) => {
-        if (!!sessionStorage.getItem('usuarioApp')) {
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'));
-            setCargando(true);
-            const f = new FormData();
+    const consultaInformacionSolicitudesPorZonaApp = async (nombreOperacion: string) => {
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
+            setCargando(true)
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
+            const authServices = new AuthServices();
             const body = {
                 "nombreOperacion": nombreOperacion,
                 "resultadoOperacion": usuarioLocalStorage.usuario
             }
-            let urlRq;
-            let headers;
-            if (apiLambda) {
-                headers = {
-                    'Content-Type': 'multipart/form-data'
-                }
-                f.append('body', JSON.stringify(body))
-                f.append('urlPath', url[9].pathLambda)
-                urlRq = `${url[9].urlEntornoLambda}`;
-            } else {
-                headers = {
-                    'Content-Type': 'application/json'
-                }
-                urlRq = `${url[9].urlEntornoLocal}${url[9].pathLambda}`;
-            }
-            const rqBody = apiLambda ? f : body;
-            await axios.post(`${urlRq}`, rqBody, {
-                headers
-            }).then((response) => {
-                setSolicitudesList(response.data.objeto.listaSolicitudesAppDto)
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 9);
+                setSolicitudesList(response.objeto.listaSolicitudesAppDto)
                 setPaginacionSolicitudes({
                     ...paginacionSolicitudes,
-                    totalElementos: response.data.objeto.totalElementos
+                    totalElementos: response.objeto.totalElementos
                 })
-                if (!response.data.estado) {
-                    toast(response.data.mensaje)
+                if (!response.estado) {
+                    toast(response.mensaje)
                 }
                 setCargando(false)
-            }).catch(() => {
-                setTimeout(() => {
-                    toast('No es posible consultar la información, contacte al administrador')
-                    setCargando(false)
-                }, 250)
-            })
+            } catch (error) {
+                toast('No es posible consultar la información, contacte al administrador')
+                setCargando(false)
+            }
         } else {
             toast('No es posible consultar la información, contacte al administrador')
         }
     }
 
     const consultaInformacionSolicitudesApp = async () => {
-        if (!!sessionStorage.getItem('usuarioApp')) {
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp'))
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
             setCargando(true)
-            const f = new FormData();
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
+            const authServices = new AuthServices();
             const body = {
                 "usuarioApp": usuarioLocalStorage.usuario,
                 "elementosPorPagina": paginacionSolicitudes.elementosPorPagina,
                 "paginaActual": paginacionSolicitudes.paginaActual,
             }
-            let urlRq;
-            let headers;
-            if (apiLambda) {
-                headers = {
-                    'Content-Type': 'multipart/form-data'
-                }
-                f.append('body', JSON.stringify(body))
-                f.append('urlPath', url[8].pathLambda)
-                urlRq = `${url[8].urlEntornoLambda}`;
-            } else {
-                headers = {
-                    'Content-Type': 'application/json'
-                }
-                urlRq = `${url[8].urlEntornoLocal}${url[8].pathLambda}`;
-            }
-            const rqBody = apiLambda ? f : body;
-            await axios.post(`${urlRq}`, rqBody, {
-                headers
-            }).then((response) => {
-                setSolicitudesList(response.data.objeto.listaSolicitudesAppDto)
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 8);
+                setSolicitudesList(response.objeto.listaSolicitudesAppDto)
                 setPaginacionSolicitudes({
                     ...paginacionSolicitudes,
-                    totalElementos: response.data.objeto.totalElementos
+                    totalElementos: response.objeto.totalElementos
                 })
-                if (!response.data.estado) {
-                    toast(response.data.mensaje)
+                if (!response.estado) {
+                    toast(response.mensaje)
                 }
                 setCargando(false)
-            }).catch(() => {
-                setTimeout(() => {
-                    toast('No es posible consultar la información, contacte al administrador')
-                    setCargando(false)
-                }, 250)
-            })
+            } catch (error) {
+                toast('No es posible consultar la información, contacte al administrador')
+                setCargando(false)
+            }
         } else {
             toast('No es posible consultar la información, contacte al administrador')
         }
@@ -246,7 +179,6 @@ const ListaSolicitudes = ({ toast, setCargando, setRedirectSolicitudes, setDetal
                                     </thead>
                                     <tbody>
                                         {
-
                                             solicitudesList.map((solicitud) => {
                                                 return (
                                                     <tr className='tr-tablet'>

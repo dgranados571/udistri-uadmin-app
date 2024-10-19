@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import ZoneRoot from '../zone_root/zoneRoot'
-import ZoneJefeDependencia from '../zone_jefe_dependencia/zoneJefeDependencia'
 import { Cargando } from '../tvs/loader/cargando'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { IZoneProps } from '../../models/IProps';
 
-const ZonePrivate = () => {
+const ZonePrivate: React.FC<IZoneProps>  = () => {
 
     const [cargando, setCargando] = useState(false)
 
@@ -40,9 +40,13 @@ const ZonePrivate = () => {
                 return (
                     <ZoneRoot infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} />
                 )
-            case 'JEFE_DEPENDENCIA_ROLE':
+            case 'ROLE_1':
                 return (
-                    <ZoneJefeDependencia toast={toast} setCargando={setCargando} />
+                    <>ZONA ROLE 1</>
+                )
+            case 'ROLE_2':
+                return (
+                    <>ZONA ROLE 2</>
                 )
             default:
                 return (

@@ -35,6 +35,10 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     }
 
     const enviaRegistroSolicitud = async () => {
+        setCargando(true)
+        setTimeout(()=>{
+            setCargando(false)
+        }, 2000)
 
     }
 

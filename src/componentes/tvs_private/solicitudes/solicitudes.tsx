@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import ListaSolicitudes from './listaSolicitudes'
 import DetalleSolicitud from './detalleSolicitud'
+import { ISolicitudesProps } from '../../../models/IProps'
 
-const Solicitudes = ({ toast, setCargando, zonaConsulta }) => {
+const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaConsulta }) => {
 
     const [redirectSolicitudes, setRedirectSolicitudes] = useState('LISTA_SOLICITUDES')
-    const [detalleSolicitud, setDetalleSolicitud] = useState('')
+    const [idDetalleSolicitud, setIdDetalleSolicitud] = useState('')
 
     const validateRedirectSolcitudes = () => {
         switch (redirectSolicitudes) {
@@ -17,13 +18,13 @@ const Solicitudes = ({ toast, setCargando, zonaConsulta }) => {
                                 <h3 className='titulo-form'>Solicitudes de aplicación</h3>
                             </div>
                         </div>
-                        <ListaSolicitudes toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} setDetalleSolicitud={setDetalleSolicitud} zonaConsulta= {zonaConsulta} />
+                        <ListaSolicitudes toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} setIdDetalleSolicitud={setIdDetalleSolicitud} zonaConsulta={zonaConsulta}></ListaSolicitudes>
                     </>
                 )
             case 'DETALLE_SOLICITUD':
                 return (
                     <>
-                        <DetalleSolicitud toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} idDetalleSolicitud={detalleSolicitud} />
+                        <>DETALLE DE LA SOLICTUD</>
                     </>
                 )
             default:

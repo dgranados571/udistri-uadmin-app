@@ -27,9 +27,20 @@ export interface IUsuariosAppProps {
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface ISetRedirectProps {
-    usuario: string;
-    rol: string
+export interface ISolicitudesProps {
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+    zonaConsulta: string
+}
+
+export interface IZoneProps {}
+
+export interface IListaSolicitudesProps {
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+    setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
+    setIdDetalleSolicitud: React.Dispatch<React.SetStateAction<string>>;
+    zonaConsulta: string
 }
 
 export interface IMenuLateralProps {

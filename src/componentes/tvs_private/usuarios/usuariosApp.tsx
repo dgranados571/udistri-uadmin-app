@@ -23,7 +23,6 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
     const [role, setRole] = useState('')
     const [usuario, setUsuario] = useState('')
 
-
     const [nombresRef, setNombresRef] = useState(false)
     const [apellidosRef, setApellidosRef] = useState(false)
     const [tipoIdentificacionRef, setTipoIdentificacionRef] = useState(false)
@@ -31,6 +30,8 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
     const [correoRef, setCorreoRef] = useState(false)
     const [roleRef, setRoleRef] = useState(false)
     const [usuarioRef, setUsuarioRef] = useState(false)
+
+    const [usuarioRootControl, setUsuarioRootControl] = useState(false)
 
     useEffect(() => {
         consultaInformacionUsuariosApp()
@@ -119,8 +120,10 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
 
         setNombresRef(false)
         setApellidosRef(false)
+        setTipoIdentificacionRef(false)
         setIdentificacionRef(false)
         setCorreoRef(false)
+        setRoleRef(false)
         setUsuarioRef(false)
     }
 
@@ -138,6 +141,17 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
         }
         setIdentificacion(usuario.identificacion)
         setCorreo(usuario.correo)
+        if (usuario.role === 'USUARIO_ROOT') {
+            setRole('USUARIO_ROOT')
+            setUsuarioRootControl(true)
+        } else {
+            for (let step = 0; step < roles.length; step++) {
+                if (roles[step].value === usuario.role) {
+                    setRole(usuario.role)
+                    break
+                }
+            }
+        }
         for (let step = 0; step < roles.length; step++) {
             if (roles[step].value === usuario.role) {
                 setRole(usuario.role)
@@ -149,6 +163,7 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
 
     const cancelaActualizaUsuario = () => {
         setModoEditar(false)
+        setUsuarioRootControl(false)
         setUserEdita({})
         resetForm()
     }
@@ -181,9 +196,10 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
     }
 
     const actualizaContraseniaUser = async () => {
-        if (!!sessionStorage.getItem('usuarioApp')) {
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
             setCargando(true)
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp') || '')
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
             const authServices = new AuthServices();
             const body = {
                 "usuarioEdita": userEdita,
@@ -207,9 +223,10 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
     }
 
     const enviaCreacionUsuarioApp = async () => {
-        if (!!sessionStorage.getItem('usuarioApp')) {
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
             setCargando(true)
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp') || '')
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
             const authServices = new AuthServices();
             const body = {
                 "nombres": nombres,
@@ -240,9 +257,10 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
     }
 
     const enviaEdicionUsuarioApp = async () => {
-        if (!!sessionStorage.getItem('usuarioApp')) {
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
             setCargando(true)
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp') || '')
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
             const authServices = new AuthServices();
             const body = {
                 "nombres": nombres,
@@ -274,9 +292,10 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
     }
 
     const consultaInformacionUsuariosApp = async () => {
-        if (!!sessionStorage.getItem('usuarioApp')) {
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
             setCargando(true)
-            const usuarioLocalStorage = JSON.parse(sessionStorage.getItem('usuarioApp') || '')
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
             const authServices = new AuthServices();
             const body = {
                 "usuarioApp": usuarioLocalStorage.usuario,
@@ -299,6 +318,23 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
         }
     }
 
+    const labelRoleList = (role: string) => {
+        let labelRole = '';
+        if (role === 'USUARIO_ROOT') {
+            labelRole = 'Usuario Root'
+        } else {
+            for (let step = 0; step < roles.length; step++) {
+                if (roles[step].value === role) {
+                    labelRole = roles[step].label
+                    break
+                }
+            }
+        }
+        return (
+            <p>{labelRole}</p>
+        )
+    }
+
     return (
         <>
             <div className='div-style-form'>
@@ -307,19 +343,19 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Nombres: </p>
-                            <input value={nombres} onChange={(e) => setNombres(e.target.value)} type="text" className='form-control' placeholder='' autoComplete='off' />
+                            <input value={nombres} onChange={(e) => setNombres(e.target.value)} type="text" className={nombresRef ? 'form-control form-control-error' : 'form-control'} placeholder='' autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Apellidos: </p>
-                            <input value={apellidos} onChange={(e) => setApellidos(e.target.value)} type="text" className='form-control' placeholder='' autoComplete='off' />
+                            <input value={apellidos} onChange={(e) => setApellidos(e.target.value)} type="text" className={apellidosRef ? 'form-control form-control-error' : 'form-control'} placeholder='' autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Tipo identificación: </p>
-                            <select className='form-control' value={tipoIdentificacion} onChange={(e) => setTipoIdentificacion(e.target.value)} >
+                            <select value={tipoIdentificacion} onChange={(e) => setTipoIdentificacion(e.target.value)} className={tipoIdentificacionRef ? 'form-control form-control-error' : 'form-control'} >
                                 {
                                     tiposDeDocumento.map((key, i) => {
                                         return (
@@ -333,28 +369,32 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Identificación: </p>
-                            <input value={identificacion} onChange={(e) => setIdentificacion(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
+                            <input value={identificacion} onChange={(e) => setIdentificacion(e.target.value)} placeholder='' className={identificacionRef ? 'form-control form-control-error' : 'form-control'} autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'> Correo: </p>
-                            <input value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
+                            <input value={correo} onChange={(e) => setCorreo(e.target.value)} placeholder='' className={correoRef ? 'form-control form-control-error' : 'form-control'} autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
-                            <p className='p-label-form'> Role: </p>
-                            <select className='form-control' value={role} onChange={(e) => setRole(e.target.value)} >
-                                {
-                                    roles.map((key, i) => {
-                                        return (
-                                            <option key={i} value={key.value}>{key.label}</option>
-                                        )
-                                    })
-                                }
-                            </select>
-
+                            <p className='p-label-form'>Role:</p>
+                            {
+                                usuarioRootControl ?
+                                    <select value={role} className='form-control' disabled></select>
+                                    :
+                                    <select value={role} onChange={(e) => setRole(e.target.value)} className={roleRef ? 'form-control form-control-error' : 'form-control'}>
+                                        {
+                                            roles.map((key, i) => {
+                                                return (
+                                                    <option key={i} value={key.value}>{key.label}</option>
+                                                )
+                                            })
+                                        }
+                                    </select>
+                            }
                         </div>
                     </div>
                 </div>
@@ -367,7 +407,7 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
                                 modoEditar ?
                                     <input value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className='form-control' autoComplete='off' disabled />
                                     :
-                                    <input value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className='form-control' autoComplete='off' />
+                                    <input value={usuario} onChange={(e) => setUsuario(e.target.value)} placeholder='' className={usuarioRef ? 'form-control form-control-error' : 'form-control'} autoComplete='off' />
                             }
                         </div>
                     </div>
@@ -410,15 +450,17 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
                                                 <p>{usuario.nombre} {usuario.apellidos}  </p>
                                             </td>
                                             <td className='td-info'>
-                                                <p>{usuario.role}</p>
+                                                {
+                                                    labelRoleList(usuario.role)
+                                                }                                                
                                             </td>
                                             <td className='td-info'>
                                                 <p className='mt-0'>
                                                     {
                                                         usuario.usuario_activo ?
-                                                            'ACTIVO'
+                                                            'Activo'
                                                             :
-                                                            'PENDIENTE DE ACTIVAR'
+                                                            'Por activar'
                                                     }
                                                 </p>
                                             </td>

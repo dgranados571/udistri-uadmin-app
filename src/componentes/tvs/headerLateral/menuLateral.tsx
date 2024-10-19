@@ -11,7 +11,7 @@ const MenuLateralComponent: React.FC<IMenuLateralProps> = ({ setOpenMenu, seleci
 
     const cerrarSesion = () => {
         sessionStorage.clear();
-        navigate('/publicZone');
+        navigate('/login');
     }
 
     return (

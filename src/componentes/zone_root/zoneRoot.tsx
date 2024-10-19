@@ -4,8 +4,9 @@ import { faHome, faUser, faUsers } from '@fortawesome/free-solid-svg-icons'
 import { IMenuLateral, IZoneRootProps } from '../../models/IProps'
 import MenuLateralComponent from '../tvs/headerLateral/menuLateral'
 import UsuariosApp from '../tvs_private/usuarios/usuariosApp'
+import Solicitudes from '../tvs_private/solicitudes/solicitudes'
 
-const ZoneRoot: React.FC<IZoneRootProps> = ({infoMenuUsuario, toast, setCargando }) => {
+const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargando }) => {
 
     const [openMenu, setOpenMenu] = useState(false);
 
@@ -50,13 +51,13 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({infoMenuUsuario, toast, setCargando
                 return (
                     <UsuariosApp toast={toast} setCargando={setCargando} />
                 )
-                case 'VISTA_MI_CUENTA':
-                    return (
-                        <>MI CUENTA</>
-                    )
+            case 'VISTA_MI_CUENTA':
+                return (
+                    <>MI CUENTA</>
+                )
             default:
                 return (
-                    <>SOLICITUDES</>
+                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta='ROOT'></Solicitudes>
                 )
         }
     }

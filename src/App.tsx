@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ZonePrivate from './componentes/zone_app/zonePrivate';
-import ZonePublic from './componentes/zone_app/zonePublic';
+import RadicaSolitudIndex from "./componentes/zone_app/radicaSolitudIndex";
+import LoginIndex from "./componentes/zone_app/loginIndex";
 
 function App() {
 
@@ -8,8 +9,9 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ZonePublic />}></Route>
-          <Route path="publicZone" element={<ZonePublic />} />
+          <Route path="/" element={<RadicaSolitudIndex />}></Route>
+          <Route path="radica-solicitud" element={<RadicaSolitudIndex />} />
+          <Route path="login" element={<LoginIndex />} />
           <Route path="privateZone" element={<ZonePrivate />} />
         </Routes>
       </BrowserRouter>
