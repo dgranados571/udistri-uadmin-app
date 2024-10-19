@@ -13,7 +13,7 @@ export class AuthServices {
             f.append('body', JSON.stringify(body))
             urlRq = `${url[indexUrl].urlEntornoLambda}`;
         } else {
-            urlRq = `${url[indexUrl].urlEntornoLocal}${url[indexUrl].pathLambda}`;            
+            urlRq = `${url[indexUrl].urlEntornoLocal}${url[indexUrl].pathLambda}`;
         }
         const headers = {
             'Content-Type': 'application/json'
@@ -21,6 +21,26 @@ export class AuthServices {
         const rqBody = apiLambda ? f : body;
         return new Promise((resolve, reject) => {
             axios.post(urlRq, rqBody, {
+                headers
+            }).then((response) => {
+                resolve(response.data)
+            }).catch((error) => {
+                reject(error)
+            })
+        })
+    }
+
+
+    requestPostFile(fileBase64: string, fileName: string): Promise<any> {
+        const { url } = UtilUrl();
+        const f = new FormData();
+        f.append('file', fileBase64)
+        f.append('fileName', fileName)
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        return new Promise((resolve, reject) => {
+            axios.post(url[1].urlEntornoLambda, f, {
                 headers
             }).then((response) => {
                 resolve(response.data)

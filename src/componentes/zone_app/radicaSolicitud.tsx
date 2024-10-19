@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import './radicaSolicitud.css'
-import { IRadicaSolicitudProps } from '../../models/IProps';
+import { IGenericResponse, IRadicaSolicitudProps } from '../../models/IProps';
+import { AuthServices } from '../services/authServices';
 
 const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }) => {
 
@@ -11,7 +12,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const [responsable, setResponsable] = useState('');
     const [descripcion, setDescripcion] = useState('');
 
-    const [archivos, setArchivos] = useState<FileList | null>(null);
+    const [base64, setBase64] = useState('');
 
     const eventInputFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = e.target.files;
@@ -23,7 +24,14 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             }
             console.log('Longitud de archivos --> ', valorFinalMB)
             if (valorFinalMB < 10) {
-                setArchivos(fileList)
+                const file = fileList[0];
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    if (reader.result && typeof reader.result === 'string') {
+                        setBase64(reader.result);
+                    }
+                };
+                reader.readAsDataURL(file);
             } else {
                 toast("*Los archivos cargados superan las 10 MB")
             }
@@ -36,10 +44,15 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const enviaRegistroSolicitud = async () => {
         setCargando(true)
-        setTimeout(()=>{
+        const authServices = new AuthServices();
+        try {
+            const response: IGenericResponse = await authServices.requestPostFile(base64, 'miArchiDesdeReact.txt');
+            toast(response.mensaje)
             setCargando(false)
-        }, 2000)
-
+        } catch (error) {
+            toast('No es posible eliminar la solicitud, contacte al administrador')
+            setCargando(false)
+        }
     }
 
     return (
@@ -85,7 +98,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-bottom-custom'>
-                            <input type="file" className='form-control' multiple onChange={(e) => eventInputFiles(e)} />
+                            <input type="file" className='form-control' onChange={(e) => eventInputFiles(e)} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
@@ -94,6 +107,15 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div>
+                {base64 && (
+                    <div>
+                        <h3>Archivo en Base64:</h3>
+                        <textarea rows={10} cols={50} value={base64} readOnly />
+                    </div>
+                )}
             </div>
         </>
     )
