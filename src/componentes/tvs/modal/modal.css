@@ -20,8 +20,6 @@
 }
 
 .div-size-content {
-    height: 20rem;
-    width: 32rem;
     background-color: #ffffff;
     border-radius: 20px;
     border: 5px solid rgba(207, 226, 255);
@@ -33,4 +31,20 @@
 
 .content-element {
     max-width: 100%;
+}
+
+.div-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon-modal-info-true {
+    color: green;
+    margin: 0px 0px 0px 8px;
+}
+
+.icon-modal-info-false {
+    color: red;
+    margin: 0px 0px 0px 8px;
 }

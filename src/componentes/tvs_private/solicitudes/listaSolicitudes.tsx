@@ -9,7 +9,7 @@ import { AuthServices } from '../../services/authServices';
 
 const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando, setRedirectSolicitudes, setIdDetalleSolicitud, zonaConsulta }) => {
 
-    const [modal, setModal] = useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
     const [propsModal, setPropsModal] = useState({})
 
     const [solicitudesList, setSolicitudesList] = useState<any[]>([])
@@ -43,7 +43,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
     }
 
     const eliminarSolicitud = (idSolicitud: string) => {
-        setModal(true)
+        setModalOpen(true)
         setIdSolicitudEliminar(idSolicitud)
         setPropsModal({
             titulo: 'Eliminar solicitud',
@@ -136,12 +136,12 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
     }
 
     const modalSi = () => {
-        setModal(false)
+        setModalOpen(false)
         eliminarSolicitudAction()
     }
 
     const modalNo = () => {
-        setModal(false)
+        setModalOpen(false)
     }
 
     return (
@@ -235,8 +235,8 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                 }
             </div>
             {
-                modal ?
-                    <Modal modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+                modalOpen ?
+                    <Modal tipoModal='MODAL_CONTROL' modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
                     :
                     <></>
             }

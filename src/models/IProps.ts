@@ -51,6 +51,13 @@ export interface IMenuLateralProps {
     infoMenuUsuario: IUsuarioSession
 }
 
+export interface IModalProps {
+    modalSi: Function,
+    modalNo: Function,
+    tipoModal: string;
+    propsModal: any
+}
+
 export interface IMenuLateral {
     nombreItem: string;
     className: string;
