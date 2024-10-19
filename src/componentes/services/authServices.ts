@@ -30,17 +30,18 @@ export class AuthServices {
         })
     }
 
-
     requestPostFile(fileBase64: string, fileName: string): Promise<any> {
         const { url } = UtilUrl();
         const f = new FormData();
         f.append('file', fileBase64)
         f.append('fileName', fileName)
         const headers = {
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
+        const urlService = url[1].urlEntornoLambda;
+        console.log('Data request --> ', urlService, f)
         return new Promise((resolve, reject) => {
-            axios.post(url[1].urlEntornoLambda, f, {
+            axios.post(urlService, f, {
                 headers
             }).then((response) => {
                 resolve(response.data)

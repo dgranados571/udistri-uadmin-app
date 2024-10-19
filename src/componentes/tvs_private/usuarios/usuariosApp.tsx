@@ -338,7 +338,7 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
     return (
         <>
             <div className='div-style-form'>
-                <h3 className='titulo-form'>Registro de usuarios de aplicación</h3>
+                <h4>Registro de usuarios de aplicación</h4>
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
@@ -427,7 +427,7 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
                 </div>
             </div>
             <div className='div-style-form mt-3'>
-                <h3 className='titulo-form'>Usuarios de aplicación</h3>
+                <h4>Usuarios de aplicación</h4>
                 <div className='div-style-form-whit-table'>
                     <table className='table-info'>
                         <thead>

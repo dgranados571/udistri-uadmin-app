@@ -10,7 +10,7 @@ const Modal = ({ modalSi, modalNo, propsModal }) => {
         <div className='div-modal-active'>
             <div className='div-content-element'>
                 <div className='div-size-content'>
-                    <h3 className='titulo-form '>{titulo} </h3>
+                    <h4>{titulo} </h4>
                     <p >{descripcion} </p>
                     <div className='d-flex justify-content-around'>
                         <button className='btn btn-secondary bottom-custom-secondary' onClick={() => modalNo()}>Cancelar</button>

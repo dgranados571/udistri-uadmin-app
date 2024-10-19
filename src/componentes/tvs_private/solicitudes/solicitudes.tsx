@@ -15,7 +15,7 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
                     <>
                         <div className='div-style-form'>
                             <div className='div-titulo-component'>
-                                <h3 className='titulo-form'>Solicitudes de aplicación</h3>
+                                <h4>Solicitudes de aplicación</h4>
                             </div>
                         </div>
                         <ListaSolicitudes toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} setIdDetalleSolicitud={setIdDetalleSolicitud} zonaConsulta={zonaConsulta}></ListaSolicitudes>

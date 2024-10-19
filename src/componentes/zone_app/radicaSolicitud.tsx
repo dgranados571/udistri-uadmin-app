@@ -9,7 +9,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const [apellidos, setApellidos] = useState('');
     const [numeroIdentificacion, setNumeroIdentificacion] = useState('');
     const [correo, setCorreo] = useState('');
-    const [responsable, setResponsable] = useState('');
+    const [telefono, setTelefono] = useState('');
     const [descripcion, setDescripcion] = useState('');
 
     const [base64, setBase64] = useState('');
@@ -21,8 +21,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             for (let step = 0; step < fileList.length; step++) {
                 var fileSizeMB = fileList[step].size / 1024 / 1024;
                 valorFinalMB = valorFinalMB + fileSizeMB;
-            }
-            console.log('Longitud de archivos --> ', valorFinalMB)
+            }            
             if (valorFinalMB < 10) {
                 const file = fileList[0];
                 const reader = new FileReader();
@@ -33,7 +32,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                 };
                 reader.readAsDataURL(file);
             } else {
-                toast("*Los archivos cargados superan las 10 MB")
+                toast("*El archivo cargado supera los 10 MB")
             }
         }
     }
@@ -42,23 +41,30 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         enviaRegistroSolicitud()
     }
 
-    const enviaRegistroSolicitud = async () => {
+    const enviaRegistroSolicitud = () => {
+
+    }
+
+    const cargaDocumentos = async (fileBase64: string, fileName: string) => {
+        // Nom,bre del archio en .TXT
         setCargando(true)
         const authServices = new AuthServices();
         try {
-            const response: IGenericResponse = await authServices.requestPostFile(base64, 'miArchiDesdeReact.txt');
+            const response: IGenericResponse = await authServices.requestPostFile(fileBase64, fileName);
             toast(response.mensaje)
             setCargando(false)
         } catch (error) {
             toast('No es posible eliminar la solicitud, contacte al administrador')
             setCargando(false)
         }
+
     }
 
     return (
         <>
             <div className='div-style-form mt-3'>
-                <p >A continuación, ingresa la información de la solicitud que deseas registrar:</p>
+                <h4 >Información del aspirante</h4>
+                <p>A continuación, ingresa la información del titular de la solicitud:</p>
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
@@ -86,19 +92,41 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
-                            <p className='p-label-form'> Responsable: </p>
-                            <input placeholder='' className='form-control' value={responsable} onChange={(e) => setResponsable(e.target.value)} autoComplete='off' />
+                            <p className='p-label-form'> Teléfono: </p>
+                            <input placeholder='' className='form-control' value={telefono} onChange={(e) => setTelefono(e.target.value)} autoComplete='off' />
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <h4 >Cargar documentación</h4>
+                <p>Adjunte la documentación unicamente en formato PDF.</p>
+                <div className="row">
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <div className='div-form'>
+                            <p className='p-label-form'> Cargar documento identificación: </p>
+                            <input type="file" className='form-control' onChange={(e) => eventInputFiles(e)} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
-                            <p className='p-label-form'> Descripción de la solicitud: </p>
-                            <textarea placeholder='' className='form-control' value={descripcion} onChange={(e) => setDescripcion(e.target.value)} autoComplete='off' />
+                            <p className='p-label-form'> Cargar certificado de libertad y tradición: </p>
+                            <input type="file" className='form-control' onChange={(e) => eventInputFiles(e)} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <div className='div-bottom-custom'>
+                        <div className='div-form'>
+                            <p className='p-label-form'>Cargar impuesto predial: </p>
                             <input type="file" className='form-control' onChange={(e) => eventInputFiles(e)} />
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <p>De requerirlo, agregue las observaciones nescesarias a la solicitud:</p>
+                <div className="row">
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <div className='div-form'>
+                            <p className='p-label-form'></p>
+                            <textarea placeholder='' className='form-control' value={descripcion} onChange={(e) => setDescripcion(e.target.value)} autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
@@ -109,16 +137,18 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                 </div>
             </div>
 
-            <div>
-                {base64 && (
-                    <div>
-                        <h3>Archivo en Base64:</h3>
-                        <textarea rows={10} cols={50} value={base64} readOnly />
-                    </div>
-                )}
-            </div>
         </>
     )
 }
+
+// CEDULA DE CIUDADANIA
+// CERTIFICADO DE LIBERTAD Y TRADICION
+// IMPUESTO PREDIAL
+
+// ESTADOS: APTO - NO APTO- PENDIENTE CON OBSERVACION
+
+// BENEFICIOARIO DE LA SOLCITUD -- EJ: ESPOSA
+
+// FASE DE PREAPROBACION
 
 export default RadicaSolicitud
