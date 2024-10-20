@@ -32,7 +32,7 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                         <div className='div-modal-active'>
                             <div className='div-content-element'>
                                 <div className='div-size-content'>
-                                    <h4>Resumen de la radiación:</h4>
+                                    <h4>{propsModal.titulo}</h4>
                                     <div className='div-info-item'>
                                         <p className='p-label-form-text m-1'>Nombre: </p>
                                         <p className='p-label-form m-1'>{propsModal.prop1} </p>
@@ -80,23 +80,39 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                         </div>
                     </>
                 )
-            case 'MODAL_CONTROL':
+            case 'MODAL_CONTROL_1':
                 return (
                     <>
                         <div className='div-modal-active'>
                             <div className='div-content-element'>
                                 <div className='div-size-content'>
                                     <h4>{propsModal.titulo} </h4>
-                                    <p >{propsModal.descripcion} </p>
-                                    <div className='d-flex justify-content-around'>
-                                        <button className='btn btn-secondary bottom-custom-secondary' onClick={() => modalNo()}>Cancelar</button>
-                                        <button className='btn btn-primary bottom-custom' onClick={() => modalSi()} >Aceptar</button>
+                                    <p className='mt-2'>{propsModal.descripcion} </p>
+                                    <div className='d-flex justify-content-around mt-3'>                                        
+                                        <button className='btn btn-primary bottom-custom' onClick={() => modalNo()} >Aceptar</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </>
                 )
+                case 'MODAL_CONTROL_2':
+                    return (
+                        <>
+                            <div className='div-modal-active'>
+                                <div className='div-content-element'>
+                                    <div className='div-size-content'>
+                                        <h4>{propsModal.titulo} </h4>
+                                        <p >{propsModal.descripcion} </p>
+                                        <div className='d-flex justify-content-around'>
+                                            <button className='btn btn-secondary bottom-custom-secondary' onClick={() => modalNo()}>Cancelar</button>
+                                            <button className='btn btn-primary bottom-custom' onClick={() => modalSi()} >Aceptar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )
             default:
                 break;
         }

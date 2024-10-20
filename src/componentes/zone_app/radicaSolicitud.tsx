@@ -7,6 +7,7 @@ import Modal from '../tvs/modal/modal';
 const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }) => {
 
     const [modalOpen, setModalOpen] = useState(false)
+    const [tipoModal, setTipoModal] = useState('')
     const [propsModal, setPropsModal] = useState({})
 
     const [nombres, setNombres] = useState('');
@@ -168,8 +169,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const enviaRegistroSolicitud = () => {
         setPropsModal({
-            titulo: 'Resumen de la solicitud',
-            descripcion: 'Esta seguro de eliminar la solicitud: ',
+            titulo: 'Resumen de la radiación:',
+            descripcion: '',
             prop1: `${nombres} ${apellidos}`,
             prop2: numeroIdentificacion,
             prop3: correo,
@@ -179,6 +180,16 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             prop7: file3.length > 0 ? true : false,
         })
         setModalOpen(true)
+        setTipoModal('MODAL_RESUMEN_1')
+    }
+
+    const confirmaRadicacionSolicitud = () => {
+        setPropsModal({
+            titulo: 'Estado de la solicitud:',
+            descripcion: 'Se ha radicado la solicitud de manera satisfactoria',
+        })
+        setModalOpen(true)
+        setTipoModal('MODAL_CONTROL_1')
     }
 
     const modalSi = () => {
@@ -187,6 +198,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const modalNo = () => {
         setModalOpen(false)
+        setTipoModal('')
     }
 
     const resetForm = () => {
@@ -217,6 +229,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const enviaRegistroSolicitudService = async () => {
         setModalOpen(false)
+        setTipoModal('')
         setCargando(true)
         const body = {
             "nombres": nombres,
@@ -233,6 +246,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             if (response.estado) {
                 await cargaDocumentos(response.objeto)
                 resetForm()
+                confirmaRadicacionSolicitud()
             }
             setCargando(false)
         } catch (error) {
@@ -354,7 +368,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
             {
                 modalOpen ?
-                    <Modal tipoModal='MODAL_RESUMEN_1' modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+                    <Modal tipoModal={tipoModal} modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
                     :
                     <></>
             }
