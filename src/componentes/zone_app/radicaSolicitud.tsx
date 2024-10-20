@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './radicaSolicitud.css'
 import { IGenericResponse, IRadicaSolicitudProps } from '../../models/IProps';
 import { AuthServices } from '../services/authServices';
@@ -26,53 +26,104 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const [file2, setFile2] = useState('');
     const [file3, setFile3] = useState('');
 
+    const [file1Ref, setFile1Ref] = useState(false);
+    const [file2Ref, setFile2Ref] = useState(false);
+    const [file3Ref, setFile3Ref] = useState(false);
+
+    const file1InputRef = useRef<HTMLInputElement | null>(null);
+    const file2InputRef = useRef<HTMLInputElement | null>(null);
+    const file3InputRef = useRef<HTMLInputElement | null>(null);
+
     const eventInputFiles = (e: React.ChangeEvent<HTMLInputElement>, fileProperty: string) => {
         const fileList = e.target.files;
-        let valorFinalMB = 0;
+        switch (fileProperty) {
+            case 'FILE_1':
+                setFile1Ref(false)
+                break;
+            case 'FILE_2':
+                setFile2Ref(false)
+                break;
+            case 'FILE_3':
+                setFile3Ref(false)
+                break;
+            default:
+                break;
+        }
         if (fileList) {
-            for (let step = 0; step < fileList.length; step++) {
-                var fileSizeMB = fileList[step].size / 1024 / 1024;
-                valorFinalMB = valorFinalMB + fileSizeMB;
-            }
-            if (valorFinalMB < 10) {
-                const file = fileList[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        if (reader.result && typeof reader.result === 'string') {
-                            switch (fileProperty) {
-                                case 'FILE_1':
-                                    setFile1(reader.result)
-                                    break;
-                                case 'FILE_2':
-                                    setFile2(reader.result)
-                                    break;
-                                case 'FILE_3':
-                                    setFile3(reader.result)
-                                    break;
-                                default:
-                                    break;
+            const file = fileList[0];
+            if (file) {
+                if (file.type === "application/pdf") {
+                    let valorFinalMB = 0;
+                    for (let step = 0; step < fileList.length; step++) {
+                        var fileSizeMB = fileList[step].size / 1024 / 1024;
+                        valorFinalMB = valorFinalMB + fileSizeMB;
+                    }
+                    if (valorFinalMB < 10) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            if (reader.result && typeof reader.result === 'string') {
+                                switch (fileProperty) {
+                                    case 'FILE_1':
+                                        setFile1(reader.result)
+                                        break;
+                                    case 'FILE_2':
+                                        setFile2(reader.result)
+                                        break;
+                                    case 'FILE_3':
+                                        setFile3(reader.result)
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        toast("*El archivo cargado supera los 10 MB")
+                        switch (fileProperty) {
+                            case 'FILE_1':
+                                setFile1Ref(true)
+                                break;
+                            case 'FILE_2':
+                                setFile2Ref(true)
+                                break;
+                            case 'FILE_3':
+                                setFile3Ref(true)
+                                break;
+                            default:
+                                break;
                         }
-                    };
-                    reader.readAsDataURL(file);
+                    }
                 } else {
+                    toast("El archivo cargado no está en formato PDF")
                     switch (fileProperty) {
                         case 'FILE_1':
-                            setFile1('')
+                            setFile1Ref(true)
                             break;
                         case 'FILE_2':
-                            setFile2('')
+                            setFile2Ref(true)
                             break;
                         case 'FILE_3':
-                            setFile3('')
+                            setFile3Ref(true)
                             break;
                         default:
                             break;
                     }
                 }
             } else {
-                toast("*El archivo cargado supera los 10 MB")
+                switch (fileProperty) {
+                    case 'FILE_1':
+                        setFile1('')
+                        break;
+                    case 'FILE_2':
+                        setFile2('')
+                        break;
+                    case 'FILE_3':
+                        setFile3('')
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -103,6 +154,9 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         if (telefono.length === 0) {
             formValidado.push('telefono');
             setTelefonoRef(true)
+        }
+        if (file1Ref || file2Ref || file3Ref) {
+            formValidado.push('Error de archivos');
         }
         if (formValidado.length === 0) {
             enviaRegistroSolicitud()
@@ -135,26 +189,91 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         setModalOpen(false)
     }
 
-    const enviaRegistroSolicitudService = () => {
-        setModalOpen(false)
-        toast('Buena papa la enviaste')
+    const resetForm = () => {
+        setNombres('')
+        setApellidos('')
+        setNumeroIdentificacion('')
+        setCorreo('')
+        setTelefono('')
+        setDescripcion('')
+        setFile1('')
+        setFile2('')
+        setFile3('')
+        if (file1InputRef.current) {
+            file1InputRef.current.value = "";
+        }
+        if (file2InputRef.current) {
+            file2InputRef.current.value = "";
+        }
+        if (file3InputRef.current) {
+            file3InputRef.current.value = "";
+        }
+        setNombresRef(false)
+        setApellidosRef(false)
+        setNumeroIdentificacionRef(false)
+        setCorreoRef(false)
+        setTelefonoRef(false)
     }
 
-    const cargaDocumentosService = async (fileBase64: string, fileName: string) => {
-        // Nombre del archio en .TXT
+    const enviaRegistroSolicitudService = async () => {
+        setModalOpen(false)
         setCargando(true)
+        const body = {
+            "nombres": nombres,
+            "apellidos": apellidos,
+            "numeroIdentificacion": numeroIdentificacion,
+            "correo": correo,
+            "telefono": telefono,
+            "descripcion": descripcion
+        }
         const authServices = new AuthServices();
         try {
-            const response: IGenericResponse = await authServices.requestPostFile(fileBase64, fileName);
+            const response: IGenericResponse = await authServices.requestPost(body, 1);
             toast(response.mensaje)
+            if (response.estado) {
+                await cargaDocumentos(response.objeto)
+                resetForm()
+            }
             setCargando(false)
         } catch (error) {
-            toast('No es posible eliminar la solicitud, contacte al administrador')
+            toast('No es posible crear la solicitud, contacte al administrador')
             setCargando(false)
         }
     }
 
+    const cargaDocumentos = async (idProcesamiento: string) => {
+        const uploadFile1 = file1.length > 0 ? true : false;
+        if (uploadFile1) {
+            const pathFinal1 = `${idProcesamiento}/${idProcesamiento}_1.txt`;
+            await cargaDocumentosService(file1, pathFinal1, 'DOCUMENTO')
+        }
 
+        const uploadFile2 = file2.length > 0 ? true : false;
+        if (uploadFile2) {
+            const pathFinal2 = `${idProcesamiento}/${idProcesamiento}_2.txt`;
+            await cargaDocumentosService(file2, pathFinal2, 'CERTIFICADO DE LIBERTAD')
+        }
+
+        const uploadFile3 = file3.length > 0 ? true : false;
+        if (uploadFile3) {
+            const pathFinal3 = `${idProcesamiento}/${idProcesamiento}_3.txt`;
+            await cargaDocumentosService(file3, pathFinal3, 'IMPUESTO PREDIAL')
+        }
+    }
+
+    const cargaDocumentosService = async (fileBase64: string, fileName: string, idArchivo: string) => {
+        const authServices = new AuthServices();
+        try {
+            const response: IGenericResponse = await authServices.requestPostFile(fileBase64, fileName);
+            if (response.estado) {
+                toast(`El archivo: ${idArchivo}, fue cargado satisfactoriamente`)
+            } else {
+                toast(`No fue posible cargar el archivo: ${idArchivo}`)
+            }
+        } catch (error) {
+            toast(`No fue posible cargar el archivo: ${idArchivo}`)
+        }
+    }
 
     return (
         <>
@@ -199,20 +318,20 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
-                            <p className='p-label-form'> Cargar documento identificación: </p>
-                            <input type="file" className='form-control' onChange={(e) => eventInputFiles(e, 'FILE_1')} />
+                            <p className='p-label-form'> Aqui el documento: </p>
+                            <input ref={file1InputRef} type="file" onChange={(e) => eventInputFiles(e, 'FILE_1')} className={file1Ref ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
-                            <p className='p-label-form'> Cargar certificado de libertad y tradición: </p>
-                            <input type="file" className='form-control' onChange={(e) => eventInputFiles(e, 'FILE_2')} />
+                            <p className='p-label-form'> Aqui el certificado de libertad y tradición: </p>
+                            <input ref={file2InputRef} type="file" onChange={(e) => eventInputFiles(e, 'FILE_2')} className={file2Ref ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
-                            <p className='p-label-form'>Cargar impuesto predial: </p>
-                            <input type="file" className='form-control' onChange={(e) => eventInputFiles(e, 'FILE_3')} />
+                            <p className='p-label-form'>Aqui el impuesto predial: </p>
+                            <input ref={file3InputRef} type="file" onChange={(e) => eventInputFiles(e, 'FILE_3')} className={file3Ref ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
                 </div>
@@ -222,7 +341,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'></p>
-                            <textarea placeholder='' className='form-control' value={descripcion} onChange={(e) => setDescripcion(e.target.value)} autoComplete='off' />
+                            <textarea className='form-control' value={descripcion} onChange={(e) => setDescripcion(e.target.value)} autoComplete='off' />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
