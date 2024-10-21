@@ -8,17 +8,22 @@ export class AuthServices {
         console.log('URL component --> ', url[indexUrl].pathLambda)
         console.log('Body request --> ', body)
         let urlRq: string;
+        let headers: any;
         const f = new FormData();
         if (apiLambda) {
+            headers = {
+                'Content-Type': 'multipart/form-data'
+            }            
             f.append('urlPath', `${url[indexUrl].urlDominioServidor}${url[indexUrl].pathLambda}`)
             f.append('body', JSON.stringify(body))
             urlRq = `${url[indexUrl].urlEntornoLambda}`;
         } else {
+            headers = {
+                'Content-Type': 'application/json'
+            }
             urlRq = `${url[indexUrl].urlEntornoLocal}${url[indexUrl].pathLambda}`;
         }
-        const headers = {
-            'Content-Type': 'application/json'
-        }
+        
         const rqBody = apiLambda ? f : body;
         return new Promise((resolve, reject) => {
             axios.post(urlRq, rqBody, {
