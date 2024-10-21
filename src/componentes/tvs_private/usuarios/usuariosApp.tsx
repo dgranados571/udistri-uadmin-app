@@ -56,6 +56,7 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
 
     const roles = [
         { value: 'INITIAL', label: 'Seleccione' },
+        { value: 'ROLE_ADMIN', label: 'Administrador de aplicación' },
         { value: 'ROLE_1', label: 'Gestor documental' },
         { value: 'ROLE_2', label: 'Revisor documental' }
     ]

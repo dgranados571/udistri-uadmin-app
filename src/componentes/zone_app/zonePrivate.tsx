@@ -4,8 +4,9 @@ import { Cargando } from '../tvs/loader/cargando'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IZoneProps } from '../../models/IProps';
+import ZoneAdmin from '../zone_admin/zoneAdmin';
 
-const ZonePrivate: React.FC<IZoneProps>  = () => {
+const ZonePrivate: React.FC<IZoneProps> = () => {
 
     const [cargando, setCargando] = useState(false)
 
@@ -39,6 +40,10 @@ const ZonePrivate: React.FC<IZoneProps>  = () => {
             case 'USUARIO_ROOT':
                 return (
                     <ZoneRoot infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} />
+                )
+            case 'ROLE_ADMIN':
+                return (
+                    <ZoneAdmin infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} />
                 )
             case 'ROLE_1':
                 return (

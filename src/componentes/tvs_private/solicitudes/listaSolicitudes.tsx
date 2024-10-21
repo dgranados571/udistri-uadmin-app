@@ -33,6 +33,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
             case 'ROOT':
                 consultaInformacionSolicitudesApp();
                 break
+            case 'ZONE_ADMIN':
+                consultaInformacionSolicitudesApp();
+                break
             case 'ZoneJefeDependencia':
                 consultaInformacionSolicitudesPorZonaApp('');
                 break

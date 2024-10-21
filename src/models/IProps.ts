@@ -24,6 +24,12 @@ export interface IZoneRootProps {
     infoMenuUsuario: IUsuarioSession
 }
 
+export interface IZoneAdminProps {
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+    infoMenuUsuario: IUsuarioSession
+}
+
 export interface IUsuariosAppProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
