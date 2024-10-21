@@ -493,7 +493,7 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
             </div>
             {
                 modal ?
-                    <Modal tipoModal='MODAL_CONTROL' modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+                    <Modal tipoModal='MODAL_CONTROL_2' modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
                     :
                     <></>
             }

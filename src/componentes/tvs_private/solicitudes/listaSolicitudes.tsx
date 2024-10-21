@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Paginador } from '../../tvs/paginacion/paginador';
@@ -35,7 +34,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                 consultaInformacionSolicitudesApp();
                 break
             case 'ZoneJefeDependencia':
-                consultaInformacionSolicitudesApp();
+                consultaInformacionSolicitudesPorZonaApp('');
                 break
             default:
                 break
@@ -47,13 +46,14 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
         setIdSolicitudEliminar(idSolicitud)
         setPropsModal({
             titulo: 'Eliminar solicitud',
-            descripcion: 'Esta seguro de eliminar la solicitud: ' + idSolicitud
+            descripcion: `Esta seguro de eliminar la solicitud: ${idSolicitud} ?`
         })
     }
 
-    const eliminarSolicitudAction = async () => {
+    const eliminarSolicitudService = async () => {
         const usuarioSession = sessionStorage.getItem('usuarioApp');
         if (!!usuarioSession) {
+            setCargando(true)
             const usuarioLocalStorage = JSON.parse(usuarioSession);
             const authServices = new AuthServices();
             const body = {
@@ -61,7 +61,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                 "idProcesamiento": idSolicitudEliminar,
             }
             try {
-                const response: IGenericResponse = await authServices.requestPost(body, 17);
+                const response: IGenericResponse = await authServices.requestPost(body, 11);
                 solicitudesPorZonaConsulta()
                 toast(response.mensaje)
                 setCargando(false)
@@ -137,16 +137,17 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
 
     const modalSi = () => {
         setModalOpen(false)
-        eliminarSolicitudAction()
+        eliminarSolicitudService()
     }
 
     const modalNo = () => {
         setModalOpen(false)
+        setIdSolicitudEliminar('')
     }
 
     return (
         <>
-            <div className='div-style-form'>
+            <div className='mt-3'>
                 {
                     solicitudesList.length > 0 ?
                         <>
@@ -155,44 +156,36 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                     <thead>
                                         <tr>
                                             <td className='td-info'>
-                                                <p className='p-label-form'> ID Solictud </p>
-                                            </td>
-                                            <td className='td-info'>
                                                 <p className='p-label-form'> Fecha de radicación </p>
                                             </td>
                                             <td className='td-info'>
-                                                <p className='p-label-form'> Nombre </p>
+                                                <p className='p-label-form'>No. identificación </p>
                                             </td>
                                             <td className='td-info'>
-                                                <p className='p-label-form'> Dependencia </p>
+                                                <p className='p-label-form'>Nombre</p>
                                             </td>
                                             <td className='td-info'>
-                                                <p className='p-label-form'> Estado </p>
+                                                <p className='p-label-form'>Estado</p>
                                             </td>
                                             <td className='td-info'>
-                                                <p className='p-label-form'> Descripción </p>
-                                            </td>
-                                            <td className='td-info'>
-                                                <p className='p-label-form'>  Acciones </p>
+                                                <p className='p-label-form'>Acciones</p>
                                             </td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
-                                            solicitudesList.map((solicitud) => {
+                                            solicitudesList.map((solicitud, key) => {
                                                 return (
-                                                    <tr className='tr-tablet'>
-                                                        <td className='td-info'>
-                                                            <p className=''>{solicitud.solicitud.id_procesamiento}</p>
-                                                        </td>
+                                                    <tr key={key} className='tr-tablet'>
                                                         <td className='td-info'>
                                                             <p className=''>{solicitud.solicitud.fecha_registro}</p>
                                                         </td>
                                                         <td className='td-info'>
-                                                            <p className=''>{solicitud.solicitud.nombres} {solicitud.solicitud.apellidos}</p>
+                                                            <p className=''>{solicitud.solicitud.numero_identificacion}</p>
                                                         </td>
+
                                                         <td className='td-info'>
-                                                            <p className=''>{solicitud.solicitud.dependencia}</p>
+                                                            <p className=''>{solicitud.solicitud.nombres} {solicitud.solicitud.apellidos}</p>
                                                         </td>
                                                         <td className='td-info'>
                                                             <p className=''> {solicitud.solicitud.estado} </p>
@@ -236,7 +229,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
             </div>
             {
                 modalOpen ?
-                    <Modal tipoModal='MODAL_CONTROL' modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+                    <Modal tipoModal='MODAL_CONTROL_2' modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
                     :
                     <></>
             }

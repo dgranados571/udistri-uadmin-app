@@ -63,49 +63,19 @@ export const UtilUrl = () => {
     10: {
       urlEntornoLocal,
       urlEntornoLambda,
-      pathLambda: '/service/uadmin/getUsuariosApp',
+      pathLambda: '/service/uadmin/getSolicitudApp',
       urlDominioServidor
     },
     11: {
       urlEntornoLocal,
       urlEntornoLambda,
-      pathLambda: '/service/uadmin/getSolicitudApp',
+      pathLambda: '/service/uadmin/eliminarSolicitud',
       urlDominioServidor
     },
     12: {
       urlEntornoLocal,
       urlEntornoLambda,
-      pathLambda: '/service/uadmin/asignaUsuarioPrecontractual',
-      urlDominioServidor
-    },
-    13: {
-      urlEntornoLocal,
-      urlEntornoLambda,
-      pathLambda: '/service/uadmin/resuelvePrecontractual',
-      urlDominioServidor
-    },
-    14: {
-      urlEntornoLocal,
-      urlEntornoLambda,
-      pathLambda: '/service/uadmin/resuelvePresupuesto',
-      urlDominioServidor
-    },
-    15: {
-      urlEntornoLocal,
-      urlEntornoLambda,
-      pathLambda: '/service/uadmin/resuelveContractual',
-      urlDominioServidor
-    },
-    16: {
-      urlEntornoLocal,
-      urlEntornoLambda,
-      pathLambda: '/service/uadmin/cargaDocumentos',
-      urlDominioServidor
-    },
-    17: {
-      urlEntornoLocal,
-      urlEntornoLambda,
-      pathLambda: '/service/uadmin/eliminarSolicitud',
+      pathLambda: '/service/uadmin/obtenerDocumento',
       urlDominioServidor
     }
   }

@@ -1,0 +1,15 @@
+.div-titulo-ds{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icons-table-ds{
+    margin: 0px 5px;
+    color: blueviolet;
+}
+
+.icons-table-ds:hover{
+    color: orange;
+    margin: 0px 5px;
+}

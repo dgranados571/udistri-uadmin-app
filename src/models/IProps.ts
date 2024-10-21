@@ -6,6 +6,8 @@ export interface IGenericResponse {
     objeto: any
 }
 
+export interface IZoneProps { }
+
 export interface IRadicaSolicitudProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,14 +35,24 @@ export interface ISolicitudesProps {
     zonaConsulta: string
 }
 
-export interface IZoneProps {}
-
 export interface IListaSolicitudesProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
     setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
     setIdDetalleSolicitud: React.Dispatch<React.SetStateAction<string>>;
     zonaConsulta: string
+}
+
+export interface IDetalleSolicitudProps {
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+    setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
+    idDetalleSolicitud: string
+}
+
+export interface IPaginadorProps {
+    elementsPaginacion: any
+    setElementsPaginacion: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export interface IMenuLateralProps {
@@ -69,4 +81,15 @@ export interface IUsuarioSession {
     usuario: string;
     nombre_completo: string;
     id_procesamiento: string
+}
+
+export interface IListasSelect {
+    value: any,
+    label: string
+}
+
+export interface IPaginacion {
+    paginas: any[],
+    totalPaginas: number,
+    paginaActual: number
 }

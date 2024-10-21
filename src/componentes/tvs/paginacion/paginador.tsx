@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
+import './paginador.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons'
-import './paginador.css'
+import { IPaginacion, IPaginadorProps } from '../../../models/IProps'
 
-export const Paginador = ({ elementsPaginacion, setElementsPaginacion }) => {
+export const Paginador: React.FC<IPaginadorProps> = ({ elementsPaginacion, setElementsPaginacion }) => {
 
     const paginasBaseInfo = 10;
     const { totalElementos, elementosPorPagina, paginaActual } = elementsPaginacion
 
-    const [paginacion, setPaginacion] = useState({
+    const [paginacion, setPaginacion] = useState<IPaginacion>({
         paginas: [],
-        totalPaginas: '',
-        paginaActual: ''
+        totalPaginas: 0,
+        paginaActual: 0
     });
 
     useEffect(() => {
@@ -57,10 +58,10 @@ export const Paginador = ({ elementsPaginacion, setElementsPaginacion }) => {
         });
     }, [totalElementos, elementosPorPagina, paginaActual])
 
-    const cambiaPagina = (e) => {
+    const cambiaPagina = (e: React.MouseEvent<HTMLButtonElement>) => {
         setElementsPaginacion({
             ...elementsPaginacion,
-            paginaActual: e.target.id
+            paginaActual: e.currentTarget.id
         })
     }
 

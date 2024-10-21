@@ -169,7 +169,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const enviaRegistroSolicitud = () => {
         setPropsModal({
-            titulo: 'Resumen de la radiación:',
+            titulo: 'Resumen de la radicación:',
             descripcion: '',
             prop1: `${nombres} ${apellidos}`,
             prop2: numeroIdentificacion,
@@ -258,19 +258,19 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const cargaDocumentos = async (idProcesamiento: string) => {
         const uploadFile1 = file1.length > 0 ? true : false;
         if (uploadFile1) {
-            const pathFinal1 = `${idProcesamiento}/${idProcesamiento}_1.txt`;
+            const pathFinal1 = `OT_UADMIN/${idProcesamiento}/${idProcesamiento}_1.txt`;
             await cargaDocumentosService(file1, pathFinal1, 'DOCUMENTO')
         }
 
         const uploadFile2 = file2.length > 0 ? true : false;
         if (uploadFile2) {
-            const pathFinal2 = `${idProcesamiento}/${idProcesamiento}_2.txt`;
+            const pathFinal2 = `OT_UADMIN/${idProcesamiento}/${idProcesamiento}_2.txt`;
             await cargaDocumentosService(file2, pathFinal2, 'CERTIFICADO DE LIBERTAD')
         }
 
         const uploadFile3 = file3.length > 0 ? true : false;
         if (uploadFile3) {
-            const pathFinal3 = `${idProcesamiento}/${idProcesamiento}_3.txt`;
+            const pathFinal3 = `OT_UADMIN/${idProcesamiento}/${idProcesamiento}_3.txt`;
             await cargaDocumentosService(file3, pathFinal3, 'IMPUESTO PREDIAL')
         }
     }

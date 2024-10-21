@@ -103,8 +103,8 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                                 <div className='div-content-element'>
                                     <div className='div-size-content'>
                                         <h4>{propsModal.titulo} </h4>
-                                        <p >{propsModal.descripcion} </p>
-                                        <div className='d-flex justify-content-around'>
+                                        <p className='mt-2'>{propsModal.descripcion} </p>
+                                        <div className='d-flex justify-content-around mt-3'>
                                             <button className='btn btn-secondary bottom-custom-secondary' onClick={() => modalNo()}>Cancelar</button>
                                             <button className='btn btn-primary bottom-custom' onClick={() => modalSi()} >Aceptar</button>
                                         </div>

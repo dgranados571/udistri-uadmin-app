@@ -100,6 +100,17 @@ p {
   margin: 0rem 1rem;
 }
 
+.bottom-custom-link{
+  color: blueviolet;
+  font-weight: bolder;
+  display: flex;
+  align-items: center;
+}
+
+.bottom-custom-link:hover{
+  color: orange;
+}
+
 .a-link-custom {
   color: #333333;
   cursor: pointer;
@@ -233,6 +244,10 @@ p {
 .table-info{
   width: 100%;
   min-width: 50rem;
+}
+
+.icons-table{
+  color: blueviolet;
 }
 
 

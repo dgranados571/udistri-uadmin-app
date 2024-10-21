@@ -14,17 +14,16 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
                 return (
                     <>
                         <div className='div-style-form'>
-                            <div className='div-titulo-component'>
-                                <h4>Solicitudes de aplicación</h4>
-                            </div>
+                            <h4>Solicitudes de aplicación</h4>
+                            <ListaSolicitudes toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} setIdDetalleSolicitud={setIdDetalleSolicitud} zonaConsulta={zonaConsulta}></ListaSolicitudes>
                         </div>
-                        <ListaSolicitudes toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} setIdDetalleSolicitud={setIdDetalleSolicitud} zonaConsulta={zonaConsulta}></ListaSolicitudes>
+
                     </>
                 )
             case 'DETALLE_SOLICITUD':
                 return (
                     <>
-                        <>DETALLE DE LA SOLICTUD</>
+                        <DetalleSolicitud toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} idDetalleSolicitud={idDetalleSolicitud}></DetalleSolicitud>
                     </>
                 )
             default:
