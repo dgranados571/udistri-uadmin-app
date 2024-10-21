@@ -5,6 +5,8 @@ import { IMenuLateral, IZoneRootProps } from '../../models/IProps'
 import MenuLateralComponent from '../tvs/headerLateral/menuLateral'
 import UsuariosApp from '../tvs_private/usuarios/usuariosApp'
 import Solicitudes from '../tvs_private/solicitudes/solicitudes'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargando }) => {
 
@@ -70,12 +72,19 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
                         <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
+                        <div className='div-dashboard-header-busqueda-padre'>
+                            <div className="div-dashboard-header-busqueda">
+                                <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                <input type="text" className='form-control form-imput-busqueda' placeholder='Buscador' autoComplete='off' />
+                                <div className="div-cantidad-carrito"></div>
+                            </div>
+                        </div>
                         <div className="div-dashboard-content">
                             {
                                 validateRedirect()
                             }
                         </div>
-                    </div>
+                    </div>                    
                 </div>
             </div>
         </>

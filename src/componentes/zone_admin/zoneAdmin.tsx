@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { IMenuLateral, IZoneRootProps } from '../../models/IProps'
-import { faHome, faUser, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faUsers } from '@fortawesome/free-solid-svg-icons'
 import MenuLateralComponent from '../tvs/headerLateral/menuLateral'
 import UsuariosApp from '../tvs_private/usuarios/usuariosApp'
 import Solicitudes from '../tvs_private/solicitudes/solicitudes'
