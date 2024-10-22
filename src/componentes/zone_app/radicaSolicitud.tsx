@@ -377,10 +377,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     )
 }
 
-// ESTADOS: APTO - NO APTO- PENDIENTE CON OBSERVACION
 
 // BENEFICIOARIO DE LA SOLCITUD -- EJ: ESPOSA
-
-// FASE DE PREAPROBACION
+// ESTADOS: APTO - NO APTO- PENDIENTE CON OBSERVACION
 
 export default RadicaSolicitud
