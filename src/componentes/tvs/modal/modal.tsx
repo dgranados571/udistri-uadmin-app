@@ -86,12 +86,14 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                 return (
                     <>
                         <div className='div-modal-active'>
-                            <div className='div-content-element'>
-                                <div className='div-size-content'>
-                                    <h4>{propsModal.titulo} </h4>
-                                    <p className='mt-2'>{propsModal.descripcion} </p>
-                                    <div className='d-flex justify-content-around mt-3'>
-                                        <button className='btn btn-primary bottom-custom' onClick={() => modalNo()} >Aceptar</button>
+                            <div className='div-content-element-padre'>
+                                <div className='div-content-element'>
+                                    <div className='div-size-content'>
+                                        <h4>{propsModal.titulo} </h4>
+                                        <p className='mt-2'>{propsModal.descripcion} </p>
+                                        <div className='d-flex justify-content-around mt-3'>
+                                            <button className='btn btn-primary bottom-custom' onClick={() => modalNo()} >Aceptar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -102,13 +104,15 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                 return (
                     <>
                         <div className='div-modal-active'>
-                            <div className='div-content-element'>
-                                <div className='div-size-content'>
-                                    <h4>{propsModal.titulo} </h4>
-                                    <p className='mt-2'>{propsModal.descripcion} </p>
-                                    <div className='d-flex justify-content-around mt-3'>
-                                        <button className='btn btn-secondary bottom-custom-secondary' onClick={() => modalNo()}>Cancelar</button>
-                                        <button className='btn btn-primary bottom-custom' onClick={() => modalSi()} >Aceptar</button>
+                            <div className='div-content-element-padre'>
+                                <div className='div-content-element'>
+                                    <div className='div-size-content'>
+                                        <h4>{propsModal.titulo} </h4>
+                                        <p className='mt-2'>{propsModal.descripcion} </p>
+                                        <div className='d-flex justify-content-around mt-3'>
+                                            <button className='btn btn-secondary bottom-custom-secondary' onClick={() => modalNo()}>Cancelar</button>
+                                            <button className='btn btn-primary bottom-custom' onClick={() => modalSi()} >Aceptar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
