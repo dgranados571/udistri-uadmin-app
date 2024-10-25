@@ -35,6 +35,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const file2InputRef = useRef<HTMLInputElement | null>(null);
     const file3InputRef = useRef<HTMLInputElement | null>(null);
 
+    const [activaBeneficiarios, setActivaBeneficiarios] = useState(false);
+
     const eventInputFiles = (e: React.ChangeEvent<HTMLInputElement>, fileProperty: string) => {
         const fileList = e.target.files;
         switch (fileProperty) {
@@ -350,6 +352,40 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                     </div>
                 </div>
                 <hr />
+
+
+                <div className="div-info-beneficiarios">
+                    <h4 >La solicitud incluye beneficiarios?</h4>
+                    <div className={activaBeneficiarios ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => setActivaBeneficiarios(!activaBeneficiarios)} >
+                        <div className={activaBeneficiarios ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
+                    </div>
+                </div>
+                <div className={activaBeneficiarios ? "div-form-beneficiarios-active" : "div-form-beneficiarios"} >
+                    <div className="row">
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-4" >
+                            <div className='div-form'>
+                                <p className='p-label-form'>Nombres: </p>
+                                <input type="text" value={nombres} onChange={(e) => setNombres(e.target.value)} className={nombresRef ? 'form-control form-control-error' : 'form-control'} />
+                            </div>
+                        </div>
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-4" >
+                            <div className='div-form'>
+                                <p className='p-label-form'>Cédula: </p>
+                                <input type="text" value={numeroIdentificacion} onChange={(e) => setNumeroIdentificacion(e.target.value)} className={numeroIdentificacionRef ? 'form-control form-control-error' : 'form-control'} />
+                            </div>
+                        </div>
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-4" >
+                            <div className='div-form'>
+                                <p className='p-label-form'> Aqui el documento: </p>
+                                <input ref={file1InputRef} type="file" onChange={(e) => eventInputFiles(e, 'FILE_BENEFICIARIO')} className={file1Ref ? 'form-control form-control-error' : 'form-control'} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+                <hr />
                 <p>De requerirlo, agregue las observaciones nescesarias a la solicitud:</p>
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
@@ -364,8 +400,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                         </div>
                     </div>
                 </div>
-            </div>
-
+            </div >
             {
                 modalOpen ?
                     <Modal tipoModal={tipoModal} modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
@@ -376,9 +411,5 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         </>
     )
 }
-
-
-// BENEFICIOARIO DE LA SOLCITUD -- EJ: ESPOSA
-// ESTADOS: APTO - NO APTO- PENDIENTE CON OBSERVACION
 
 export default RadicaSolicitud

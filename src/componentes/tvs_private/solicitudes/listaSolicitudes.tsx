@@ -171,6 +171,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                 <p className='p-label-form'>Estado</p>
                                             </td>
                                             <td className='td-info'>
+                                                <p className='p-label-form'>Observaciones</p>
+                                            </td>
+                                            <td className='td-info'>
                                                 <p className='p-label-form'>Acciones</p>
                                             </td>
                                         </tr>
@@ -186,7 +189,6 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                         <td className='td-info'>
                                                             <p className=''>{solicitud.solicitud.numero_identificacion}</p>
                                                         </td>
-
                                                         <td className='td-info'>
                                                             <p className=''>{solicitud.solicitud.nombres} {solicitud.solicitud.apellidos}</p>
                                                         </td>

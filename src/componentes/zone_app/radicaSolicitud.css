@@ -22,7 +22,72 @@
     font-weight: bold;
 }
 
-@media (min-width: 760px) {}
+.div-info-beneficiarios {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.div-slide-padre {
+    height: 1.75rem;
+    width: 3.5rem;
+    border: 1px solid grey;
+    border-radius: 20px;
+    padding: 5px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.div-slide-padre-active {
+    height: 1.75rem;
+    width: 3.5rem;
+    border: 1px solid orange;
+    border-radius: 20px;
+    padding: 5px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.div-slide-hijo {
+    height: 100%;
+    width: 50%;
+    background-color: grey;
+    border-radius: 20px;
+    padding: 5px;
+    transition: 0.5s;
+}
+
+.div-slide-hijo-active{
+    height: 100%;
+    width: 50%;
+    margin-left: 50%;
+    background-color: orange;
+    border-radius: 20px;
+    padding: 5px;
+    transition: 0.5s;
+}
+
+.div-form-beneficiarios{
+    height: 0px;
+    overflow: hidden;
+    transition: 0.5s;
+}
+
+.div-form-beneficiarios-active{
+    overflow: hidden;
+    height: 17rem;
+    transition: 0.5s;
+}
+
+@media (min-width: 760px) {
+
+    .div-info-beneficiarios {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+    }
+}
 
 @media (min-width: 1025px) {
 
@@ -33,6 +98,12 @@
         height: 100%;
         padding: 0px 10px;
         margin: 0px 0px;
+    }
+
+    .div-form-beneficiarios-active{
+        overflow: hidden;
+        height: 7rem;
+        transition: 0.5s;
     }
 
 }
