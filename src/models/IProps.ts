@@ -99,3 +99,9 @@ export interface IPaginacion {
     totalPaginas: number,
     paginaActual: number
 }
+
+export interface IBeneficiarios {
+    nombresBen: string,
+    identificaionBen: string,
+    documentoPdfBen: string
+}

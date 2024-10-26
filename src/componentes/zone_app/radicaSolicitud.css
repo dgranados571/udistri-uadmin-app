@@ -76,8 +76,14 @@
 
 .div-form-beneficiarios-active{
     overflow: hidden;
-    height: 17rem;
+    height: 20rem;
     transition: 0.5s;
+}
+
+.div-info-item-ben {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 @media (min-width: 760px) {
@@ -89,7 +95,7 @@
     }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 990px) {
 
     .div-menu-principal {
         display: flex;
@@ -102,7 +108,7 @@
 
     .div-form-beneficiarios-active{
         overflow: hidden;
-        height: 7rem;
+        height: 11rem;
         transition: 0.5s;
     }
 
