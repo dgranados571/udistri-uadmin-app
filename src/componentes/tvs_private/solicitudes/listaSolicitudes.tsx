@@ -3,13 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Paginador } from '../../tvs/paginacion/paginador';
 import Modal from '../../tvs/modal/modal';
-import { IGenericResponse, IListaSolicitudesProps } from '../../../models/IProps';
+import { IGenericResponse, IListaSolicitudesProps, IlPropsModal } from '../../../models/IProps';
 import { AuthServices } from '../../services/authServices';
 
 const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando, setRedirectSolicitudes, setIdDetalleSolicitud, zonaConsulta }) => {
 
     const [modalOpen, setModalOpen] = useState(false)
-    const [propsModal, setPropsModal] = useState({})
+    const [propsModal, setPropsModal] = useState<IlPropsModal>({
+        titulo: '',
+        descripcion: '',
+    })
 
     const [solicitudesList, setSolicitudesList] = useState<any[]>([])
 

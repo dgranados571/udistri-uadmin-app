@@ -2,7 +2,7 @@ import React from 'react'
 import './modal.css'
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IModalProps } from '../../../models/IProps'
+import { IBeneficiarios, IModalProps } from '../../../models/IProps'
 
 const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal }) => {
 
@@ -20,6 +20,50 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                     <p className='p-label-form-text'>No registra</p>
                     <FontAwesomeIcon icon={faXmarkCircle} className='icon-modal-info-false' />
                 </div>
+            )
+        }
+    }
+
+    const labelBeneficiarios = (prop8: IBeneficiarios[] | undefined) => {
+        if (!!prop8) {
+            if (prop8.length > 0) {
+                return (
+                    <></>
+                )
+            } else {
+                return (
+                    <p className='p-label-form m-1'>No registra</p>
+                )
+            }
+        } else {
+            return (
+                <></>
+            )
+        }
+    }
+
+    const detalleBeneficiarios = (prop8: IBeneficiarios[] | undefined) => {
+        if (!!prop8) {
+            return prop8.map((benficiario, ind) => {
+                return (
+                    <div className="d-flex justify-content-between mt-2" >
+                        <div className='' >
+                            <p>{benficiario.nombresBen}</p>
+                        </div>
+                        <div className='' >
+                            <p>{benficiario.identificaionBen}</p>
+                        </div>
+                        <div className='' >
+                            {
+                                labelArchivosCargados(benficiario.documentoPdfBen.length > 0)
+                            }
+                        </div>
+                    </div>
+                )
+            })
+        } else {
+            return (
+                <></>
             )
         }
     }
@@ -55,19 +99,31 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                                         <div className='div-info-item'>
                                             <p className='p-label-form-text m-1'>Documento aspirante: </p>
                                             {
-                                                labelArchivosCargados(propsModal.prop5)
+                                                labelArchivosCargados(propsModal.prop5 ? propsModal.prop5 : false)
                                             }
                                         </div>
                                         <div className='div-info-item'>
                                             <p className='p-label-form-text m-1'>Certificado libertad: </p>
                                             {
-                                                labelArchivosCargados(propsModal.prop6)
+                                                labelArchivosCargados(propsModal.prop6 ? propsModal.prop6 : false)
                                             }
                                         </div>
                                         <div className='div-info-item'>
                                             <p className='p-label-form-text m-1'>Impuesto predial: </p>
                                             {
-                                                labelArchivosCargados(propsModal.prop7)
+                                                labelArchivosCargados(propsModal.prop7 ? propsModal.prop7 : false)
+                                            }
+                                        </div>
+                                        <hr />
+                                        <div className="d-flex justify-content-between">
+                                            <h4 >Beneficiarios:</h4>
+                                            {
+                                                labelBeneficiarios(propsModal.prop8)
+                                            }
+                                        </div>
+                                        <div className="">
+                                            {
+                                                detalleBeneficiarios(propsModal.prop8)
                                             }
                                         </div>
                                         <hr />

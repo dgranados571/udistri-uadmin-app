@@ -73,7 +73,20 @@ export interface IModalProps {
     modalSi: Function,
     modalNo: Function,
     tipoModal: string;
-    propsModal: any
+    propsModal: IlPropsModal
+}
+
+export interface IlPropsModal{
+    titulo: string,
+    descripcion: string,
+    prop1?: string;
+    prop2?: string;
+    prop3?: string;
+    prop4?: string;
+    prop5?: boolean;
+    prop6?: boolean;
+    prop7?: boolean;
+    prop8?: IBeneficiarios[];
 }
 
 export interface IMenuLateral {

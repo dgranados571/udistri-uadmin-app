@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import './radicaSolicitud.css'
-import { IBeneficiarios, IGenericResponse, IRadicaSolicitudProps } from '../../models/IProps';
+import { IBeneficiarios, IGenericResponse, IlPropsModal, IRadicaSolicitudProps } from '../../models/IProps';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AuthServices } from '../services/authServices';
@@ -10,7 +10,10 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const [modalOpen, setModalOpen] = useState(false)
     const [tipoModal, setTipoModal] = useState('')
-    const [propsModal, setPropsModal] = useState({})
+    const [propsModal, setPropsModal] = useState<IlPropsModal>({
+        titulo: '',
+        descripcion: '',
+    })
 
     const [nombres, setNombres] = useState('');
     const [apellidos, setApellidos] = useState('');
@@ -278,6 +281,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             prop5: file1.length > 0 ? true : false,
             prop6: file2.length > 0 ? true : false,
             prop7: file3.length > 0 ? true : false,
+            prop8: beneficiariosList
         })
         setModalOpen(true)
         setTipoModal('MODAL_RESUMEN_1')
@@ -508,10 +512,10 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                                 return (
                                     <div className="col-12 col-sm-12 col-md-12 col-lg-4" >
                                         <div className='p-label-form' >
-                                            <p>Beneficiario {ind + 1}</p> 
+                                            <p>Beneficiario {ind + 1}</p>
                                         </div>
                                         <div className='' >
-                                            <p>{benficiario.nombresBen}</p> 
+                                            <p>{benficiario.nombresBen}</p>
                                         </div>
                                         <div className='' >
                                             {benficiario.identificaionBen}

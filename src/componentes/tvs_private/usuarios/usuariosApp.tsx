@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRotateLeft, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../../tvs/modal/modal'
-import { IGenericResponse, IUsuariosAppProps } from '../../../models/IProps'
+import { IGenericResponse, IlPropsModal, IUsuariosAppProps } from '../../../models/IProps'
 import { AuthServices } from '../../services/authServices'
 
 const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
 
     const [modal, setModal] = useState(false)
-    const [propsModal, setPropsModal] = useState({})
+    const [propsModal, setPropsModal] = useState<IlPropsModal>({
+        titulo: '',
+        descripcion: '',
+    })
 
     const [modoEditar, setModoEditar] = useState(false)
     const [userEdita, setUserEdita] = useState<any>({})
