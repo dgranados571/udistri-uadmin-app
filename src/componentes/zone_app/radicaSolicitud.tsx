@@ -384,6 +384,14 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             const pathFinal3 = `OT_UADMIN/${idProcesamiento}/${idProcesamiento}_3.txt`;
             await cargaDocumentosService(file3, pathFinal3, 'IMPUESTO PREDIAL')
         }
+
+        for (let i = 0; i < beneficiariosList.length; i++) {
+            if (beneficiariosList[i].documentoPdfBen.length > 0) {
+                const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/${idProcesamiento}_BEN_${i}.txt`;
+                await cargaDocumentosService(beneficiariosList[i].documentoPdfBen, pathBeneficiarioX, `DOCUMENTO beneficiario: ${beneficiariosList[i].nombresBen}`)
+            }
+        }
+
     }
 
     const cargaDocumentosService = async (fileBase64: string, fileName: string, idArchivo: string) => {
