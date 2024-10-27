@@ -51,7 +51,7 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                             <p>{benficiario.nombresBen}</p>
                         </div>
                         <div className='' >
-                            <p>{benficiario.identificaionBen}</p>
+                            <p>{benficiario.identificacionBen}</p>
                         </div>
                         <div className='' >
                             {

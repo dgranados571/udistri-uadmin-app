@@ -151,17 +151,21 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const activaVistaBeneficiario = () => {
         setActivaBeneficiarios(!activaBeneficiarios)
         if (activaBeneficiarios) {
-            setNombresBeneficiario('')
-            setNumIdentificacionBeneficiario('')
-            setFileBeneficiario('')
-            if (fileBeneficiarioInputRef.current) {
-                fileBeneficiarioInputRef.current.value = ""
-            }
-            setNombresBeneficiarioRef(false)
-            setNumIdentificacionBeneficiarioRef(false)
-            setFileBeneficiarioRef(false)
-            setBeneficiariosList([])
+            resetFormBeneficiario()
         }
+    }
+
+    const resetFormBeneficiario = () => {
+        setNombresBeneficiario('')
+        setNumIdentificacionBeneficiario('')
+        setFileBeneficiario('')
+        if (fileBeneficiarioInputRef.current) {
+            fileBeneficiarioInputRef.current.value = ""
+        }
+        setNombresBeneficiarioRef(false)
+        setNumIdentificacionBeneficiarioRef(false)
+        setFileBeneficiarioRef(false)
+        setBeneficiariosList([])
     }
 
     const eventInputFilesBeneficiario = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -216,7 +220,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         if (formValidado.length === 0) {
             const benneficiarioObj: IBeneficiarios = {
                 nombresBen: nombresBeneficiario,
-                identificaionBen: numIdentificacionBeneficiario,
+                identificacionBen: numIdentificacionBeneficiario,
                 documentoPdfBen: fileBeneficiario
             }
             setBeneficiariosList([...beneficiariosList, benneficiarioObj])
@@ -329,6 +333,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         setNumeroIdentificacionRef(false)
         setCorreoRef(false)
         setTelefonoRef(false)
+        resetFormBeneficiario()
+        setActivaBeneficiarios(false)
     }
 
     const enviaRegistroSolicitudService = async () => {
@@ -341,7 +347,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             "numeroIdentificacion": numeroIdentificacion,
             "correo": correo,
             "telefono": telefono,
-            "descripcion": descripcion
+            "descripcion": descripcion,
+            "beneficiariosList": beneficiariosList
         }
         const authServices = new AuthServices();
         try {
@@ -518,7 +525,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                                             <p>{benficiario.nombresBen}</p>
                                         </div>
                                         <div className='' >
-                                            {benficiario.identificaionBen}
+                                            {benficiario.identificacionBen}
                                         </div>
                                         {
                                             labelArchivosCargados(benficiario.documentoPdfBen.length > 0)
