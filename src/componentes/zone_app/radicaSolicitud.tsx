@@ -221,7 +221,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             const benneficiarioObj: IBeneficiarios = {
                 nombresBen: nombresBeneficiario,
                 identificacionBen: numIdentificacionBeneficiario,
-                documentoPdfBen: fileBeneficiario
+                documentoPdfBen: fileBeneficiario,
+                registraDocPdf: fileBeneficiario.length > 0 ? true : false
             }
             setBeneficiariosList([...beneficiariosList, benneficiarioObj])
             setNombresBeneficiario('')
@@ -369,32 +370,32 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const cargaDocumentos = async (idProcesamiento: string) => {
         const uploadFile1 = file1.length > 0 ? true : false;
         if (uploadFile1) {
-            const pathFinal1 = `OT_UADMIN/${idProcesamiento}/${idProcesamiento}_1.txt`;
-            await cargaDocumentosService(file1, pathFinal1, 'DOCUMENTO')
+            const pathFinal1 = `OT_UADMIN/${idProcesamiento}/MODULO_1/${idProcesamiento}_1.txt`;
+            await cargaDocumentosService(file1, pathFinal1, 'DOCUMENTO', idProcesamiento)
         }
 
         const uploadFile2 = file2.length > 0 ? true : false;
         if (uploadFile2) {
-            const pathFinal2 = `OT_UADMIN/${idProcesamiento}/${idProcesamiento}_2.txt`;
-            await cargaDocumentosService(file2, pathFinal2, 'CERTIFICADO DE LIBERTAD')
+            const pathFinal2 = `OT_UADMIN/${idProcesamiento}/MODULO_1/${idProcesamiento}_2.txt`;
+            await cargaDocumentosService(file2, pathFinal2, 'CERTIFICADO DE LIBERTAD', idProcesamiento)
         }
 
         const uploadFile3 = file3.length > 0 ? true : false;
         if (uploadFile3) {
-            const pathFinal3 = `OT_UADMIN/${idProcesamiento}/${idProcesamiento}_3.txt`;
-            await cargaDocumentosService(file3, pathFinal3, 'IMPUESTO PREDIAL')
+            const pathFinal3 = `OT_UADMIN/${idProcesamiento}/MODULO_1/${idProcesamiento}_3.txt`;
+            await cargaDocumentosService(file3, pathFinal3, 'IMPUESTO PREDIAL', idProcesamiento)
         }
 
         for (let i = 0; i < beneficiariosList.length; i++) {
             if (beneficiariosList[i].documentoPdfBen.length > 0) {
-                const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/${idProcesamiento}_BEN_${i}.txt`;
-                await cargaDocumentosService(beneficiariosList[i].documentoPdfBen, pathBeneficiarioX, `DOCUMENTO beneficiario: ${beneficiariosList[i].nombresBen}`)
+                const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/MODULO_BEN/${idProcesamiento}_${i}.txt`;
+                await cargaDocumentosService(beneficiariosList[i].documentoPdfBen, pathBeneficiarioX, `DOCUMENTO beneficiario: ${beneficiariosList[i].nombresBen}`, idProcesamiento)
             }
         }
 
     }
 
-    const cargaDocumentosService = async (fileBase64: string, fileName: string, idArchivo: string) => {
+    const cargaDocumentosService = async (fileBase64: string, fileName: string, idArchivo: string, idProcesamiento: string) => {
         const authServices = new AuthServices();
         try {
             const response: IGenericResponse = await authServices.requestPostFile(fileBase64, fileName);
@@ -402,9 +403,27 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                 toast(`El archivo: ${idArchivo}, fue cargado satisfactoriamente`)
             } else {
                 toast(`No fue posible cargar el archivo: ${idArchivo}`)
+                await controlRegistroBeneficiariosService(idProcesamiento, fileName)
             }
         } catch (error) {
             toast(`No fue posible cargar el archivo: ${idArchivo}`)
+            await controlRegistroBeneficiariosService(idProcesamiento, fileName)
+        }
+    }
+
+    const controlRegistroBeneficiariosService = async (idProcesamiento: string, fileName: string) => {
+        const authServices = new AuthServices();
+        const body = {
+            "idProcesamiento": idProcesamiento,
+            "urlTxt": fileName
+        }
+        try {
+            const response: IGenericResponse = await authServices.requestPost(body, 13);
+            if (!response.estado) {
+                toast('No es posible consultar información, contacte al administrador')
+            }
+        } catch (error) {
+            toast('No es posible consultar información, contacte al administrador')
         }
     }
 

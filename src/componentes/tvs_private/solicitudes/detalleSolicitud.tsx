@@ -114,7 +114,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], { type: "application/pdf" });
     const pdfBlobUrl = URL.createObjectURL(blob);
-    window.open(pdfBlobUrl, '_blank');      
+    window.open(pdfBlobUrl, '_blank');
   };
 
   return (
@@ -204,11 +204,11 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
         <hr />
         <div className="row mt-4">
           <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
-            <p className='mb-1'>A continuación, encontrará el listado de documentos asociados a la solicitud {idDetalleSolicitud}. (Dar click en cada uno para visualizar el archivo): </p>
+            <p className='mb-1'>A continuación, encontrará el listado de documentos asociados a la solicitud. (Dar click en cada uno para visualizar el archivo): </p>
           </div>
           {
             showDetalleSolicitud ?
-              detalleSolicitud.urlDocuments.map((urlDoc: any, i: number) => {
+              detalleSolicitud.urlDocumentsMod1.map((urlDoc: any, i: number) => {
                 return (
                   <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
                     <button className='btn btn-link bottom-custom-link' onClick={() => consultaPDF(urlDoc.urlTxt)}>
@@ -221,11 +221,52 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
               'Cargando ...'
           }
         </div>
+        <hr />
+        <div className="row mt-0">
+          <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+            <h4 className='titulo-form'>Beneficiarios de la solicitud: </h4>
+            <p className='mb-1'>A continuación, encontrará el detalle de los beneficiarios asociados a la solicitud: </p>
+          </div>
+          {
+            showDetalleSolicitud ?
+              detalleSolicitud.beneficiariosList.map((beneficiario: any, i: number) => {
+                return (
+                  <>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-3" >
+                      <div className="d-flex justify-content-start align-items-center">
+                        <p className='p-label-form m-0'> Nombre: </p>
+                        <p className='mx-2'> {beneficiario.nombresBen} </p>
+                      </div>
+                      {
+                        beneficiario.registraDocPdf ?                          
+                            <div className="d-flex align-items-baseline">
+                              <p className='p-label-form m-0'>Documento No: </p>
+                              <p className='mx-2'>{beneficiario.identificacionBen} </p>
+                              <button className='btn btn-link bottom-custom-link p-0' onClick={() => consultaPDF(beneficiario.documentosDto.urlTxt)}>
+                                <FontAwesomeIcon className='icons-table-ds' icon={faFilePdf} />
+                              </button>
+                            </div>
+                          :
+                          <div className="d-flex align-items-baseline">
+                            <p className='p-label-form m-0'>Documento No: </p>
+                            <p> {beneficiario.identificacionBen} </p>
+                          </div>
+                      }
+                    </div>
+                  </>
+
+                )
+              })
+              :
+              'Cargando ...'
+          }
+        </div>
       </div>
       {
         showDetalleSolicitud ?
           detalleSolicitud.detalleSolicitudVista.modulo2 ?
             <>
+              <hr />
               <div className='div-style-form'>
                 <div className="row">
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >

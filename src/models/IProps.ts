@@ -117,4 +117,5 @@ export interface IBeneficiarios {
     nombresBen: string,
     identificacionBen: string,
     documentoPdfBen: string
+    registraDocPdf: boolean
 }
