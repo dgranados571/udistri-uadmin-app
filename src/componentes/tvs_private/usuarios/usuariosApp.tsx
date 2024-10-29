@@ -431,68 +431,62 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
                 </div>
             </div>
             <div className='div-style-form mt-3'>
-                <h4>Usuarios de aplicación</h4>
-                <div className='div-style-form-whit-table'>
-                    <table className='table-info'>
-                        <thead>
-                            <tr>
-                                <td className='td-info'><p className='p-label-form'> Nombres </p></td>
-                                <td className='td-info'><p className='p-label-form'> Role </p></td>
-                                <td className='td-info'><p className='p-label-form'> Estado </p></td>
-                                <td className='td-info'><p className='p-label-form'> Usuario de aplicación </p></td>
-                                <td className='td-info'><p className='p-label-form'> Contraseña </p></td>
-                                <td className='td-info'><p className='p-label-form'> Correo </p></td>
-                                <td className='td-info'><p className='p-label-form'> Acciones </p></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                usuariosList.map((usuario: any) => {
-                                    return (
-                                        <tr >
-                                            <td className='td-info'>
-                                                <p>{usuario.nombre} {usuario.apellidos}  </p>
-                                            </td>
-                                            <td className='td-info'>
+                <h4>Usuarios de aplicación</h4>               
+                <div className="row">
+                    {
+                        usuariosList.map((usuario: any) => {
+                            return (
+                                <>
+                                    <div className="col-12 col-sm-12 col-md-6 col-lg-6 mt-4">
+                                        <div className="d-flex justify-content-start align-items-center">
+                                            <p className='p-label-form m-0'> Nombres: </p>
+                                            <p className='mx-2'> {usuario.nombre} {usuario.apellidos} </p>
+                                        </div>
+                                        <div className="d-flex justify-content-start align-items-center">
+                                            <p className='p-label-form m-0'> Role: </p>
+                                            <p className='mx-2'>
                                                 {
                                                     labelRoleList(usuario.role)
-                                                }                                                
-                                            </td>
-                                            <td className='td-info'>
-                                                <p className='mt-0'>
-                                                    {
-                                                        usuario.usuario_activo ?
-                                                            'Activo'
-                                                            :
-                                                            'Por activar'
-                                                    }
-                                                </p>
-                                            </td>
-                                            <td className='td-info'>
-                                                <p>{usuario.usuario}</p>
-                                            </td>
-                                            <td className='td-info'>
-                                                <p>{usuario.contrasenia}</p>
-                                            </td>
-                                            <td className='td-info'>
-                                                <p>{usuario.correo}</p>
-                                            </td>
-                                            <td className='td-info'>
-                                                <div className='d-flex justify-content-around'>
-                                                    <button className='btn btn-link' onClick={() => actualizaContrasenia(usuario)}>
-                                                        <FontAwesomeIcon className='icons-table' icon={faRotateLeft} />
-                                                    </button>
-                                                    <button className='btn btn-link' onClick={() => actualizaUsuario(usuario)}>
-                                                        <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </table>
+                                                }
+                                            </p>
+                                        </div>
+                                        <div className="d-flex justify-content-start align-items-center">
+                                            <p className='p-label-form m-0'> Estado: </p>
+                                            <p className='mx-2'>
+                                                {
+                                                    usuario.usuario_activo ?
+                                                        'Activo'
+                                                        :
+                                                        'Por activar'
+                                                }
+                                            </p>
+                                        </div>
+                                        <div className="d-flex justify-content-start align-items-center">
+                                            <p className='p-label-form m-0'> Usuario: </p>
+                                            <p className='mx-2'> {usuario.usuario} </p>
+                                        </div>
+                                        <div className="d-flex justify-content-start align-items-center">
+                                            <p className='p-label-form m-0'> Contraseña: </p>
+                                            <p className='mx-2'> {usuario.contrasenia} </p>
+                                        </div>
+                                        <div className="d-flex justify-content-start align-items-center">
+                                            <p className='p-label-form m-0'> Correo: </p>
+                                            <p className='mx-2'> {usuario.correo} </p>
+                                        </div>
+                                        <div className='d-flex justify-content-start align-items-center'>
+                                            <p className='p-label-form m-0'> Acciones: </p>
+                                            <button className='btn btn-link' onClick={() => actualizaContrasenia(usuario)}>
+                                                <FontAwesomeIcon className='icons-table' icon={faRotateLeft} />
+                                            </button>
+                                            <button className='btn btn-link' onClick={() => actualizaUsuario(usuario)}>
+                                                <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            )
+                        })
+                    }
                 </div>
             </div>
             {
