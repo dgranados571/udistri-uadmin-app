@@ -20,6 +20,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const [numeroIdentificacion, setNumeroIdentificacion] = useState('');
     const [correo, setCorreo] = useState('');
     const [telefono, setTelefono] = useState('');
+    const [matriculaInmobiliaria, setMatriculaInmobiliaria] = useState('');
     const [descripcion, setDescripcion] = useState('');
 
     const [nombresRef, setNombresRef] = useState(false);
@@ -27,6 +28,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const [numeroIdentificacionRef, setNumeroIdentificacionRef] = useState(false);
     const [correoRef, setCorreoRef] = useState(false);
     const [telefonoRef, setTelefonoRef] = useState(false);
+    const [matriculaInmobiliariaRef, setMatriculaInmobiliariaRef] = useState(false);
 
     const [file1, setFile1] = useState('');
     const [file2, setFile2] = useState('');
@@ -264,6 +266,11 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             formValidado.push('telefono');
             setTelefonoRef(true)
         }
+        setMatriculaInmobiliariaRef(false)
+        if (matriculaInmobiliaria.length === 0) {
+            formValidado.push('matriculaInmobiliaria');
+            setMatriculaInmobiliariaRef(true)
+        }
         if (file1Ref || file2Ref || file3Ref) {
             formValidado.push('Error de archivos');
         }
@@ -286,7 +293,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             prop5: file1.length > 0 ? true : false,
             prop6: file2.length > 0 ? true : false,
             prop7: file3.length > 0 ? true : false,
-            prop8: beneficiariosList
+            prop8: beneficiariosList,
+            prop9: matriculaInmobiliaria
         })
         setModalOpen(true)
         setTipoModal('MODAL_RESUMEN_1')
@@ -349,22 +357,34 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             "correo": correo,
             "telefono": telefono,
             "descripcion": descripcion,
-            "beneficiariosList": beneficiariosList
+            "beneficiariosList": beneficiariosList,
+            "matriculaInmobiliaria": matriculaInmobiliaria
         }
         const authServices = new AuthServices();
         try {
             const response: IGenericResponse = await authServices.requestPost(body, 1);
-            toast(response.mensaje)
             if (response.estado) {
+                toast(response.mensaje)
                 await cargaDocumentos(response.objeto)
                 resetForm()
                 confirmaRadicacionSolicitud()
+            } else {
+                erroRadicacionSolicitud(response.mensaje)
             }
             setCargando(false)
         } catch (error) {
             toast('No es posible crear la solicitud, contacte al administrador')
             setCargando(false)
         }
+    }
+
+    const erroRadicacionSolicitud = (descripcionError: string) => {
+        setPropsModal({
+            titulo: 'Error en la solicitud:',
+            descripcion: descripcionError,
+        })
+        setModalOpen(true)
+        setTipoModal('MODAL_CONTROL_1')
     }
 
     const cargaDocumentos = async (idProcesamiento: string) => {
@@ -453,14 +473,14 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
-                            <p className='p-label-form'>Nombres: </p>
-                            <input type="text" value={nombres} onChange={(e) => setNombres(e.target.value)} className={nombresRef ? 'form-control form-control-error' : 'form-control'} />
+                            <p className='p-label-form'>Apellidos: </p>
+                            <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className={apellidosRef ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
-                            <p className='p-label-form'>Apellidos: </p>
-                            <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className={apellidosRef ? 'form-control form-control-error' : 'form-control'} />
+                            <p className='p-label-form'>Nombres: </p>
+                            <input type="text" value={nombres} onChange={(e) => setNombres(e.target.value)} className={nombresRef ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
@@ -479,6 +499,12 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                         <div className='div-form'>
                             <p className='p-label-form'> Teléfono: </p>
                             <input type="text" value={telefono} onChange={(e) => setTelefono(e.target.value)} className={telefonoRef ? 'form-control form-control-error' : 'form-control'} />
+                        </div>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <div className='div-form'>
+                            <p className='p-label-form'> Matricula inmobiliaria: </p>
+                            <input type="text" value={matriculaInmobiliaria} onChange={(e) => setMatriculaInmobiliaria(e.target.value)} className={matriculaInmobiliariaRef ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
                 </div>

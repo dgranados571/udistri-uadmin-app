@@ -202,7 +202,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                             <p className=''> {solicitud.solicitud.descripcion} </p>
                                                         </td>
                                                         <td className='td-info'>
-                                                            <div className='div-icons-table'>
+                                                            <div className='d-flex'>
                                                                 <button className='btn btn-link' onClick={() => detalleSolicitud(solicitud.solicitud.id_procesamiento)}>
                                                                     <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
                                                                 </button>

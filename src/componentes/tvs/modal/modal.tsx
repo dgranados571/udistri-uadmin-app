@@ -94,6 +94,10 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                                             <p className='p-label-form-text m-1'>Teléfono: </p>
                                             <p className='p-label-form m-1'>{propsModal.prop4} </p>
                                         </div>
+                                        <div className='div-info-item'>
+                                            <p className='p-label-form-text m-1'>Matrícula inmobiliaria: </p>
+                                            <p className='p-label-form m-1'>{propsModal.prop9} </p>
+                                        </div>
                                         <hr />
                                         <h4 >Archivos:</h4>
                                         <div className='div-info-item'>

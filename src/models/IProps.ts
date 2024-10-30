@@ -87,6 +87,7 @@ export interface IlPropsModal{
     prop6?: boolean;
     prop7?: boolean;
     prop8?: IBeneficiarios[];
+    prop9?: string;
 }
 
 export interface IMenuLateral {

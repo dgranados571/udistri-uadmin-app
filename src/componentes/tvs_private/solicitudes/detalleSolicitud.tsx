@@ -191,6 +191,17 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           </div>
           <div className="col-12 col-sm-12 col-md-6 col-lg-4" >
             <div className='div-form'>
+              <p className='p-label-form'>Matrícula inmobiliaria: </p>
+              {
+                showDetalleSolicitud ?
+                  <p> {detalleSolicitud.solicitud.matricula_inmobiliaria} </p>
+                  :
+                  'Cargando ...'
+              }
+            </div>
+          </div>          
+          <div className="col-12 col-sm-12 col-md-6 col-lg-8" >
+            <div className='div-form'>
               <p className='p-label-form'> Obseraciones: </p>
               {
                 showDetalleSolicitud ?

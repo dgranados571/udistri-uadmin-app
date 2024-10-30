@@ -6,7 +6,7 @@ import MenuLateralComponent from '../tvs/headerLateral/menuLateral'
 import UsuariosApp from '../tvs_private/usuarios/usuariosApp'
 import Solicitudes from '../tvs_private/solicitudes/solicitudes'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faCog } from '@fortawesome/free-solid-svg-icons'
 
 const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargando }) => {
 
@@ -26,6 +26,12 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
             className: 'div-item-menu',
             iconMenu: faUsers,
             controlVista: 'VISTA_USUARIOS_APP'
+        },
+        {
+            nombreItem: 'Configuración',
+            className: 'div-item-menu',
+            iconMenu: faCog,
+            controlVista: 'VISTA_CONFIGURACION'
         },
         {
             nombreItem: 'Mi cuenta',

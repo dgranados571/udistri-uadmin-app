@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { IMenuLateral, IZoneRootProps } from '../../models/IProps'
-import { faHome, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faUsers, faCog } from '@fortawesome/free-solid-svg-icons'
 import MenuLateralComponent from '../tvs/headerLateral/menuLateral'
 import UsuariosApp from '../tvs_private/usuarios/usuariosApp'
 import Solicitudes from '../tvs_private/solicitudes/solicitudes'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargando }) => {
 
@@ -23,6 +25,12 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
             className: 'div-item-menu',
             iconMenu: faUsers,
             controlVista: 'VISTA_USUARIOS_APP'
+        },
+        {
+            nombreItem: 'Configuración',
+            className: 'div-item-menu',
+            iconMenu: faCog,
+            controlVista: 'VISTA_CONFIGURACION'
         }
     ])
 
@@ -45,9 +53,9 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                 return (
                     <UsuariosApp toast={toast} setCargando={setCargando} />
                 )
-            case 'VISTA_MI_CUENTA':
+            case 'VISTA_CONFIGURACION':
                 return (
-                    <>MI CUENTA</>
+                    <>VISTA_CONFIGURACION</>
                 )
             default:
                 return (
@@ -64,12 +72,19 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                         <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
+                        <div className='div-dashboard-header-busqueda-padre'>
+                            <div className="div-dashboard-header-busqueda">
+                                <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                <input type="text" className='form-control form-imput-busqueda' placeholder='Buscador' autoComplete='off' />
+                                <div className="div-cantidad-carrito"></div>
+                            </div>
+                        </div>
                         <div className="div-dashboard-content">
                             {
                                 validateRedirect()
                             }
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </>
