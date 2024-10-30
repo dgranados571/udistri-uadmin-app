@@ -242,15 +242,15 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             showDetalleSolicitud ?
               detalleSolicitud.beneficiariosList.map((beneficiario: any, i: number) => {
                 return (
-                  <>
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-3" >
-                      <div className="d-flex justify-content-start align-items-center">
+                  <>                  
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-5 my-3" >
+                      <div className="d-flex justify-content-start align-items-start">
                         <p className='p-label-form m-0'> Nombre: </p>
                         <p className='mx-2'> {beneficiario.nombresBen} </p>
                       </div>
                       {
                         beneficiario.registraDocPdf ?                          
-                            <div className="d-flex align-items-baseline">
+                            <div className="d-flex justify-content-between">
                               <p className='p-label-form m-0'>Documento No: </p>
                               <p className='mx-2'>{beneficiario.identificacionBen} </p>
                               <button className='btn btn-link bottom-custom-link p-0' onClick={() => consultaPDF(beneficiario.documentosDto.urlTxt)}>
@@ -258,19 +258,20 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
                               </button>
                             </div>
                           :
-                          <div className="d-flex align-items-baseline">
+                          <div className="d-flex justify-content-between">
                             <p className='p-label-form m-0'>Documento No: </p>
                             <p> {beneficiario.identificacionBen} </p>
                           </div>
                       }
                     </div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-1" ></div>
                   </>
-
                 )
               })
               :
               'Cargando ...'
           }
+          
         </div>
       </div>
       {
