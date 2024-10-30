@@ -63,6 +63,10 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
                 return (
                     <>MI CUENTA</>
                 )
+            case 'VISTA_CONFIGURACION':
+                return (
+                    <>VISTA_CONFIGURACION</>
+                )
             default:
                 return (
                     <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta='ROOT'></Solicitudes>
@@ -90,7 +94,7 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
                                 validateRedirect()
                             }
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </>
