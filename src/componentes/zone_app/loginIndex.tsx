@@ -14,7 +14,7 @@ const LoginIndex: React.FC<IZoneProps> = () => {
 
     return (
         <>
-            <ToastContainer autoClose={4000} hideProgressBar={true} />
+            <ToastContainer autoClose={8000} hideProgressBar={true} />
             <div className='div-container'>
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-12 col-lg-4" >

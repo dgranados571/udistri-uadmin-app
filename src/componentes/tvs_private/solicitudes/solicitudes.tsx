@@ -23,7 +23,9 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
             case 'DETALLE_SOLICITUD':
                 return (
                     <>
-                        <DetalleSolicitud toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} idDetalleSolicitud={idDetalleSolicitud}></DetalleSolicitud>
+                        <div className='div-style-form'>
+                            <DetalleSolicitud toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} idDetalleSolicitud={idDetalleSolicitud}></DetalleSolicitud>
+                        </div>
                     </>
                 )
             default:

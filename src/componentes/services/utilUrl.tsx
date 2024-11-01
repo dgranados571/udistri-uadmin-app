@@ -83,6 +83,30 @@ export const UtilUrl = () => {
       urlEntornoLambda,
       pathLambda: '/service/uadmin/controlRegistroBeneficiarios',
       urlDominioServidor
+    },
+    14: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/registrarDepartamento',
+      urlDominioServidor
+    },
+    15: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/getDepartamentos',
+      urlDominioServidor
+    },
+    16: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/registrarMunicipio',
+      urlDominioServidor
+    },
+    17: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/getMunicipios',
+      urlDominioServidor
     }
   }
 

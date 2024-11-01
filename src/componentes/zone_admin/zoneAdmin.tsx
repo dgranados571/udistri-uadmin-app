@@ -6,6 +6,7 @@ import UsuariosApp from '../tvs_private/usuarios/usuariosApp'
 import Solicitudes from '../tvs_private/solicitudes/solicitudes'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
+import Configuracion from '../tvs_private/configuracion/configuracion'
 
 const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargando }) => {
 
@@ -55,7 +56,7 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                 )
             case 'VISTA_CONFIGURACION':
                 return (
-                    <>VISTA_CONFIGURACION</>
+                    <Configuracion toast={toast} setCargando={setCargando} />
                 )
             default:
                 return (
@@ -84,7 +85,7 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                                 validateRedirect()
                             }
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </>

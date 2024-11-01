@@ -77,7 +77,10 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                             <div className='div-content-element-padre'>
                                 <div className='div-content-element'>
                                     <div className='div-size-content'>
-                                        <h4>{propsModal.titulo}</h4>
+                                        <div className="d-flex justify-content-between">
+                                            <h4>{propsModal.titulo}</h4>
+                                            <p className='p-label-form m-1'>{propsModal.prop10} </p>
+                                        </div>
                                         <div className='div-info-item'>
                                             <p className='p-label-form-text m-1'>Nombre: </p>
                                             <p className='p-label-form m-1'>{propsModal.prop1} </p>

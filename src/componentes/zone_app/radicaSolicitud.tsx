@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './radicaSolicitud.css'
-import { IBeneficiarios, IGenericResponse, IlPropsModal, IRadicaSolicitudProps } from '../../models/IProps';
+import { IBeneficiarios, IGenericResponse, IListasSelect, IlPropsModal, IRadicaSolicitudProps } from '../../models/IProps';
 import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AuthServices } from '../services/authServices';
@@ -21,6 +21,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const [correo, setCorreo] = useState('');
     const [telefono, setTelefono] = useState('');
     const [matriculaInmobiliaria, setMatriculaInmobiliaria] = useState('');
+    const [municipio, setMunicipio] = useState('INITIAL');
     const [descripcion, setDescripcion] = useState('');
 
     const [nombresRef, setNombresRef] = useState(false);
@@ -29,6 +30,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const [correoRef, setCorreoRef] = useState(false);
     const [telefonoRef, setTelefonoRef] = useState(false);
     const [matriculaInmobiliariaRef, setMatriculaInmobiliariaRef] = useState(false);
+    const [municipioRef, setMunicipioRef] = useState(false);
 
     const [file1, setFile1] = useState('');
     const [file2, setFile2] = useState('');
@@ -55,6 +57,11 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const fileBeneficiarioInputRef = useRef<HTMLInputElement | null>(null);
 
     const [beneficiariosList, setBeneficiariosList] = useState<IBeneficiarios[]>([]);
+    const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
+
+    useEffect(() => {
+        obtieneMunicipioService()
+    }, [])
 
     const eventInputFiles = (e: React.ChangeEvent<HTMLInputElement>, fileProperty: string) => {
         const fileList = e.target.files;
@@ -271,6 +278,11 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             formValidado.push('matriculaInmobiliaria');
             setMatriculaInmobiliariaRef(true)
         }
+        setMunicipioRef(false)
+        if(municipio === 'INITIAL'){
+            formValidado.push('municipio');
+            setMunicipioRef(true)
+        }
         if (file1Ref || file2Ref || file3Ref) {
             formValidado.push('Error de archivos');
         }
@@ -294,7 +306,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             prop6: file2.length > 0 ? true : false,
             prop7: file3.length > 0 ? true : false,
             prop8: beneficiariosList,
-            prop9: matriculaInmobiliaria
+            prop9: matriculaInmobiliaria,
+            prop10: municipio
         })
         setModalOpen(true)
         setTipoModal('MODAL_RESUMEN_1')
@@ -324,6 +337,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         setNumeroIdentificacion('')
         setCorreo('')
         setTelefono('')
+        setMatriculaInmobiliaria('')
+        setMunicipio('INITIAL')
         setDescripcion('')
         setFile1('')
         setFile2('')
@@ -342,6 +357,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         setNumeroIdentificacionRef(false)
         setCorreoRef(false)
         setTelefonoRef(false)
+        setMatriculaInmobiliariaRef(false)
+        setMunicipioRef(false)
         resetFormBeneficiario()
         setActivaBeneficiarios(false)
     }
@@ -358,7 +375,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             "telefono": telefono,
             "descripcion": descripcion,
             "beneficiariosList": beneficiariosList,
-            "matriculaInmobiliaria": matriculaInmobiliaria
+            "matriculaInmobiliaria": matriculaInmobiliaria,
+            "municipio": municipio
         }
         const authServices = new AuthServices();
         try {
@@ -447,6 +465,30 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         }
     }
 
+    const obtieneMunicipioService = async () => {
+        setCargando(true);
+        const authServices = new AuthServices();
+        try {
+            const response: IGenericResponse = await authServices.requestPost({}, 17);
+            if (response.estado) {
+                const arrayDepartamentos = Array.from(response.objeto);
+                const municipiosList = arrayDepartamentos.map((element: any) => {
+                    return {
+                        value: `${element.departamentoMunObj.id_departamento}:${element.municipioObj.id_municipio}`,
+                        label: `${element.municipioObj.municipio} -- ${element.departamentoMunObj.id_departamento}.${element.municipioObj.id_municipio}`
+                    }
+                })
+                setMunicipiosList(municipiosList)
+            } else {
+                toast(response.mensaje)
+            }
+            setCargando(false);
+        } catch (error) {
+            toast('No es posible consultar la información, contacte al administrador')
+            setCargando(false)
+        }
+    }
+
     const labelArchivosCargados = (prop: boolean) => {
         if (prop) {
             return (
@@ -507,6 +549,21 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                             <input type="text" value={matriculaInmobiliaria} onChange={(e) => setMatriculaInmobiliaria(e.target.value)} className={matriculaInmobiliariaRef ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                        <p className='p-label-form'> Municipio: </p>
+                        <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={municipioRef ? 'form-control form-control-error' : 'form-control'} >
+                            <option value="INITIAL">Selecione</option>
+                            {
+                                municipiosList.map((key, i) => {
+                                    return (
+                                        <option key={i} value={key.value}>{key.label}</option>
+                                    )
+                                })
+                            }
+                        </select>
+                    </div>
+                </div>
                 </div>
                 <hr />
                 <h4 >Cargar documentación</h4>

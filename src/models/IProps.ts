@@ -56,6 +56,11 @@ export interface IDetalleSolicitudProps {
     idDetalleSolicitud: string
 }
 
+export interface IConfiguracionProps {
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 export interface IPaginadorProps {
     elementsPaginacion: any
     setElementsPaginacion: React.Dispatch<React.SetStateAction<any>>;
@@ -88,6 +93,7 @@ export interface IlPropsModal{
     prop7?: boolean;
     prop8?: IBeneficiarios[];
     prop9?: string;
+    prop10?: string;
 }
 
 export interface IMenuLateral {
