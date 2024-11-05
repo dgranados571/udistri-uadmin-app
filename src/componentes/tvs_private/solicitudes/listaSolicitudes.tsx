@@ -23,28 +23,12 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
     const [idSolicitudEliminar, setIdSolicitudEliminar] = useState('')
 
     useEffect(() => {
-        solicitudesPorZonaConsulta()
+        consultaInformacionSolicitudesApp();
     }, [paginacionSolicitudes.paginaActual])
 
     const detalleSolicitud = (idSolicitud: string) => {
         setIdDetalleSolicitud(idSolicitud)
         setRedirectSolicitudes('DETALLE_SOLICITUD')
-    }
-
-    const solicitudesPorZonaConsulta = () => {
-        switch (zonaConsulta) {
-            case 'ROOT':
-                consultaInformacionSolicitudesApp();
-                break
-            case 'ZONE_ADMIN':
-                consultaInformacionSolicitudesApp();
-                break
-            case 'ZoneJefeDependencia':
-                consultaInformacionSolicitudesPorZonaApp('');
-                break
-            default:
-                break
-        }
     }
 
     const eliminarSolicitud = (idSolicitud: string) => {
@@ -68,7 +52,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
             }
             try {
                 const response: IGenericResponse = await authServices.requestPost(body, 11);
-                solicitudesPorZonaConsulta()
+                consultaInformacionSolicitudesApp()
                 toast(response.mensaje)
                 setCargando(false)
             } catch (error) {
@@ -77,36 +61,6 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
             }
         } else {
             toast('No es posible eliminar la solicitud, contacte al administrador')
-        }
-    }
-
-    const consultaInformacionSolicitudesPorZonaApp = async (nombreOperacion: string) => {
-        const usuarioSession = sessionStorage.getItem('usuarioApp');
-        if (!!usuarioSession) {
-            setCargando(true)
-            const usuarioLocalStorage = JSON.parse(usuarioSession);
-            const authServices = new AuthServices();
-            const body = {
-                "nombreOperacion": nombreOperacion,
-                "resultadoOperacion": usuarioLocalStorage.usuario
-            }
-            try {
-                const response: IGenericResponse = await authServices.requestPost(body, 9);
-                setSolicitudesList(response.objeto.listaSolicitudesAppDto)
-                setPaginacionSolicitudes({
-                    ...paginacionSolicitudes,
-                    totalElementos: response.objeto.totalElementos
-                })
-                if (!response.estado) {
-                    toast(response.mensaje)
-                }
-                setCargando(false)
-            } catch (error) {
-                toast('No es posible consultar la información, contacte al administrador')
-                setCargando(false)
-            }
-        } else {
-            toast('No es posible consultar la información, contacte al administrador')
         }
     }
 
@@ -207,7 +161,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                                     <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
                                                                 </button>
                                                                 {
-                                                                    zonaConsulta === 'ROOT' ?
+                                                                    zonaConsulta === 'USUARIO_ROOT' ?
                                                                         <button className='btn btn-link' onClick={() => eliminarSolicitud(solicitud.solicitud.id_procesamiento)}>
                                                                             <FontAwesomeIcon className='icons-table' icon={faTrash} />
                                                                         </button>

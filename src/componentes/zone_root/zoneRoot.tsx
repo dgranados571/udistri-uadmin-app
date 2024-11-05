@@ -70,7 +70,7 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
                 )
             default:
                 return (
-                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta='ROOT'></Solicitudes>
+                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROOT'></Solicitudes>
                 )
         }
     }

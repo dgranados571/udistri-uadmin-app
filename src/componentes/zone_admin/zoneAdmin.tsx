@@ -60,7 +60,7 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                 )
             default:
                 return (
-                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta='ZONE_ADMIN'></Solicitudes>
+                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta='ROLE_ADMIN'></Solicitudes>
                 )
         }
     }

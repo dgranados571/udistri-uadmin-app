@@ -3,59 +3,17 @@ import './solicitudes.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilePdf, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 
-import { IDetalleSolicitudProps, IGenericResponse, IListasSelect } from '../../../models/IProps'
+import { IDetalleSolicitudProps, IGenericResponse } from '../../../models/IProps'
 import { AuthServices } from '../../services/authServices'
 
 const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud }) => {
-
-  const [usuariosPrecontractual, setUsuariosPrecontractual] = useState<IListasSelect[]>([]);
-
-  const [usuarioPrecontractual, setUsuarioPrecontractual] = useState('');
-
+  
   const [detalleSolicitud, setDetalleSolicitud] = useState<any>({});
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false);
 
   useEffect(() => {
-    consultaInformacionGeneral();
-  }, [])
-
-  const consultaInformacionGeneral = () => {
-    consultaInformacionUsuarios('');
     consultaDetalleSolicitud();
-  }
-
-  const consultaInformacionUsuarios = async (role: string) => {
-    const usuarioSession = sessionStorage.getItem('usuarioApp');
-    if (!!usuarioSession) {
-      setCargando(true)
-      const usuarioLocalStorage = JSON.parse(usuarioSession);
-      const authServices = new AuthServices();
-      const body = {
-        "usuarioApp": usuarioLocalStorage.usuario,
-        "role": role,
-      }
-      try {
-        const response: IGenericResponse = await authServices.requestPost(body, 4);
-        if (response.estado) {
-          const arrayUsers = Array.from(response.objeto);
-          const usersPorRole = arrayUsers.map((element: any) => {
-            return {
-              value: element.usuario,
-              label: element.nombre + ' ' + element.apellidos
-            }
-          })
-          setUsuariosPrecontractual(usersPorRole);
-        } else {
-          toast(response.mensaje);
-        }
-      } catch (error) {
-        toast('No es posible consultar la información, contacte al administrador');
-        setCargando(false);
-      }
-    } else {
-      toast('No es posible consultar la información, contacte al administrador');
-    }
-  }
+  }, [])
 
   const consultaDetalleSolicitud = async () => {
     const usuarioSession = sessionStorage.getItem('usuarioApp');
@@ -120,7 +78,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   return (
     <>
       <div className='div-titulo-ds'>
-        <h4 className='titulo-form'>Detalle de la solicitud {idDetalleSolicitud}: </h4>
+        <h4 className='titulo-form'>Detalle de la solicitud {detalleSolicitud.idDefSolicitud}: </h4>
         <button className='btn btn-link bottom-custom-link' onClick={() => setRedirectSolicitudes('LISTA_SOLICITUDES')}>
           <FontAwesomeIcon className='icons-table-ds' icon={faRotateLeft} /><p>Volver</p>
         </button>
@@ -201,7 +159,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
         </div>
         <div className="col-12 col-sm-12 col-md-6 col-lg-8" >
           <div className='div-form'>
-            <p className='p-label-form'> Obseraciones: </p>
+            <p className='p-label-form'> Observaciones: </p>
             {
               showDetalleSolicitud ?
                 <p> {detalleSolicitud.solicitud.descripcion} </p>
@@ -279,16 +237,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
                 <div className="row">
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form'>
-                      <p className='mb-3'>Para continuar con la gestión de la presente solicitud, es requerido que le asigne un analista del área Precontractual:</p>
-                      <select value={usuarioPrecontractual} onChange={(e) => setUsuarioPrecontractual(e.target.value)} className='form-control' >
-                        {
-                          usuariosPrecontractual.map((key, i) => {
-                            return (
-                              <option key={i} value={key.value}>{key.label}</option>
-                            )
-                          })
-                        }
-                      </select>
+                      <p className='mb-3'>Para continuar con la gestión de la presente solicitud, es requerido que le asigne un analista del área Precontractual:</p>                      
                     </div>
                   </div>
                   <div className="col-12 col-sm-12 col-md-6 col-lg-6" >

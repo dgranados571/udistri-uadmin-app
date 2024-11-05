@@ -57,7 +57,7 @@ export const UtilUrl = () => {
     9: {
       urlEntornoLocal,
       urlEntornoLambda,
-      pathLambda: '/service/uadmin/getSolicitudesPorUsuarioApp',
+      pathLambda: '',
       urlDominioServidor
     },
     10: {
