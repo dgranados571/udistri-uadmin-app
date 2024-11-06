@@ -5,6 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { IZoneProps } from '../../models/IProps';
 import ZoneAdmin from '../zone_admin/zoneAdmin';
+import ZoneRole1 from '../zone_role_1/zoneRole1';
+import ZoneRole2 from '../zone_role_2/zoneRole2';
 
 const ZonePrivate: React.FC<IZoneProps> = () => {
 
@@ -47,11 +49,11 @@ const ZonePrivate: React.FC<IZoneProps> = () => {
                 )
             case 'ROLE_1':
                 return (
-                    <>ZONA ROLE 1</>
+                    <ZoneRole1 infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} />
                 )
             case 'ROLE_2':
                 return (
-                    <>ZONA ROLE 2</>
+                    <ZoneRole2 infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} />
                 )
             default:
                 return (

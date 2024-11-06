@@ -78,7 +78,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   return (
     <>
       <div className='div-titulo-ds'>
-        <h4 className='titulo-form'>Detalle de la solicitud {detalleSolicitud.idDefSolicitud}: </h4>
+        <h4 className='titulo-form'>Detalle de la solicitud: {detalleSolicitud.idDefSolicitud} </h4>
         <button className='btn btn-link bottom-custom-link' onClick={() => setRedirectSolicitudes('LISTA_SOLICITUDES')}>
           <FontAwesomeIcon className='icons-table-ds' icon={faRotateLeft} /><p>Volver</p>
         </button>
