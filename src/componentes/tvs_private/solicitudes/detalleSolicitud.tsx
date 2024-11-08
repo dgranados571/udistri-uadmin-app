@@ -5,9 +5,10 @@ import { faFilePdf, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 
 import { IDetalleSolicitudProps, IGenericResponse } from '../../../models/IProps'
 import { AuthServices } from '../../services/authServices'
+import GestionSolicitud from './gestionSolicitud'
 
 const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud }) => {
-  
+
   const [detalleSolicitud, setDetalleSolicitud] = useState<any>({});
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false);
 
@@ -231,24 +232,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       </div>
       {
         showDetalleSolicitud ?
-          detalleSolicitud.detalleSolicitudVista.modulo2 ?
-            <>
-              <hr />              
-                <div className="row">
-                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                    <div className='div-form'>
-                      <p className='mb-3'>Para continuar con la gestión de la presente solicitud, es requerido que le asigne un analista del área Precontractual:</p>                      
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                    <div className='div-buttom-registra '>
-                      <button className='btn btn-primary bottom-custom' >Asignar</button>
-                    </div>
-                  </div>
-                </div>
-            </>
-            :
-            <></>
+          <GestionSolicitud useSelect={detalleSolicitud.gestionSolicitud} />
           :
           'Cargando ...'
       }

@@ -132,3 +132,8 @@ export interface IBeneficiarios {
     documentoPdfBen: string
     registraDocPdf: boolean
 }
+
+export interface IGestionSolicitudProps {
+    useSelect: string,
+}
+

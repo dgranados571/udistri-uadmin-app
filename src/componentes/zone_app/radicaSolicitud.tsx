@@ -553,7 +553,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                     <div className='div-form'>
                         <p className='p-label-form'> Municipio: </p>
                         <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={municipioRef ? 'form-control form-control-error' : 'form-control'} >
-                            <option value="INITIAL">Selecione</option>
+                            <option value="INITIAL">Seleccione</option>
                             {
                                 municipiosList.map((key, i) => {
                                     return (
