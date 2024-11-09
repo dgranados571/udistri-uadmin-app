@@ -11,6 +11,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
 
   const [detalleSolicitud, setDetalleSolicitud] = useState<any>({});
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false);
+  const [eventosList, setEventosList] = useState<any[]>([])
 
   useEffect(() => {
     consultaDetalleSolicitud();
@@ -30,6 +31,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
         const response: IGenericResponse = await authServices.requestPost(body, 10);
         if (response.estado) {
           setDetalleSolicitud(response.objeto);
+          setEventosList(response.objeto.eventosSolicitud)
           setShowDetalleSolicitud(true);
         } else {
           toast(response.mensaje);
@@ -232,10 +234,53 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       </div>
       {
         showDetalleSolicitud ?
-          <GestionSolicitud useSelect={detalleSolicitud.gestionSolicitud} />
+          <GestionSolicitud toast={toast} setCargando={setCargando} useSelect={detalleSolicitud.gestionSolicitud} idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} />
           :
           'Cargando ...'
       }
+      <hr />
+      <div className='div-style-form-whit-table'>
+        <table className='table-info'>
+          <thead>
+            <tr>
+              <td className='td-info'>
+                <p className='p-label-form'>Fecha</p>
+              </td>
+              <td className='td-info'>
+                <p className='p-label-form'>Resultado de operación</p>
+              </td>
+              <td className='td-info'>
+                <p className='p-label-form'>Observaciones</p>
+              </td>
+              <td className='td-info'>
+                <p className='p-label-form'>Usuario</p>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              eventosList.map((evento: any, key: number) => {
+                return (
+                  <tr key={key} className='tr-tablet'>
+                    <td className='td-info'>
+                      <p className=''>{evento.fecha_evento}</p>
+                    </td>
+                    <td className='td-info'>
+                      <p className=''>{evento.resultado_operacion}</p>
+                    </td>
+                    <td className='td-info'>
+                      <p className=''>{evento.observaciones}</p>
+                    </td>
+                    <td className='td-info'>
+                      <p className=''>{evento.userApp}</p>
+                    </td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>
+      </div>
     </>
   )
 }

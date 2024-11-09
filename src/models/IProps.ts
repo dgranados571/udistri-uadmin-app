@@ -39,6 +39,7 @@ export interface IZoneRoleProps {
 export interface IUsuariosAppProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+    zonaConsulta: string
 }
 
 export interface ISolicitudesProps {
@@ -134,6 +135,10 @@ export interface IBeneficiarios {
 }
 
 export interface IGestionSolicitudProps {
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
     useSelect: string,
+    idDetalleSolicitud: string
+    setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
 }
 

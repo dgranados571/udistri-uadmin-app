@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRotateLeft, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faRotateLeft, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../../tvs/modal/modal'
 import { IGenericResponse, IlPropsModal, IUsuariosAppProps } from '../../../models/IProps'
 import { AuthServices } from '../../services/authServices'
 
-const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
+const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando, zonaConsulta }) => {
 
     const [modal, setModal] = useState(false)
     const [propsModal, setPropsModal] = useState<IlPropsModal>({
@@ -14,6 +14,7 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
     })
 
     const [modoEditar, setModoEditar] = useState(false)
+    const [modoELiminar, setModoELiminar] = useState(false)
     const [userEdita, setUserEdita] = useState<any>({})
 
     const [usuariosList, setUsuariosList] = useState([])
@@ -48,6 +49,10 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
         {
             titulo: 'Actualizar usuario de aplicación',
             descripcion: 'Esta seguro de actualizar la información del usuario: '
+        },
+        {
+            titulo: 'Eliminar usuario de aplicación',
+            descripcion: 'Esta seguro de eliminar al usuario: '
         },
     ]
 
@@ -121,7 +126,6 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
         setCorreo('')
         setRole('INITIAL')
         setUsuario('')
-
         setNombresRef(false)
         setApellidosRef(false)
         setTipoIdentificacionRef(false)
@@ -185,10 +189,20 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
         setModal(true)
     }
 
+    const eliminarUsuario = (usuario: any) => {
+        setModoELiminar(true)
+        modalMensajes[2].descripcion = modalMensajes[1].descripcion + usuario.usuario
+        setPropsModal(modalMensajes[2])
+        setModal(true)
+        setUserEdita(usuario)
+    }
+
     const modalSi = () => {
         setModal(false)
         if (modoEditar) {
             enviaEdicionUsuarioApp()
+        } else if (modoELiminar) {
+            eliminaUsuarioService()
         } else {
             actualizaContraseniaUser()
         }
@@ -196,7 +210,36 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
 
     const modalNo = () => {
         setModal(false)
+        setModoELiminar(false)
         setUserEdita({})
+    }
+
+    const eliminaUsuarioService = async () => {
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
+            setCargando(true)
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
+            const authServices = new AuthServices();
+            const body = {
+                "usuarioElimina": userEdita,
+                "usuarioApp": usuarioLocalStorage.usuario,
+            }
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 9);                
+                if (response.estado) {
+                    toast(response.mensaje)
+                    setModoELiminar(false)
+                    setUserEdita({})
+                    consultaInformacionUsuariosApp()                    
+                }
+                setCargando(false);
+            } catch (error) {
+                toast('No es posible eliminar la información, contacte al administrador')
+                setCargando(false)
+            }
+        } else {
+            toast('No es posible eliminar la información, contacte al administrador')
+        }
     }
 
     const actualizaContraseniaUser = async () => {
@@ -431,7 +474,7 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
                 </div>
             </div>
             <div className='div-style-form mt-3'>
-                <h4>Usuarios de aplicación</h4>               
+                <h4>Usuarios de aplicación</h4>
                 <div className="row">
                     {
                         usuariosList.map((usuario: any) => {
@@ -481,6 +524,14 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando }) => {
                                             <button className='btn btn-link' onClick={() => actualizaUsuario(usuario)}>
                                                 <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
                                             </button>
+                                            {
+                                                zonaConsulta === 'USUARIO_ROOT' ?
+                                                    <button className='btn btn-link' onClick={() => eliminarUsuario(usuario)}>
+                                                        <FontAwesomeIcon className='icons-table' icon={faTrash} />
+                                                    </button>
+                                                    :
+                                                    <></>
+                                            }
                                         </div>
                                     </div>
                                 </>

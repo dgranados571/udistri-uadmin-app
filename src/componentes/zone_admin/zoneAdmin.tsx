@@ -52,7 +52,7 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
         switch (redirect) {
             case 'VISTA_USUARIOS_APP':
                 return (
-                    <UsuariosApp toast={toast} setCargando={setCargando} />
+                    <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta='ROLE_ADMIN'/>
                 )
             case 'VISTA_CONFIGURACION':
                 return (

@@ -217,7 +217,7 @@ const Configuracion: React.FC<IConfiguracionProps> = ({ toast, setCargando }) =>
                     <div className='div-form'>
                         <p className='p-label-form'> Departamento al que pertenece: </p>
                         <select value={departamentoMun} onChange={(e) => setDepartamentoMun(e.target.value)} className={departamentoMunRef ? 'form-control form-control-error' : 'form-control'} >
-                            <option value="INITIAL">Seleccione</option>
+                            <option value='INITIAL'>Seleccione</option>
                             {
                                 departamentosList.map((key, i) => {
                                     return (

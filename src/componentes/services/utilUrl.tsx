@@ -57,7 +57,7 @@ export const UtilUrl = () => {
     9: {
       urlEntornoLocal,
       urlEntornoLambda,
-      pathLambda: '',
+      pathLambda: '/service/uadmin/eliminaUsuarioApp',
       urlDominioServidor
     },
     10: {
@@ -106,6 +106,12 @@ export const UtilUrl = () => {
       urlEntornoLocal,
       urlEntornoLambda,
       pathLambda: '/service/uadmin/getMunicipios',
+      urlDominioServidor
+    },
+    18: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/ejecutaEventoyEstado',
       urlDominioServidor
     }
   }

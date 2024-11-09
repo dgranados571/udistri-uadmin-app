@@ -58,7 +58,7 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
         switch (redirect) {
             case 'VISTA_USUARIOS_APP':
                 return (
-                    <UsuariosApp toast={toast} setCargando={setCargando} />
+                    <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROOT'/>
                 )
             case 'VISTA_MI_CUENTA':
                 return (
