@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './radicaSolicitud.css'
 import { IBeneficiarios, IGenericResponse, IListasSelect, IlPropsModal, IRadicaSolicitudProps } from '../../models/IProps';
-import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AuthServices } from '../services/authServices';
 import Modal from '../tvs/modal/modal';
+import Beneficiarios from '../tvs_private/beneficiarios/beneficiarios';
 
 const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }) => {
 
@@ -45,17 +44,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const file3InputRef = useRef<HTMLInputElement | null>(null);
 
     const [activaBeneficiarios, setActivaBeneficiarios] = useState(false);
-
-    const [nombresBeneficiario, setNombresBeneficiario] = useState('');
-    const [numIdentificacionBeneficiario, setNumIdentificacionBeneficiario] = useState('');
-
-    const [nombresBeneficiarioRef, setNombresBeneficiarioRef] = useState(false);
-    const [numIdentificacionBeneficiarioRef, setNumIdentificacionBeneficiarioRef] = useState(false);
-
-    const [fileBeneficiario, setFileBeneficiario] = useState('');
-    const [fileBeneficiarioRef, setFileBeneficiarioRef] = useState(false);
-    const fileBeneficiarioInputRef = useRef<HTMLInputElement | null>(null);
-
     const [beneficiariosList, setBeneficiariosList] = useState<IBeneficiarios[]>([]);
     const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
 
@@ -157,95 +145,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         }
     }
 
-    const activaVistaBeneficiario = () => {
-        setActivaBeneficiarios(!activaBeneficiarios)
-        if (activaBeneficiarios) {
-            resetFormBeneficiario()
-        }
-    }
-
-    const resetFormBeneficiario = () => {
-        setNombresBeneficiario('')
-        setNumIdentificacionBeneficiario('')
-        setFileBeneficiario('')
-        if (fileBeneficiarioInputRef.current) {
-            fileBeneficiarioInputRef.current.value = ""
-        }
-        setNombresBeneficiarioRef(false)
-        setNumIdentificacionBeneficiarioRef(false)
-        setFileBeneficiarioRef(false)
-        setBeneficiariosList([])
-    }
-
-    const eventInputFilesBeneficiario = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const fileList = e.target.files;
-        setFileBeneficiarioRef(false)
-        if (fileList) {
-            const file = fileList[0];
-            if (file) {
-                if (file.type === "application/pdf") {
-                    let valorFinalMB = 0;
-                    for (let step = 0; step < fileList.length; step++) {
-                        var fileSizeMB = fileList[step].size / 1024 / 1024;
-                        valorFinalMB = valorFinalMB + fileSizeMB;
-                    }
-                    if (valorFinalMB < 10) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            if (reader.result && typeof reader.result === 'string') {
-                                setFileBeneficiario(reader.result)
-                            }
-                        };
-                        reader.readAsDataURL(file);
-                    } else {
-                        toast("*El archivo cargado supera los 10 MB")
-                        setFileBeneficiarioRef(true)
-                    }
-                } else {
-                    toast("El archivo cargado no está en formato PDF")
-                    setFileBeneficiarioRef(true)
-                }
-            } else {
-                setFileBeneficiario('')
-            }
-        }
-    }
-
-    const agregaBeneficiarioAction = () => {
-        let formValidado = [];
-        setNombresBeneficiarioRef(false)
-        if (nombresBeneficiario.length === 0) {
-            setNombresBeneficiarioRef(true)
-            formValidado.push('Nombres Beneficiario');
-        }
-        setNumIdentificacionBeneficiarioRef(false)
-        if (numIdentificacionBeneficiario.length === 0) {
-            setNumIdentificacionBeneficiarioRef(true)
-            formValidado.push('Num Identificacion Beneficiario');
-        }
-        if (fileBeneficiarioRef) {
-            formValidado.push('Error de archivos');
-        }
-        if (formValidado.length === 0) {
-            const benneficiarioObj: IBeneficiarios = {
-                nombresBen: nombresBeneficiario,
-                identificacionBen: numIdentificacionBeneficiario,
-                documentoPdfBen: fileBeneficiario,
-                registraDocPdf: fileBeneficiario.length > 0 ? true : false
-            }
-            setBeneficiariosList([...beneficiariosList, benneficiarioObj])
-            setNombresBeneficiario('')
-            setNumIdentificacionBeneficiario('')
-            setFileBeneficiario('')
-            if (fileBeneficiarioInputRef.current) {
-                fileBeneficiarioInputRef.current.value = ""
-            }
-        } else {
-            formValidado.splice(0, formValidado.length)
-            toast('Errores en el formulario de registro, valide la información')
-        }
-    }
-
     const registraSolicitud = () => {
         let formValidado = [];
         setNombresRef(false)
@@ -279,7 +178,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             setMatriculaInmobiliariaRef(true)
         }
         setMunicipioRef(false)
-        if(municipio === 'INITIAL'){
+        if (municipio === 'INITIAL') {
             formValidado.push('municipio');
             setMunicipioRef(true)
         }
@@ -359,7 +258,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         setTelefonoRef(false)
         setMatriculaInmobiliariaRef(false)
         setMunicipioRef(false)
-        resetFormBeneficiario()
         setActivaBeneficiarios(false)
     }
 
@@ -430,7 +328,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                 await cargaDocumentosService(beneficiariosList[i].documentoPdfBen, pathBeneficiarioX, `DOCUMENTO beneficiario: ${beneficiariosList[i].nombresBen}`, idProcesamiento)
             }
         }
-
     }
 
     const cargaDocumentosService = async (fileBase64: string, fileName: string, idArchivo: string, idProcesamiento: string) => {
@@ -489,24 +386,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         }
     }
 
-    const labelArchivosCargados = (prop: boolean) => {
-        if (prop) {
-            return (
-                <div className='div-info-item-ben'>
-                    <p className=''>Si registra documento</p>
-                    <FontAwesomeIcon icon={faCheckCircle} className='icon-modal-info-true' />
-                </div>
-            )
-        } else {
-            return (
-                <div className='div-info-item-ben'>
-                    <p className=''>No registra documento</p>
-                    <FontAwesomeIcon icon={faXmarkCircle} className='icon-modal-info-false' />
-                </div>
-            )
-        }
-    }
-
     return (
         <>
             <div className='div-style-form mt-3'>
@@ -550,20 +429,20 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                    <div className='div-form'>
-                        <p className='p-label-form'> Municipio: </p>
-                        <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={municipioRef ? 'form-control form-control-error' : 'form-control'} >
-                            <option value='INITIAL'>Seleccione</option>
-                            {
-                                municipiosList.map((key, i) => {
-                                    return (
-                                        <option key={i} value={key.value}>{key.label}</option>
-                                    )
-                                })
-                            }
-                        </select>
+                        <div className='div-form'>
+                            <p className='p-label-form'> Municipio: </p>
+                            <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={municipioRef ? 'form-control form-control-error' : 'form-control'} >
+                                <option value='INITIAL'>Seleccione</option>
+                                {
+                                    municipiosList.map((key, i) => {
+                                        return (
+                                            <option key={i} value={key.value}>{key.label}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div>
                     </div>
-                </div>
                 </div>
                 <hr />
                 <h4 >Cargar documentación</h4>
@@ -589,63 +468,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                     </div>
                 </div>
                 <hr />
-                <div className="div-info-beneficiarios">
-                    <h4 >La solicitud incluye beneficiarios?</h4>
-                    <div className={activaBeneficiarios ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVistaBeneficiario()} >
-                        <div className={activaBeneficiarios ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
-                    </div>
-                </div>
-                <div className={activaBeneficiarios ? "div-form-beneficiarios-active" : "div-form-beneficiarios"} >
-                    <div className="row">
-                        <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
-                            <div className='div-form'>
-                                <p className='p-label-form'>Nombres del beneficiario: </p>
-                                <input type="text" value={nombresBeneficiario} onChange={(e) => setNombresBeneficiario(e.target.value)} className={nombresBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
-                            </div>
-                        </div>
-                        <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
-                            <div className='div-form'>
-                                <p className='p-label-form'>Cédula beneficiario: </p>
-                                <input type="text" value={numIdentificacionBeneficiario} onChange={(e) => setNumIdentificacionBeneficiario(e.target.value)} className={numIdentificacionBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
-                            </div>
-                        </div>
-                        <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
-                            <div className='div-form'>
-                                <p className='p-label-form'> Aqui el documento: </p>
-                                <input ref={fileBeneficiarioInputRef} type="file" onChange={(e) => eventInputFilesBeneficiario(e)} className={fileBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
-                            </div>
-                        </div>
-                        <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
-                            <div className='div-bottom-custom'>
-                                <button className='btn btn-primary bottom-custom' onClick={() => { agregaBeneficiarioAction() }} >Agregar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="">
-                    <div className="row">
-                        {
-                            beneficiariosList.map((benficiario, ind) => {
-                                return (
-                                    <div className="col-12 col-sm-12 col-md-12 col-lg-4" >
-                                        <div className='p-label-form' >
-                                            <p>Beneficiario {ind + 1}</p>
-                                        </div>
-                                        <div className='' >
-                                            <p>{benficiario.nombresBen}</p>
-                                        </div>
-                                        <div className='' >
-                                            {benficiario.identificacionBen}
-                                        </div>
-                                        {
-                                            labelArchivosCargados(benficiario.documentoPdfBen.length > 0)
-                                        }
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                </div>
+                <Beneficiarios idProcesamiento='' toast={toast} setCargando={setCargando} setBeneficiariosList={setBeneficiariosList} beneficiariosList={beneficiariosList} setActivaBeneficiarios={setActivaBeneficiarios} activaBeneficiarios={activaBeneficiarios} zonaConsulta = 'ZONA_PUBLICA' />
                 <hr />
                 <p>De requerirlo, agregue las observaciones nescesarias a la solicitud:</p>
                 <div className="row">
@@ -661,7 +484,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
             {
                 modalOpen ?
                     <Modal tipoModal={tipoModal} modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />

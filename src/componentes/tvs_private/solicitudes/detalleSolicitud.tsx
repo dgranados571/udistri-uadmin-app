@@ -3,19 +3,24 @@ import './solicitudes.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilePdf, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 
-import { IDetalleSolicitudProps, IGenericResponse } from '../../../models/IProps'
+import { IBeneficiarios, IDetalleSolicitudProps, IGenericResponse } from '../../../models/IProps'
 import { AuthServices } from '../../services/authServices'
 import GestionSolicitud from './gestionSolicitud'
+import Beneficiarios from '../beneficiarios/beneficiarios'
 
-const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud }) => {
+const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta }) => {
 
   const [detalleSolicitud, setDetalleSolicitud] = useState<any>({});
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false);
+  const [activaBeneficiarios, setActivaBeneficiarios] = useState(false);
+  const [beneficiariosList, setBeneficiariosList] = useState<IBeneficiarios[]>([]);
   const [eventosList, setEventosList] = useState<any[]>([])
 
   useEffect(() => {
-    consultaDetalleSolicitud();
-  }, [])
+    if (!activaBeneficiarios) {
+      consultaDetalleSolicitud();
+    }
+  }, [activaBeneficiarios])
 
   const consultaDetalleSolicitud = async () => {
     const usuarioSession = sessionStorage.getItem('usuarioApp');
@@ -30,6 +35,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       try {
         const response: IGenericResponse = await authServices.requestPost(body, 10);
         if (response.estado) {
+          setBeneficiariosList(response.objeto.beneficiariosList)
           setDetalleSolicitud(response.objeto);
           setEventosList(response.objeto.eventosSolicitud)
           setShowDetalleSolicitud(true);
@@ -194,50 +200,9 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       </div>
       <hr />
       <div className="row mt-0">
-        <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
-          <h4 className='titulo-form'>Beneficiarios de la solicitud: </h4>
-          <p className='mb-1'>A continuación, encontrará el detalle de los beneficiarios asociados a la solicitud: </p>
-        </div>
-        {
-          showDetalleSolicitud ?
-            detalleSolicitud.beneficiariosList.map((beneficiario: any, i: number) => {
-              return (
-                <>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-5 my-3" >
-                    <div className="d-flex justify-content-start align-items-start">
-                      <p className='p-label-form m-0'> Nombre: </p>
-                      <p className='mx-2'> {beneficiario.nombresBen} </p>
-                    </div>
-                    {
-                      beneficiario.registraDocPdf ?
-                        <div className="d-flex justify-content-between">
-                          <p className='p-label-form m-0'>Documento No: </p>
-                          <p className='mx-2'>{beneficiario.identificacionBen} </p>
-                          <button className='btn btn-link bottom-custom-link p-0' onClick={() => consultaPDF(beneficiario.documentosDto.urlTxt)}>
-                            <FontAwesomeIcon className='icons-table-ds' icon={faFilePdf} />
-                          </button>
-                        </div>
-                        :
-                        <div className="d-flex justify-content-between">
-                          <p className='p-label-form m-0'>Documento No: </p>
-                          <p> {beneficiario.identificacionBen} </p>
-                        </div>
-                    }
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-12 col-lg-1" ></div>
-                </>
-              )
-            })
-            :
-            'Cargando ...'
-        }
+        <Beneficiarios idProcesamiento={idDetalleSolicitud} toast={toast} setCargando={setCargando} setBeneficiariosList={setBeneficiariosList} beneficiariosList={beneficiariosList} setActivaBeneficiarios={setActivaBeneficiarios} activaBeneficiarios={activaBeneficiarios} zonaConsulta={zonaConsulta} />
       </div>
-      {
-        showDetalleSolicitud ?
-          <GestionSolicitud toast={toast} setCargando={setCargando} useSelect={detalleSolicitud.gestionSolicitud} idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} />
-          :
-          'Cargando ...'
-      }
+      <GestionSolicitud toast={toast} setCargando={setCargando} useSelect={detalleSolicitud.gestionSolicitud} idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} />
       <hr />
       <div className='div-style-form-whit-table'>
         <table className='table-info'>

@@ -8,6 +8,17 @@ export interface IGenericResponse {
 
 export interface IZoneProps { }
 
+export interface IBeneficiariosProps {
+    idProcesamiento: string
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+    setBeneficiariosList: React.Dispatch<React.SetStateAction<IBeneficiarios[]>>;
+    beneficiariosList: IBeneficiarios[]
+    setActivaBeneficiarios: React.Dispatch<React.SetStateAction<boolean>>;
+    activaBeneficiarios: boolean
+    zonaConsulta: string
+}
+
 export interface IRadicaSolicitudProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,7 +71,8 @@ export interface IDetalleSolicitudProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
     setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
-    idDetalleSolicitud: string
+    idDetalleSolicitud: string,
+    zonaConsulta: string
 }
 
 export interface IConfiguracionProps {
@@ -131,7 +143,10 @@ export interface IBeneficiarios {
     nombresBen: string,
     identificacionBen: string,
     documentoPdfBen: string
-    registraDocPdf: boolean
+    registraDocPdf: boolean,
+    documentosDto?: {
+        urlTxt: string
+    }
 }
 
 export interface IGestionSolicitudProps {
