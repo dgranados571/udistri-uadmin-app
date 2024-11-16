@@ -126,9 +126,9 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                 if (fileBeneficiario.length > 0) {
                     await cargaDocumentos(idProcesamiento, response.objeto)
                 }
-                resetFormBeneficiarioAction()
+                resetFormBeneficiarioAction()                           
+                await consultaBeneficiarioService()
                 setActivaBeneficiarios(false)
-                consultaBeneficiarioService()
             }
             setCargando(false)
         } catch (error) {
