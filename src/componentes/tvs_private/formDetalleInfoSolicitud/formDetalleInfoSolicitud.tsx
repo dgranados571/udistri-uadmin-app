@@ -2,7 +2,8 @@ import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'rea
 import { FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps, IGenericResponse, IListasSelect } from '../../../models/IProps';
 import { AuthServices } from '../../services/authServices';
 
-const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps> = ({ toast, setCargando }, ref) => {
+const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps> = ({ toast, setCargando,
+    zonaConsulta, setEditaDetalleSolicitud, solicitud }, ref) => {
 
     useImperativeHandle(ref, () => ({
         funcionHandle1() {
@@ -15,6 +16,9 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
 
     useEffect(() => {
         obtieneMunicipioService()
+        if (zonaConsulta !== 'ZONA_PUBLICA') {
+            setValuesForm()
+        }
     }, [])
 
     const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
@@ -105,6 +109,16 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
         setMunicipioRef(false)
     }
 
+    const setValuesForm = () => {
+        setNombres(solicitud.nombres)
+        setApellidos(solicitud.apellidos)
+        setNumeroIdentificacion(solicitud.numero_identificacion)
+        setCorreo(solicitud.correo)
+        setTelefono(solicitud.telefono)
+        setMatriculaInmobiliaria(solicitud.matricula_inmobiliaria)
+        setMunicipio(solicitud.departamento_municipio)
+    }
+
     const obtieneMunicipioService = async () => {
         setCargando(true);
         const authServices = new AuthServices();
@@ -180,6 +194,19 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
                             })
                         }
                     </select>
+                </div>
+            </div>
+            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                <div className='div-bottom-custom'>
+                    {
+                        zonaConsulta !== 'ZONA_PUBLICA' ?
+                            <>
+                                <button className='btn btn-secondary bottom-custom-secondary' onClick={() => setEditaDetalleSolicitud(false)} >Cancelar</button>
+                                <button className='btn btn-primary bottom-custom' onClick={() => { }} >Actualizar</button>
+                            </>
+                            :
+                            <></>
+                    }
                 </div>
             </div>
         </div>

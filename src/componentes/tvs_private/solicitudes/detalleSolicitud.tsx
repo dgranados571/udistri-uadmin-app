@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './solicitudes.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilePdf, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 
-import { IBeneficiarios, IDetalleSolicitudProps, IGenericResponse } from '../../../models/IProps'
+import { FormDetalleInfoSolicitudHandle, IBeneficiarios, IDetalleSolicitudProps, IGenericResponse } from '../../../models/IProps'
 import { AuthServices } from '../../services/authServices'
 import GestionSolicitud from './gestionSolicitud'
 import Beneficiarios from '../beneficiarios/beneficiarios'
 import DetalleInfoSolicitud from '../detalleInfoSolicitud/detalleInfoSolicitud'
+import FormDetalleInfoSolicitud from '../formDetalleInfoSolicitud/formDetalleInfoSolicitud'
 
 const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta }) => {
 
   const [detalleSolicitud, setDetalleSolicitud] = useState<any>({});
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false);
+  const [editaDetalleSolicitud, setEditaDetalleSolicitud] = useState(false);
   const [activaBeneficiarios, setActivaBeneficiarios] = useState(false);
   const [beneficiariosList, setBeneficiariosList] = useState<IBeneficiarios[]>([]);
   const [eventosList, setEventosList] = useState<any[]>([])
+
+  const formDetalleInfoSolicitudRef = useRef<FormDetalleInfoSolicitudHandle>(null);
 
   useEffect(() => {
     consultaDetalleSolicitud();
@@ -88,12 +92,20 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       <div className='div-titulo-ds'>
         <h4 className='titulo-form'>Detalle de la solicitud: {detalleSolicitud.idDefSolicitud} </h4>
         <button className='btn btn-link bottom-custom-link' onClick={() => setRedirectSolicitudes('LISTA_SOLICITUDES')}>
-          <FontAwesomeIcon className='icons-table-ds' icon={faRotateLeft} /><p>Volver</p>
+          <FontAwesomeIcon className='icons-table-ds' icon={faRotateLeft} /><p className='margin-icons'>Volver</p>
         </button>
       </div>
       {
         showDetalleSolicitud ?
-          <DetalleInfoSolicitud toast={toast} setCargando={setCargando} idDetalleSolicitud={idDetalleSolicitud} solicitud={detalleSolicitud.solicitud} zonaConsulta={zonaConsulta} />
+          <>
+            {
+              editaDetalleSolicitud ?
+                <FormDetalleInfoSolicitud ref={formDetalleInfoSolicitudRef} toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta}
+                  setEditaDetalleSolicitud={setEditaDetalleSolicitud} solicitud={detalleSolicitud.solicitud} />
+                :
+                <DetalleInfoSolicitud idDetalleSolicitud={idDetalleSolicitud} solicitud={detalleSolicitud.solicitud} setEditaDetalleSolicitud={setEditaDetalleSolicitud} />
+            }
+          </>
           :
           'Cargando ...'
       }
@@ -119,7 +131,12 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       </div>
       <hr />
       <div className="row mt-0">
-        <Beneficiarios idProcesamiento={idDetalleSolicitud} toast={toast} setCargando={setCargando} setBeneficiariosList={setBeneficiariosList} beneficiariosList={beneficiariosList} setActivaBeneficiarios={setActivaBeneficiarios} activaBeneficiarios={activaBeneficiarios} zonaConsulta={zonaConsulta} />
+        <Beneficiarios idProcesamiento={idDetalleSolicitud} toast={toast} setCargando={setCargando}
+          setBeneficiariosList={setBeneficiariosList}
+          beneficiariosList={beneficiariosList}
+          setActivaBeneficiarios={setActivaBeneficiarios}
+          activaBeneficiarios={activaBeneficiarios}
+          zonaConsulta={zonaConsulta} />
       </div>
       <GestionSolicitud toast={toast} setCargando={setCargando} useSelect={detalleSolicitud.gestionSolicitud} idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} />
       <hr />

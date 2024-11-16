@@ -4,7 +4,8 @@ import { faCheckCircle, faXmarkCircle, faFilePdf, faTrash } from '@fortawesome/f
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AuthServices } from '../../services/authServices';
 
-const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, setCargando, setBeneficiariosList, beneficiariosList, setActivaBeneficiarios, activaBeneficiarios, zonaConsulta }) => {
+const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, setCargando,
+    setBeneficiariosList, beneficiariosList, setActivaBeneficiarios, activaBeneficiarios, zonaConsulta }) => {
 
     const [nombresBeneficiario, setNombresBeneficiario] = useState('');
     const [numIdentificacionBeneficiario, setNumIdentificacionBeneficiario] = useState('');

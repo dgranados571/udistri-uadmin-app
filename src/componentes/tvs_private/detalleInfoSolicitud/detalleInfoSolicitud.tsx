@@ -1,7 +1,9 @@
 import React from 'react'
 import { IDetalleInfoSolicitudProps } from '../../../models/IProps'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
-const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({toast, setCargando, idDetalleSolicitud, solicitud, zonaConsulta }) => {
+const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({ idDetalleSolicitud, solicitud, setEditaDetalleSolicitud }) => {
     return (
         <div className="row">
             <div className="col-12 col-sm-12 col-md-6 col-lg-4" >
@@ -46,10 +48,18 @@ const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({toast, setC
                     <p> {solicitud.matricula_inmobiliaria} </p>
                 </div>
             </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-8" >
+            <div className="col-12 col-sm-12 col-md-6 col-lg-5" >
                 <div className='div-form'>
                     <p className='p-label-form'> Observaciones: </p>
                     <p> {solicitud.descripcion} </p>
+                </div>
+            </div>
+            <div className="col-12 col-sm-12 col-md-6 col-lg-3" >
+                <div className='div-titulo-ds'>
+                    <h4 className='titulo-form'></h4>
+                    <button className='btn btn-link bottom-custom-link' onClick={()=> setEditaDetalleSolicitud(true)} >
+                        <FontAwesomeIcon className='icons-table-ds' icon={faPenToSquare} /><p className='margin-icons'>Editar</p>
+                    </button>
                 </div>
             </div>
         </div>

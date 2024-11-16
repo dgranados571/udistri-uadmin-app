@@ -13,3 +13,16 @@
     color: orange;
     margin: 0px 0px 0px 8px;
 }
+
+.margin-icons {
+    margin: 0px;
+}
+
+@media (min-width: 760px) {}
+
+@media (min-width: 1025px) {
+    
+    .margin-icons {
+        margin: 0px 5px;
+    }
+}
