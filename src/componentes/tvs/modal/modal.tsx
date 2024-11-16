@@ -83,7 +83,7 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                                         </div>
                                         <div className='div-info-item'>
                                             <p className='p-label-form-text m-1'>Nombre: </p>
-                                            <p className='p-label-form m-1'>{propsModal.prop1} </p>
+                                            <p className='p-label-form m-1'>{propsModal.prop0} {propsModal.prop1} </p>
                                         </div>
                                         <div className='div-info-item'>
                                             <p className='p-label-form-text m-1'>No documento: </p>

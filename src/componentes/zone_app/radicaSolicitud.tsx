@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './radicaSolicitud.css'
-import { FormDetalleInfoSolicitudHandle, IBeneficiarios, IGenericResponse, IListasSelect, IlPropsModal, IRadicaSolicitudProps } from '../../models/IProps';
+import { FormDetalleInfoSolicitudHandle, IBeneficiarios, IGenericResponse, IlPropsModal, IRadicaSolicitudProps } from '../../models/IProps';
 import { AuthServices } from '../services/authServices';
 import Modal from '../tvs/modal/modal';
 import Beneficiarios from '../tvs_private/beneficiarios/beneficiarios';
@@ -16,7 +16,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     })
 
     const [descripcion, setDescripcion] = useState('');
-    const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
 
     const [file1, setFile1] = useState('');
     const [file2, setFile2] = useState('');
@@ -34,10 +33,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const [activaBeneficiarios, setActivaBeneficiarios] = useState(false);
     const [beneficiariosList, setBeneficiariosList] = useState<IBeneficiarios[]>([]);
-
-    useEffect(() => {
-        obtieneMunicipioService()
-    }, [])
 
     const eventInputFiles = (e: React.ChangeEvent<HTMLInputElement>, fileProperty: string) => {
         const fileList = e.target.files;
@@ -135,10 +130,10 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const registraSolicitud = () => {
         let formValidado = [];
-        let validaForm = false
+        let validaForm = null;
         if (formDetalleInfoSolicitudRef.current) {
             validaForm = formDetalleInfoSolicitudRef.current.funcionHandle1()
-            if(!validaForm){
+            if (!validaForm) {
                 formValidado.push('Error formulario');
             }
         } else {
@@ -148,25 +143,27 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             formValidado.push('Error de archivos');
         }
         if (formValidado.length === 0) {
-            enviaRegistroSolicitud()
+            setPropsModal({
+                titulo: 'Resumen de la radicación:',
+                descripcion: '',
+                prop0: validaForm.prop0,
+                prop1: validaForm.prop1,
+                prop2: validaForm.prop2,
+                prop3: validaForm.prop3,
+                prop4: validaForm.prop4,
+                prop5: file1.length > 0 ? true : false,
+                prop6: file2.length > 0 ? true : false,
+                prop7: file3.length > 0 ? true : false,
+                prop8: beneficiariosList,
+                prop9: validaForm.prop9,
+                prop10: validaForm.prop10,
+            })
+            setModalOpen(true)
+            setTipoModal('MODAL_RESUMEN_1')
         } else {
             formValidado.splice(0, formValidado.length)
             toast('Errores en el formulario de registro, valide la información')
         }
-    }
-
-    const enviaRegistroSolicitud = () => {
-        setPropsModal({
-            ...propsModal,
-            titulo: 'Resumen de la radicación:',
-            descripcion: '',
-            prop5: file1.length > 0 ? true : false,
-            prop6: file2.length > 0 ? true : false,
-            prop7: file3.length > 0 ? true : false,
-            prop8: beneficiariosList,
-        })
-        setModalOpen(true)
-        setTipoModal('MODAL_RESUMEN_1')
     }
 
     const confirmaRadicacionSolicitud = () => {
@@ -190,7 +187,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const resetForm = () => {
         if (formDetalleInfoSolicitudRef.current) {
             formDetalleInfoSolicitudRef.current.funcionHandle2()
-        }            
+        }
         setDescripcion('')
         setFile1('')
         setFile2('')
@@ -208,20 +205,19 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     }
 
     const enviaRegistroSolicitudService = async () => {
-        /*
         setModalOpen(false)
         setTipoModal('')
         setCargando(true)
         const body = {
-            "nombres": nombres,
-            "apellidos": apellidos,
-            "numeroIdentificacion": numeroIdentificacion,
-            "correo": correo,
-            "telefono": telefono,
+            "nombres": propsModal.prop0,
+            "apellidos": propsModal.prop1,
+            "numeroIdentificacion": propsModal.prop2,
+            "correo": propsModal.prop3,
+            "telefono": propsModal.prop4,
             "descripcion": descripcion,
             "beneficiariosList": beneficiariosList,
-            "matriculaInmobiliaria": matriculaInmobiliaria,
-            "municipio": municipio
+            "matriculaInmobiliaria": propsModal.prop9,
+            "municipio": propsModal.prop10
         }
         const authServices = new AuthServices();
         try {
@@ -238,7 +234,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         } catch (error) {
             toast('No es posible crear la solicitud, contacte al administrador')
             setCargando(false)
-        }*/
+        }
     }
 
     const erroRadicacionSolicitud = (descripcionError: string) => {
@@ -309,36 +305,12 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         }
     }
 
-    const obtieneMunicipioService = async () => {
-        setCargando(true);
-        const authServices = new AuthServices();
-        try {
-            const response: IGenericResponse = await authServices.requestPost({}, 17);
-            if (response.estado) {
-                const arrayDepartamentos = Array.from(response.objeto);
-                const municipiosList = arrayDepartamentos.map((element: any) => {
-                    return {
-                        value: `${element.departamentoMunObj.id_departamento}:${element.municipioObj.id_municipio}`,
-                        label: `${element.municipioObj.municipio} -- ${element.departamentoMunObj.id_departamento}.${element.municipioObj.id_municipio}`
-                    }
-                })
-                setMunicipiosList(municipiosList)
-            } else {
-                toast(response.mensaje)
-            }
-            setCargando(false);
-        } catch (error) {
-            toast('No es posible consultar la información, contacte al administrador')
-            setCargando(false)
-        }
-    }
-
     return (
         <>
             <div className='div-style-form mt-3'>
                 <h4 >Información del aspirante</h4>
                 <p>A continuación, ingresa la información del titular de la solicitud:</p>
-                <FormDetalleInfoSolicitud ref={formDetalleInfoSolicitudRef} toast={toast} setCargando={setCargando} municipiosList={municipiosList} setPropsModal={setPropsModal} />
+                <FormDetalleInfoSolicitud ref={formDetalleInfoSolicitudRef} toast={toast} setCargando={setCargando} />
                 <hr />
                 <h4 >Cargar documentación</h4>
                 <p>Adjunte la documentación del titular unicamente en formato PDF.</p>
@@ -386,7 +358,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                     :
                     <></>
             }
-
         </>
     )
 }

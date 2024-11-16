@@ -25,16 +25,13 @@ export interface IRadicaSolicitudProps {
 }
 
 export interface FormDetalleInfoSolicitudHandle { 
-    funcionHandle1: () => boolean;
+    funcionHandle1: () => any;
     funcionHandle2: () => void; 
-    funcionHandle3: () => void;
 }
 
 export interface FormDetalleInfoSolicitudProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
-    municipiosList: IListasSelect[];
-    setPropsModal: React.Dispatch<React.SetStateAction<IlPropsModal>>;
 }
 
 export interface ILoginProps {
@@ -124,6 +121,7 @@ export interface IModalProps {
 export interface IlPropsModal{
     titulo: string,
     descripcion: string,
+    prop0?: string;
     prop1?: string;
     prop2?: string;
     prop3?: string;

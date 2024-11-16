@@ -91,7 +91,12 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           <FontAwesomeIcon className='icons-table-ds' icon={faRotateLeft} /><p>Volver</p>
         </button>
       </div>
-      <DetalleInfoSolicitud toast={toast} setCargando={setCargando} idDetalleSolicitud={idDetalleSolicitud} solicitud={detalleSolicitud.solicitud} zonaConsulta={zonaConsulta} />
+      {
+        showDetalleSolicitud ?
+          <DetalleInfoSolicitud toast={toast} setCargando={setCargando} idDetalleSolicitud={idDetalleSolicitud} solicitud={detalleSolicitud.solicitud} zonaConsulta={zonaConsulta} />
+          :
+          'Cargando ...'
+      }
       <hr />
       <div className="row mt-4">
         <div className="col-12 col-sm-12 col-md-12 col-lg-12" >

@@ -1,8 +1,8 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps } from '../../../models/IProps';
+import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
+import { FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps, IGenericResponse, IListasSelect } from '../../../models/IProps';
+import { AuthServices } from '../../services/authServices';
 
-const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps> = ({
-    toast, setCargando, municipiosList, setPropsModal }, ref) => {
+const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps> = ({ toast, setCargando }, ref) => {
 
     useImperativeHandle(ref, () => ({
         funcionHandle1() {
@@ -10,11 +10,14 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
         },
         funcionHandle2() {
             resetForm()
-        },
-        funcionHandle3() {            
         }
-
     }));
+
+    useEffect(() => {
+        obtieneMunicipioService()
+    }, [])
+
+    const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
 
     const [nombres, setNombres] = useState('');
     const [apellidos, setApellidos] = useState('');
@@ -70,20 +73,18 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
             setMunicipioRef(true)
         }
         if (formValidado.length === 0) {
-            setPropsModal({
-                titulo: 'Resumen de la radicación:',
-                descripcion: '',
-                prop1: `${nombres} ${apellidos}`,
+            return {
+                prop0: `${nombres}`,
+                prop1: `${apellidos}`,
                 prop2: numeroIdentificacion,
                 prop3: correo,
                 prop4: telefono,
                 prop9: matriculaInmobiliaria,
                 prop10: municipio
-            })
-            return true
+            }
         } else {
             formValidado.splice(0, formValidado.length)
-            return false
+            return null
         }
     }
 
@@ -102,6 +103,30 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
         setTelefonoRef(false)
         setMatriculaInmobiliariaRef(false)
         setMunicipioRef(false)
+    }
+
+    const obtieneMunicipioService = async () => {
+        setCargando(true);
+        const authServices = new AuthServices();
+        try {
+            const response: IGenericResponse = await authServices.requestPost({}, 17);
+            if (response.estado) {
+                const arrayDepartamentos = Array.from(response.objeto);
+                const municipiosList = arrayDepartamentos.map((element: any) => {
+                    return {
+                        value: `${element.departamentoMunObj.id_departamento}:${element.municipioObj.id_municipio}`,
+                        label: `${element.municipioObj.municipio} -- ${element.departamentoMunObj.id_departamento}.${element.municipioObj.id_municipio}`
+                    }
+                })
+                setMunicipiosList(municipiosList)
+            } else {
+                toast(response.mensaje)
+            }
+            setCargando(false);
+        } catch (error) {
+            toast('No es posible consultar la información, contacte al administrador')
+            setCargando(false)
+        }
     }
 
     return (
