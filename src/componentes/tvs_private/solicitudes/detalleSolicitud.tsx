@@ -7,6 +7,7 @@ import { IBeneficiarios, IDetalleSolicitudProps, IGenericResponse } from '../../
 import { AuthServices } from '../../services/authServices'
 import GestionSolicitud from './gestionSolicitud'
 import Beneficiarios from '../beneficiarios/beneficiarios'
+import DetalleInfoSolicitud from '../detalleInfoSolicitud/detalleInfoSolicitud'
 
 const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta }) => {
 
@@ -90,92 +91,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           <FontAwesomeIcon className='icons-table-ds' icon={faRotateLeft} /><p>Volver</p>
         </button>
       </div>
-      <div className="row">
-        <div className="col-12 col-sm-12 col-md-6 col-lg-4" >
-          <div className='div-form'>
-            <p className='p-label-form'> ID Solictud: </p>
-            <p> {idDetalleSolicitud} </p>
-          </div>
-        </div>
-        <div className="col-12 col-sm-12 col-md-6 col-lg-4" >
-          <div className='div-form'>
-            <p className='p-label-form'> Fecha de radicación: </p>
-            {
-              showDetalleSolicitud ?
-                <p> {detalleSolicitud.solicitud.fecha_registro} </p>
-
-                :
-                'Cargando ...'
-            }
-          </div>
-        </div>
-        <div className="col-12 col-sm-12 col-md-6 col-lg-4" >
-          <div className='div-form'>
-            <p className='p-label-form'> Nombres: </p>
-            {
-              showDetalleSolicitud ?
-                <p> {detalleSolicitud.solicitud.nombres + ' ' + detalleSolicitud.solicitud.apellidos} </p>
-                :
-                'Cargando ...'
-            }
-          </div>
-        </div>
-        <div className="col-12 col-sm-12 col-md-6 col-lg-4" >
-          <div className='div-form'>
-            <p className='p-label-form'> No. Identificación: </p>
-            {
-              showDetalleSolicitud ?
-                <p> {detalleSolicitud.solicitud.numero_identificacion} </p>
-                :
-                'Cargando ...'
-            }
-          </div>
-        </div>
-        <div className="col-12 col-sm-12 col-md-6 col-lg-4" >
-          <div className='div-form'>
-            <p className='p-label-form'>Correo:</p>
-            {
-              showDetalleSolicitud ?
-                <p> {detalleSolicitud.solicitud.correo} </p>
-                :
-                'Cargando ...'
-            }
-          </div>
-        </div>
-        <div className="col-12 col-sm-12 col-md-6 col-lg-4" >
-          <div className='div-form'>
-            <p className='p-label-form'>Teléfono: </p>
-            {
-              showDetalleSolicitud ?
-                <p> {detalleSolicitud.solicitud.telefono} </p>
-                :
-                'Cargando ...'
-            }
-          </div>
-        </div>
-        <div className="col-12 col-sm-12 col-md-6 col-lg-4" >
-          <div className='div-form'>
-            <p className='p-label-form'>Matrícula inmobiliaria: </p>
-            {
-              showDetalleSolicitud ?
-                <p> {detalleSolicitud.solicitud.matricula_inmobiliaria} </p>
-                :
-                'Cargando ...'
-            }
-          </div>
-        </div>
-        <div className="col-12 col-sm-12 col-md-6 col-lg-8" >
-          <div className='div-form'>
-            <p className='p-label-form'> Observaciones: </p>
-            {
-              showDetalleSolicitud ?
-                <p> {detalleSolicitud.solicitud.descripcion} </p>
-                :
-                'Cargando ...'
-            }
-          </div>
-        </div>
-      </div>
+      <DetalleInfoSolicitud toast={toast} setCargando={setCargando} idDetalleSolicitud={idDetalleSolicitud} solicitud={detalleSolicitud.solicitud} zonaConsulta={zonaConsulta} />
       <hr />
       <div className="row mt-4">
         <div className="col-12 col-sm-12 col-md-12 col-lg-12" >

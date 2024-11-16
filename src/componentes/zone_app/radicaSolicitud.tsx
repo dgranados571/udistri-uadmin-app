@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './radicaSolicitud.css'
-import { IBeneficiarios, IGenericResponse, IListasSelect, IlPropsModal, IRadicaSolicitudProps } from '../../models/IProps';
+import { FormDetalleInfoSolicitudHandle, IBeneficiarios, IGenericResponse, IListasSelect, IlPropsModal, IRadicaSolicitudProps } from '../../models/IProps';
 import { AuthServices } from '../services/authServices';
 import Modal from '../tvs/modal/modal';
 import Beneficiarios from '../tvs_private/beneficiarios/beneficiarios';
+import FormDetalleInfoSolicitud from '../tvs_private/formDetalleInfoSolicitud/formDetalleInfoSolicitud';
 
 const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }) => {
 
@@ -14,22 +15,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         descripcion: '',
     })
 
-    const [nombres, setNombres] = useState('');
-    const [apellidos, setApellidos] = useState('');
-    const [numeroIdentificacion, setNumeroIdentificacion] = useState('');
-    const [correo, setCorreo] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [matriculaInmobiliaria, setMatriculaInmobiliaria] = useState('');
-    const [municipio, setMunicipio] = useState('INITIAL');
     const [descripcion, setDescripcion] = useState('');
-
-    const [nombresRef, setNombresRef] = useState(false);
-    const [apellidosRef, setApellidosRef] = useState(false);
-    const [numeroIdentificacionRef, setNumeroIdentificacionRef] = useState(false);
-    const [correoRef, setCorreoRef] = useState(false);
-    const [telefonoRef, setTelefonoRef] = useState(false);
-    const [matriculaInmobiliariaRef, setMatriculaInmobiliariaRef] = useState(false);
-    const [municipioRef, setMunicipioRef] = useState(false);
+    const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
 
     const [file1, setFile1] = useState('');
     const [file2, setFile2] = useState('');
@@ -39,13 +26,14 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const [file2Ref, setFile2Ref] = useState(false);
     const [file3Ref, setFile3Ref] = useState(false);
 
+    const formDetalleInfoSolicitudRef = useRef<FormDetalleInfoSolicitudHandle>(null);
+
     const file1InputRef = useRef<HTMLInputElement | null>(null);
     const file2InputRef = useRef<HTMLInputElement | null>(null);
     const file3InputRef = useRef<HTMLInputElement | null>(null);
 
     const [activaBeneficiarios, setActivaBeneficiarios] = useState(false);
     const [beneficiariosList, setBeneficiariosList] = useState<IBeneficiarios[]>([]);
-    const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
 
     useEffect(() => {
         obtieneMunicipioService()
@@ -147,40 +135,14 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const registraSolicitud = () => {
         let formValidado = [];
-        setNombresRef(false)
-        if (nombres.length === 0) {
-            formValidado.push('Nombres');
-            setNombresRef(true)
-        }
-        setApellidosRef(false)
-        if (apellidos.length === 0) {
-            formValidado.push('Apellidos');
-            setApellidosRef(true)
-        }
-        setNumeroIdentificacionRef(false)
-        if (numeroIdentificacion.length === 0) {
-            formValidado.push('Numero identificacion');
-            setNumeroIdentificacionRef(true)
-        }
-        setCorreoRef(false)
-        if (correo.length === 0) {
-            formValidado.push('correo');
-            setCorreoRef(true)
-        }
-        setTelefonoRef(false)
-        if (telefono.length === 0) {
-            formValidado.push('telefono');
-            setTelefonoRef(true)
-        }
-        setMatriculaInmobiliariaRef(false)
-        if (matriculaInmobiliaria.length === 0) {
-            formValidado.push('matriculaInmobiliaria');
-            setMatriculaInmobiliariaRef(true)
-        }
-        setMunicipioRef(false)
-        if (municipio === 'INITIAL') {
-            formValidado.push('municipio');
-            setMunicipioRef(true)
+        let validaForm = false
+        if (formDetalleInfoSolicitudRef.current) {
+            validaForm = formDetalleInfoSolicitudRef.current.funcionHandle1()
+            if(!validaForm){
+                formValidado.push('Error formulario');
+            }
+        } else {
+            formValidado.push('Error formulario');
         }
         if (file1Ref || file2Ref || file3Ref) {
             formValidado.push('Error de archivos');
@@ -195,18 +157,13 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
 
     const enviaRegistroSolicitud = () => {
         setPropsModal({
+            ...propsModal,
             titulo: 'Resumen de la radicación:',
             descripcion: '',
-            prop1: `${nombres} ${apellidos}`,
-            prop2: numeroIdentificacion,
-            prop3: correo,
-            prop4: telefono,
             prop5: file1.length > 0 ? true : false,
             prop6: file2.length > 0 ? true : false,
             prop7: file3.length > 0 ? true : false,
             prop8: beneficiariosList,
-            prop9: matriculaInmobiliaria,
-            prop10: municipio
         })
         setModalOpen(true)
         setTipoModal('MODAL_RESUMEN_1')
@@ -231,13 +188,9 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     }
 
     const resetForm = () => {
-        setNombres('')
-        setApellidos('')
-        setNumeroIdentificacion('')
-        setCorreo('')
-        setTelefono('')
-        setMatriculaInmobiliaria('')
-        setMunicipio('INITIAL')
+        if (formDetalleInfoSolicitudRef.current) {
+            formDetalleInfoSolicitudRef.current.funcionHandle2()
+        }            
         setDescripcion('')
         setFile1('')
         setFile2('')
@@ -251,17 +204,11 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         if (file3InputRef.current) {
             file3InputRef.current.value = "";
         }
-        setNombresRef(false)
-        setApellidosRef(false)
-        setNumeroIdentificacionRef(false)
-        setCorreoRef(false)
-        setTelefonoRef(false)
-        setMatriculaInmobiliariaRef(false)
-        setMunicipioRef(false)
         setActivaBeneficiarios(false)
     }
 
     const enviaRegistroSolicitudService = async () => {
+        /*
         setModalOpen(false)
         setTipoModal('')
         setCargando(true)
@@ -291,7 +238,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
         } catch (error) {
             toast('No es posible crear la solicitud, contacte al administrador')
             setCargando(false)
-        }
+        }*/
     }
 
     const erroRadicacionSolicitud = (descripcionError: string) => {
@@ -391,59 +338,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             <div className='div-style-form mt-3'>
                 <h4 >Información del aspirante</h4>
                 <p>A continuación, ingresa la información del titular de la solicitud:</p>
-                <div className="row">
-                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <div className='div-form'>
-                            <p className='p-label-form'>Apellidos: </p>
-                            <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className={apellidosRef ? 'form-control form-control-error' : 'form-control'} />
-                        </div>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <div className='div-form'>
-                            <p className='p-label-form'>Nombres: </p>
-                            <input type="text" value={nombres} onChange={(e) => setNombres(e.target.value)} className={nombresRef ? 'form-control form-control-error' : 'form-control'} />
-                        </div>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <div className='div-form'>
-                            <p className='p-label-form'>Cédula: </p>
-                            <input type="text" value={numeroIdentificacion} onChange={(e) => setNumeroIdentificacion(e.target.value)} className={numeroIdentificacionRef ? 'form-control form-control-error' : 'form-control'} />
-                        </div>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <div className='div-form'>
-                            <p className='p-label-form'>Correo: </p>
-                            <input type="text" value={correo} onChange={(e) => setCorreo(e.target.value)} className={correoRef ? 'form-control form-control-error' : 'form-control'} />
-                        </div>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <div className='div-form'>
-                            <p className='p-label-form'> Teléfono: </p>
-                            <input type="text" value={telefono} onChange={(e) => setTelefono(e.target.value)} className={telefonoRef ? 'form-control form-control-error' : 'form-control'} />
-                        </div>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <div className='div-form'>
-                            <p className='p-label-form'> Matricula inmobiliaria: </p>
-                            <input type="text" value={matriculaInmobiliaria} onChange={(e) => setMatriculaInmobiliaria(e.target.value)} className={matriculaInmobiliariaRef ? 'form-control form-control-error' : 'form-control'} />
-                        </div>
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <div className='div-form'>
-                            <p className='p-label-form'> Municipio: </p>
-                            <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={municipioRef ? 'form-control form-control-error' : 'form-control'} >
-                                <option value='INITIAL'>Seleccione</option>
-                                {
-                                    municipiosList.map((key, i) => {
-                                        return (
-                                            <option key={i} value={key.value}>{key.label}</option>
-                                        )
-                                    })
-                                }
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                <FormDetalleInfoSolicitud ref={formDetalleInfoSolicitudRef} toast={toast} setCargando={setCargando} municipiosList={municipiosList} setPropsModal={setPropsModal} />
                 <hr />
                 <h4 >Cargar documentación</h4>
                 <p>Adjunte la documentación del titular unicamente en formato PDF.</p>
@@ -468,7 +363,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                     </div>
                 </div>
                 <hr />
-                <Beneficiarios idProcesamiento='' toast={toast} setCargando={setCargando} setBeneficiariosList={setBeneficiariosList} beneficiariosList={beneficiariosList} setActivaBeneficiarios={setActivaBeneficiarios} activaBeneficiarios={activaBeneficiarios} zonaConsulta = 'ZONA_PUBLICA' />
+                <Beneficiarios idProcesamiento='' toast={toast} setCargando={setCargando} setBeneficiariosList={setBeneficiariosList} beneficiariosList={beneficiariosList} setActivaBeneficiarios={setActivaBeneficiarios} activaBeneficiarios={activaBeneficiarios} zonaConsulta='ZONA_PUBLICA' />
                 <hr />
                 <p>De requerirlo, agregue las observaciones nescesarias a la solicitud:</p>
                 <div className="row">

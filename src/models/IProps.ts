@@ -24,6 +24,19 @@ export interface IRadicaSolicitudProps {
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export interface FormDetalleInfoSolicitudHandle { 
+    funcionHandle1: () => boolean;
+    funcionHandle2: () => void; 
+    funcionHandle3: () => void;
+}
+
+export interface FormDetalleInfoSolicitudProps {
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+    municipiosList: IListasSelect[];
+    setPropsModal: React.Dispatch<React.SetStateAction<IlPropsModal>>;
+}
+
 export interface ILoginProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
@@ -72,6 +85,14 @@ export interface IDetalleSolicitudProps {
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
     setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
     idDetalleSolicitud: string,
+    zonaConsulta: string
+}
+
+export interface IDetalleInfoSolicitudProps {
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+    idDetalleSolicitud: string;
+    solicitud: any;
     zonaConsulta: string
 }
 
