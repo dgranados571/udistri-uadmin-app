@@ -127,6 +127,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                 }
                 resetFormBeneficiarioAction()
                 setActivaBeneficiarios(false)
+                consultaBeneficiarioService()
             }
             setCargando(false)
         } catch (error) {
@@ -135,12 +136,32 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
         }
     }
 
-    const cargaDocumentos = async (idProcesamiento: string, i: number) => {
-        const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/MODULO_BEN/${idProcesamiento}_${i}.txt`;
-        await cargaDocumentosService(fileBeneficiario, pathBeneficiarioX, `DOCUMENTO beneficiario: ${nombresBeneficiario}`, idProcesamiento)
+    const consultaBeneficiarioService = async () => {
+        setCargando(true);
+        const authServices = new AuthServices();
+        try {
+            const body = {
+                "idProcesamiento": idProcesamiento
+            }
+            const response: IGenericResponse = await authServices.requestPost(body, 21);
+            if (response.estado) {
+                setBeneficiariosList(response.objeto)
+            } else {
+                toast(response.mensaje);
+            }
+            setCargando(false);
+        } catch (error) {
+            toast('No es posible consultar la información, contacte al administrador');
+            setCargando(false);
+        }
     }
 
-    const cargaDocumentosService = async (fileBase64: string, fileName: string, idArchivo: string, idProcesamiento: string) => {
+    const cargaDocumentos = async (idProcesamiento: string, i: number) => {
+        const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/MODULO_BEN/${idProcesamiento}_${i}.txt`;
+        await cargaDocumentosService(fileBeneficiario, pathBeneficiarioX, `DOCUMENTO beneficiario: ${nombresBeneficiario}`)
+    }
+
+    const cargaDocumentosService = async (fileBase64: string, fileName: string, idArchivo: string) => {
         const authServices = new AuthServices();
         try {
             const response: IGenericResponse = await authServices.requestPostFile(fileBase64, fileName);
@@ -239,8 +260,28 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
         window.open(pdfBlobUrl, '_blank');
     };
 
-    const eliminarBeneficiarios = (beneficiario: IBeneficiarios) => {
+    const eliminarBeneficiarios = async (beneficiario: IBeneficiarios) => {
+        await eliminarBeneficiariosService(beneficiario)
+    }
 
+    const eliminarBeneficiariosService = async (beneficiario: IBeneficiarios) => {
+        setCargando(true);
+        const authServices = new AuthServices();
+        try {
+            const body = {
+                "idProcesamiento": idProcesamiento,
+                "beneficiariosDto": beneficiario
+            }
+            const response: IGenericResponse = await authServices.requestPost(body, 20);
+            toast(response.mensaje);
+            if (response.estado) {
+                setBeneficiariosList(response.objeto)
+            }
+            setCargando(false);
+        } catch (error) {
+            toast('No es posible consultar la información, contacte al administrador');
+            setCargando(false);
+        }
     }
 
     return (

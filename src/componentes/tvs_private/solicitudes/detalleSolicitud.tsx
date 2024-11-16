@@ -17,10 +17,8 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   const [eventosList, setEventosList] = useState<any[]>([])
 
   useEffect(() => {
-    if (!activaBeneficiarios) {
-      consultaDetalleSolicitud();
-    }
-  }, [activaBeneficiarios])
+    consultaDetalleSolicitud();
+  }, [])
 
   const consultaDetalleSolicitud = async () => {
     const usuarioSession = sessionStorage.getItem('usuarioApp');

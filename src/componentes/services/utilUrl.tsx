@@ -119,7 +119,20 @@ export const UtilUrl = () => {
       urlEntornoLambda,
       pathLambda: '/service/uadmin/registraBeneficiarioSolicitud',
       urlDominioServidor
+    },
+    20: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/eliminaBeneficiarioSolicitud',
+      urlDominioServidor
+    },
+    21: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/getBeneficiariosSolicitud',
+      urlDominioServidor
     }
+
   }
 
   return {
