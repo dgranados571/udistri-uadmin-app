@@ -46,7 +46,8 @@ export interface ILoginProps {
 export interface IZoneRootProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
-    infoMenuUsuario: IUsuarioSession
+    infoMenuUsuario: IUsuarioSession,
+    zonaConsulta: string
 }
 
 export interface IZoneAdminProps {
@@ -59,6 +60,7 @@ export interface IZoneRoleProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
     infoMenuUsuario: IUsuarioSession
+    zonaConsulta: string
 }
 
 export interface IUsuariosAppProps {
@@ -93,6 +95,7 @@ export interface IDetalleInfoSolicitudProps {
     idDetalleSolicitud: string;
     solicitud: any;
     setEditaDetalleSolicitud: React.Dispatch<React.SetStateAction<boolean>>;
+    zonaConsulta: string
 }
 
 export interface IConfiguracionProps {

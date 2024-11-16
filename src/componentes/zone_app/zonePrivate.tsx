@@ -41,19 +41,19 @@ const ZonePrivate: React.FC<IZoneProps> = () => {
         switch (redirectZone) {
             case 'USUARIO_ROOT':
                 return (
-                    <ZoneRoot infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} />
+                    <ZoneRoot infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROOT' />
                 )
             case 'ROLE_ADMIN':
                 return (
-                    <ZoneAdmin infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} />
+                    <ZoneAdmin infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} zonaConsulta='ROLE_ADMIN'/>
                 )
             case 'ROLE_1':
                 return (
-                    <ZoneRole1 infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} />
+                    <ZoneRole1 infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROLE_1' />
                 )
             case 'ROLE_2':
                 return (
-                    <ZoneRole2 infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} />
+                    <ZoneRole2 infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROLE_2' />
                 )
             default:
                 return (

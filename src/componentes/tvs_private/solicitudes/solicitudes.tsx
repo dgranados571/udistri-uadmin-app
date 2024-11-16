@@ -15,7 +15,10 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
                     <>
                         <div className='div-style-form'>
                             <h4>Solicitudes de aplicación</h4>
-                            <ListaSolicitudes toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} setIdDetalleSolicitud={setIdDetalleSolicitud} zonaConsulta={zonaConsulta}></ListaSolicitudes>
+                            <ListaSolicitudes toast={toast} setCargando={setCargando}
+                                setRedirectSolicitudes={setRedirectSolicitudes}
+                                setIdDetalleSolicitud={setIdDetalleSolicitud}
+                                zonaConsulta={zonaConsulta} />
                         </div>
 
                     </>
@@ -24,7 +27,10 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
                 return (
                     <>
                         <div className='div-style-form'>
-                            <DetalleSolicitud toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} idDetalleSolicitud={idDetalleSolicitud} zonaConsulta={zonaConsulta}></DetalleSolicitud>
+                            <DetalleSolicitud toast={toast} setCargando={setCargando}
+                                setRedirectSolicitudes={setRedirectSolicitudes}
+                                idDetalleSolicitud={idDetalleSolicitud}
+                                zonaConsulta={zonaConsulta} />
                         </div>
                     </>
                 )

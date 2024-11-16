@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faHome } from '@fortawesome/free-solid-svg-icons'
 import Solicitudes from '../tvs_private/solicitudes/solicitudes'
 
-const ZoneRole2: React.FC<IZoneRoleProps> = ({ infoMenuUsuario, toast, setCargando }) => {
+const ZoneRole2: React.FC<IZoneRoleProps> = ({ infoMenuUsuario, toast, setCargando, zonaConsulta }) => {
 
     const [openMenu, setOpenMenu] = useState(false);
 
@@ -37,10 +37,10 @@ const ZoneRole2: React.FC<IZoneRoleProps> = ({ infoMenuUsuario, toast, setCargan
             case 'VISTA_MI_CUENTA':
                 return (
                     <>MI CUENTA</>
-                )            
+                )
             default:
                 return (
-                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROLE_2'></Solicitudes>
+                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} ></Solicitudes>
                 )
         }
     }

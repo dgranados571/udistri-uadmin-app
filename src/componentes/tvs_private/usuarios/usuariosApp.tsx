@@ -7,6 +7,9 @@ import { AuthServices } from '../../services/authServices'
 
 const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando, zonaConsulta }) => {
 
+    const rolesPermitenEliminar = ['USUARIO_ROOT']
+    const [showBotomElimina, setShowBotomElimina] = useState(false);
+
     const [modal, setModal] = useState(false)
     const [propsModal, setPropsModal] = useState<IlPropsModal>({
         titulo: '',
@@ -38,6 +41,9 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando, zonaCons
     const [usuarioRootControl, setUsuarioRootControl] = useState(false)
 
     useEffect(() => {
+        if (rolesPermitenEliminar.includes(zonaConsulta)) {
+            setShowBotomElimina(true)
+        }
         consultaInformacionUsuariosApp()
     }, [])
 
@@ -525,7 +531,7 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando, zonaCons
                                                 <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
                                             </button>
                                             {
-                                                zonaConsulta === 'USUARIO_ROOT' ?
+                                                showBotomElimina ?
                                                     <button className='btn btn-link' onClick={() => eliminarUsuario(usuario)}>
                                                         <FontAwesomeIcon className='icons-table' icon={faTrash} />
                                                     </button>

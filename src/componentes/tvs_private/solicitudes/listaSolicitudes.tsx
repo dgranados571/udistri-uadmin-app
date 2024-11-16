@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Paginador } from '../../tvs/paginacion/paginador';
 import Modal from '../../tvs/modal/modal';
 import { IGenericResponse, IListaSolicitudesProps, IlPropsModal } from '../../../models/IProps';
 import { AuthServices } from '../../services/authServices';
 
 const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando, setRedirectSolicitudes, setIdDetalleSolicitud, zonaConsulta }) => {
+
+    const rolesPermitenEliminar = ['USUARIO_ROOT']
+    const [showBotomElimina, setShowBotomElimina] = useState(false);
 
     const [modalOpen, setModalOpen] = useState(false)
     const [propsModal, setPropsModal] = useState<IlPropsModal>({
@@ -23,6 +26,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
     const [idSolicitudEliminar, setIdSolicitudEliminar] = useState('')
 
     useEffect(() => {
+        if (rolesPermitenEliminar.includes(zonaConsulta)) {
+            setShowBotomElimina(true)
+        }
         consultaInformacionSolicitudesApp();
     }, [paginacionSolicitudes.paginaActual])
 
@@ -148,14 +154,14 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                         </td>
                                                         <td className='td-info'>
                                                             <p className=''> {solicitud.solicitud.estado} </p>
-                                                        </td>                                                        
+                                                        </td>
                                                         <td className='td-info'>
                                                             <div className='d-flex'>
-                                                                <button className='btn btn-link' onClick={() => detalleSolicitud(solicitud.solicitud.id_procesamiento)}>
-                                                                    <FontAwesomeIcon className='icons-table' icon={faPenToSquare} />
-                                                                </button>
+                                                                <button className='btn btn-link bottom-custom-link' onClick={() => detalleSolicitud(solicitud.solicitud.id_procesamiento)}>
+                                                                    <FontAwesomeIcon className='icons-table-ds' icon={faEye} /><p className='margin-icons'>Ver</p>
+                                                                </button>                                                                
                                                                 {
-                                                                    zonaConsulta === 'USUARIO_ROOT' ?
+                                                                    showBotomElimina ?
                                                                         <button className='btn btn-link' onClick={() => eliminarSolicitud(solicitud.solicitud.id_procesamiento)}>
                                                                             <FontAwesomeIcon className='icons-table' icon={faTrash} />
                                                                         </button>

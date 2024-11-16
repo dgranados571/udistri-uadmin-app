@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCog } from '@fortawesome/free-solid-svg-icons'
 import Configuracion from '../tvs_private/configuracion/configuracion'
 
-const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargando }) => {
+const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargando, zonaConsulta }) => {
 
     const [openMenu, setOpenMenu] = useState(false);
 
@@ -58,7 +58,7 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
         switch (redirect) {
             case 'VISTA_USUARIOS_APP':
                 return (
-                    <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROOT'/>
+                    <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
                 )
             case 'VISTA_MI_CUENTA':
                 return (
@@ -70,7 +70,7 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
                 )
             default:
                 return (
-                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROOT'></Solicitudes>
+                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta}></Solicitudes>
                 )
         }
     }
