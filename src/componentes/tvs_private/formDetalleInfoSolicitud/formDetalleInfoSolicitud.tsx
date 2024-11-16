@@ -1,9 +1,10 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from 'react';
-import { FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps, IGenericResponse, IListasSelect } from '../../../models/IProps';
+import { FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps, IGenericResponse, IListasSelect, IlPropsModal } from '../../../models/IProps';
 import { AuthServices } from '../../services/authServices';
+import Modal from '../../tvs/modal/modal';
 
 const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSolicitudHandle, FormDetalleInfoSolicitudProps> = ({ toast, setCargando,
-    zonaConsulta, setEditaDetalleSolicitud, solicitud }, ref) => {
+    zonaConsulta, setEditaDetalleSolicitud, solicitud, idDetalleSolicitud }, ref) => {
 
     useImperativeHandle(ref, () => ({
         funcionHandle1() {
@@ -20,6 +21,13 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
             setValuesForm()
         }
     }, [])
+
+    const [modalOpen, setModalOpen] = useState(false)
+    const [tipoModal, setTipoModal] = useState('')
+    const [propsModal, setPropsModal] = useState<IlPropsModal>({
+        titulo: '',
+        descripcion: '',
+    })
 
     const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
 
@@ -143,73 +151,152 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
         }
     }
 
+    const actualizaSolicitud = () => {
+        setPropsModal({
+            titulo: 'Resumen de la actualización:',
+            descripcion: '',
+            prop0: nombres,
+            prop1: apellidos,
+            prop2: numeroIdentificacion,
+            prop3: correo,
+            prop4: telefono,
+            prop9: matriculaInmobiliaria,
+            prop10: municipio
+        })
+        setModalOpen(true)
+        setTipoModal('MODAL_RESUMEN_2')
+    }
+
+    const modalSi = () => {
+        enviaActualizacionSolicitudService()
+    }
+
+    const modalNo = () => {
+        setModalOpen(false)
+        setTipoModal('')
+    }
+
+    const enviaActualizacionSolicitudService = async () => {
+        setModalOpen(false)
+        setTipoModal('')
+        setCargando(true)
+        const body = {
+            "idProcesamiento": idDetalleSolicitud,
+            "nombres": propsModal.prop0,
+            "apellidos": propsModal.prop1,
+            "numeroIdentificacion": propsModal.prop2,
+            "correo": propsModal.prop3,
+            "telefono": propsModal.prop4,
+            "matriculaInmobiliaria": propsModal.prop9,
+            "municipio": propsModal.prop10
+        }
+        const authServices = new AuthServices();
+        try {
+            const response: IGenericResponse = await authServices.requestPost(body, 22);
+            if (response.estado) {
+                toast(response.mensaje)
+                resetForm()
+                cancelaEdicion()
+            } else {
+                erroRadicacionSolicitud(response.mensaje)
+            }
+            setCargando(false)
+        } catch (error) {
+            toast('No es posible crear la solicitud, contacte al administrador')
+            setCargando(false)
+        }
+    }
+
+    const erroRadicacionSolicitud = (descripcionError: string) => {
+        setPropsModal({
+            titulo: 'Error en la solicitud:',
+            descripcion: descripcionError,
+        })
+        setModalOpen(true)
+        setTipoModal('MODAL_CONTROL_1')
+    }
+
+    const cancelaEdicion = () => {
+        if (setEditaDetalleSolicitud) {
+            setEditaDetalleSolicitud(false)
+        }
+    }
+
     return (
-        <div className="row">
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                <div className='div-form'>
-                    <p className='p-label-form'>Apellidos: </p>
-                    <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className={apellidosRef ? 'form-control form-control-error' : 'form-control'} />
+        <>
+            <div className="row">
+                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                        <p className='p-label-form'>Apellidos: </p>
+                        <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className={apellidosRef ? 'form-control form-control-error' : 'form-control'} />
+                    </div>
                 </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                <div className='div-form'>
-                    <p className='p-label-form'>Nombres: </p>
-                    <input type="text" value={nombres} onChange={(e) => setNombres(e.target.value)} className={nombresRef ? 'form-control form-control-error' : 'form-control'} />
+                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                        <p className='p-label-form'>Nombres: </p>
+                        <input type="text" value={nombres} onChange={(e) => setNombres(e.target.value)} className={nombresRef ? 'form-control form-control-error' : 'form-control'} />
+                    </div>
                 </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                <div className='div-form'>
-                    <p className='p-label-form'>Cédula: </p>
-                    <input type="text" value={numeroIdentificacion} onChange={(e) => setNumeroIdentificacion(e.target.value)} className={numeroIdentificacionRef ? 'form-control form-control-error' : 'form-control'} />
+                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                        <p className='p-label-form'>Cédula: </p>
+                        <input type="text" value={numeroIdentificacion} onChange={(e) => setNumeroIdentificacion(e.target.value)} className={numeroIdentificacionRef ? 'form-control form-control-error' : 'form-control'} />
+                    </div>
                 </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                <div className='div-form'>
-                    <p className='p-label-form'>Correo: </p>
-                    <input type="text" value={correo} onChange={(e) => setCorreo(e.target.value)} className={correoRef ? 'form-control form-control-error' : 'form-control'} />
+                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                        <p className='p-label-form'>Correo: </p>
+                        <input type="text" value={correo} onChange={(e) => setCorreo(e.target.value)} className={correoRef ? 'form-control form-control-error' : 'form-control'} />
+                    </div>
                 </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                <div className='div-form'>
-                    <p className='p-label-form'> Teléfono: </p>
-                    <input type="text" value={telefono} onChange={(e) => setTelefono(e.target.value)} className={telefonoRef ? 'form-control form-control-error' : 'form-control'} />
+                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                        <p className='p-label-form'> Teléfono: </p>
+                        <input type="text" value={telefono} onChange={(e) => setTelefono(e.target.value)} className={telefonoRef ? 'form-control form-control-error' : 'form-control'} />
+                    </div>
                 </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                <div className='div-form'>
-                    <p className='p-label-form'> Matricula inmobiliaria: </p>
-                    <input type="text" value={matriculaInmobiliaria} onChange={(e) => setMatriculaInmobiliaria(e.target.value)} className={matriculaInmobiliariaRef ? 'form-control form-control-error' : 'form-control'} />
+                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                        <p className='p-label-form'> Matricula inmobiliaria: </p>
+                        <input type="text" value={matriculaInmobiliaria} onChange={(e) => setMatriculaInmobiliaria(e.target.value)} className={matriculaInmobiliariaRef ? 'form-control form-control-error' : 'form-control'} />
+                    </div>
                 </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                <div className='div-form'>
-                    <p className='p-label-form'> Municipio: </p>
-                    <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={municipioRef ? 'form-control form-control-error' : 'form-control'} >
-                        <option value='INITIAL'>Seleccione</option>
+                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
+                        <p className='p-label-form'> Municipio: </p>
+                        <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={municipioRef ? 'form-control form-control-error' : 'form-control'} >
+                            <option value='INITIAL'>Seleccione</option>
+                            {
+                                municipiosList.map((key, i) => {
+                                    return (
+                                        <option key={i} value={key.value}>{key.label}</option>
+                                    )
+                                })
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-bottom-custom'>
                         {
-                            municipiosList.map((key, i) => {
-                                return (
-                                    <option key={i} value={key.value}>{key.label}</option>
-                                )
-                            })
+                            zonaConsulta !== 'ZONA_PUBLICA' ?
+                                <>
+                                    <button className='btn btn-secondary bottom-custom-secondary' onClick={() => cancelaEdicion()} >Cancelar</button>
+                                    <button className='btn btn-primary bottom-custom' onClick={() => { actualizaSolicitud() }} >Actualizar</button>
+                                </>
+                                :
+                                <></>
                         }
-                    </select>
+                    </div>
                 </div>
             </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                <div className='div-bottom-custom'>
-                    {
-                        zonaConsulta !== 'ZONA_PUBLICA' ?
-                            <>
-                                <button className='btn btn-secondary bottom-custom-secondary' onClick={() => setEditaDetalleSolicitud(false)} >Cancelar</button>
-                                <button className='btn btn-primary bottom-custom' onClick={() => { }} >Actualizar</button>
-                            </>
-                            :
-                            <></>
-                    }
-                </div>
-            </div>
-        </div>
+            {
+                modalOpen ?
+                    <Modal tipoModal={tipoModal} modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+                    :
+                    <></>
+            }
+        </>
     )
 };
 

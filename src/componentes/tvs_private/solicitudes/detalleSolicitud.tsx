@@ -22,8 +22,10 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   const formDetalleInfoSolicitudRef = useRef<FormDetalleInfoSolicitudHandle>(null);
 
   useEffect(() => {
-    consultaDetalleSolicitud();
-  }, [])
+    if(!editaDetalleSolicitud){
+      consultaDetalleSolicitud();
+    }
+  }, [editaDetalleSolicitud])
 
   const consultaDetalleSolicitud = async () => {
     const usuarioSession = sessionStorage.getItem('usuarioApp');
@@ -101,7 +103,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             {
               editaDetalleSolicitud ?
                 <FormDetalleInfoSolicitud ref={formDetalleInfoSolicitudRef} toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta}
-                  setEditaDetalleSolicitud={setEditaDetalleSolicitud} solicitud={detalleSolicitud.solicitud} />
+                  setEditaDetalleSolicitud={setEditaDetalleSolicitud} solicitud={detalleSolicitud.solicitud} idDetalleSolicitud={idDetalleSolicitud} />
                 :
                 <DetalleInfoSolicitud idDetalleSolicitud={idDetalleSolicitud} solicitud={detalleSolicitud.solicitud} setEditaDetalleSolicitud={setEditaDetalleSolicitud} />
             }

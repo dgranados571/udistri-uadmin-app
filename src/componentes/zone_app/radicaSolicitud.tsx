@@ -34,8 +34,6 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     const [activaBeneficiarios, setActivaBeneficiarios] = useState(false);
     const [beneficiariosList, setBeneficiariosList] = useState<IBeneficiarios[]>([]);
 
-    const [editaDetalleSolicitud, setEditaDetalleSolicitud] = useState(false);
-
     const eventInputFiles = (e: React.ChangeEvent<HTMLInputElement>, fileProperty: string) => {
         const fileList = e.target.files;
         switch (fileProperty) {
@@ -312,7 +310,8 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
             <div className='div-style-form mt-3'>
                 <h4 >Información del aspirante</h4>
                 <p>A continuación, ingresa la información del titular de la solicitud:</p>
-                <FormDetalleInfoSolicitud ref={formDetalleInfoSolicitudRef} toast={toast} setCargando={setCargando} zonaConsulta='ZONA_PUBLICA' setEditaDetalleSolicitud={setEditaDetalleSolicitud}/>
+                <FormDetalleInfoSolicitud ref={formDetalleInfoSolicitudRef} toast={toast} setCargando={setCargando}
+                    zonaConsulta='ZONA_PUBLICA' />
                 <hr />
                 <h4 >Cargar documentación</h4>
                 <p>Adjunte la documentación del titular unicamente en formato PDF.</p>

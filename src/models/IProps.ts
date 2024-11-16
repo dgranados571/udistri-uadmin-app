@@ -33,8 +33,9 @@ export interface FormDetalleInfoSolicitudProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
     zonaConsulta: string;
-    setEditaDetalleSolicitud: React.Dispatch<React.SetStateAction<boolean>>;
+    setEditaDetalleSolicitud?: React.Dispatch<React.SetStateAction<boolean>>;
     solicitud?: any;
+    idDetalleSolicitud?: string,
 }
 
 export interface ILoginProps {

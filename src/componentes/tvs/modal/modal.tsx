@@ -145,6 +145,48 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                         </div>
                     </>
                 )
+                case 'MODAL_RESUMEN_2':
+                return (
+                    <>
+                        <div className='div-modal-active'>
+                            <div className='div-content-element-padre'>
+                                <div className='div-content-element'>
+                                    <div className='div-size-content'>
+                                        <div className="d-flex justify-content-between">
+                                            <h4>{propsModal.titulo}</h4>
+                                            <p className='p-label-form m-1'>{propsModal.prop10} </p>
+                                        </div>
+                                        <div className='div-info-item'>
+                                            <p className='p-label-form-text m-1'>Nombre: </p>
+                                            <p className='p-label-form m-1'>{propsModal.prop0} {propsModal.prop1} </p>
+                                        </div>
+                                        <div className='div-info-item'>
+                                            <p className='p-label-form-text m-1'>No documento: </p>
+                                            <p className='p-label-form m-1'>{propsModal.prop2} </p>
+                                        </div>
+                                        <div className='div-info-item'>
+                                            <p className='p-label-form-text m-1'>Correo: </p>
+                                            <p className='p-label-form m-1'>{propsModal.prop3} </p>
+                                        </div>
+                                        <div className='div-info-item'>
+                                            <p className='p-label-form-text m-1'>Teléfono: </p>
+                                            <p className='p-label-form m-1'>{propsModal.prop4} </p>
+                                        </div>
+                                        <div className='div-info-item'>
+                                            <p className='p-label-form-text m-1'>Matrícula inmobiliaria: </p>
+                                            <p className='p-label-form m-1'>{propsModal.prop9} </p>
+                                        </div>                                        
+                                        <p className='p-label-form'>Es correcta la información?:</p>
+                                        <div className='d-flex justify-content-around mt-3'>
+                                            <button className='btn btn-secondary bottom-custom-secondary' onClick={() => modalNo()}>Cancelar</button>
+                                            <button className='btn btn-primary bottom-custom' onClick={() => modalSi()} >Aceptar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
             case 'MODAL_CONTROL_1':
                 return (
                     <>

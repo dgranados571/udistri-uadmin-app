@@ -54,7 +54,7 @@ const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({ idDetalleS
                     <p> {solicitud.descripcion} </p>
                 </div>
             </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-3" >
+            <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
                 <div className='div-titulo-ds'>
                     <h4 className='titulo-form'></h4>
                     <button className='btn btn-link bottom-custom-link' onClick={()=> setEditaDetalleSolicitud(true)} >
