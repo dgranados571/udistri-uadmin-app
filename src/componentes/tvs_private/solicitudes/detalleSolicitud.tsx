@@ -12,7 +12,7 @@ import FormDetalleInfoSolicitud from '../formDetalleInfoSolicitud/formDetalleInf
 
 const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta }) => {
 
-  const rolesPermitenEditar = ['ZONA_PUBLICA', 'USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
+  const rolesPermitenEditar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
   const [showBotomEditaDocumentos, setShowBotomEditaDocumentos] = useState(false);
 
   const tiposDeArchivoEdita = [
