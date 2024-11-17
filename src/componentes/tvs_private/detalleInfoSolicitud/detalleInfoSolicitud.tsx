@@ -5,7 +5,7 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
 const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({ idDetalleSolicitud, solicitud, setEditaDetalleSolicitud, zonaConsulta }) => {
 
-    const rolesPermitenEditar = ['USUARIO_ROOT', 'ROLE_ADMIN', 'USUARIO_ROLE_1']
+    const rolesPermitenEditar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
     const [showBotomEdita, setShowBotomEdita] = useState(false);
 
     useEffect(() => {

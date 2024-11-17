@@ -7,6 +7,9 @@ import { AuthServices } from '../../services/authServices';
 const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, setCargando,
     setBeneficiariosList, beneficiariosList, setActivaBeneficiarios, activaBeneficiarios, zonaConsulta }) => {
 
+    const rolesPermitenEditar = ['ZONA_PUBLICA', 'USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
+    const [showBotomActivaBeneficiarios, setShowBotomActivaBeneficiarios] = useState(false);
+
     const [nombresBeneficiario, setNombresBeneficiario] = useState('');
     const [numIdentificacionBeneficiario, setNumIdentificacionBeneficiario] = useState('');
 
@@ -18,6 +21,9 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
     const fileBeneficiarioInputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
+        if (rolesPermitenEditar.includes(zonaConsulta)) {
+            setShowBotomActivaBeneficiarios(true)
+        }
         if (!activaBeneficiarios) {
             resetFormBeneficiarioAction()
             if (zonaConsulta === 'ZONA_PUBLICA') {
@@ -126,7 +132,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                 if (fileBeneficiario.length > 0) {
                     await cargaDocumentos(idProcesamiento, response.objeto)
                 }
-                resetFormBeneficiarioAction()                           
+                resetFormBeneficiarioAction()
                 await consultaBeneficiarioService()
                 setActivaBeneficiarios(false)
             }
@@ -215,9 +221,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
     const tituloDescripcionHeader = () => {
         if (zonaConsulta === 'ZONA_PUBLICA') {
             return (
-                <>
-                    <h4 >La solicitud incluye beneficiarios?</h4>
-                </>
+                <h4 >La solicitud incluye beneficiarios?</h4>
             )
         } else {
             return (
@@ -293,9 +297,14 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                         tituloDescripcionHeader()
                     }
                 </div>
-                <div className={activaBeneficiarios ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVistaBeneficiario()} >
-                    <div className={activaBeneficiarios ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
-                </div>
+                {
+                    showBotomActivaBeneficiarios ?
+                        <div className={activaBeneficiarios ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVistaBeneficiario()} >
+                            <div className={activaBeneficiarios ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
+                        </div>
+                        :
+                        <></>
+                }
             </div>
             <div className={activaBeneficiarios ? "div-form-beneficiarios-active" : "div-form-beneficiarios"} >
                 <div className="row">
@@ -358,17 +367,27 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                                                             <button className='btn btn-link bottom-custom-link p-0' onClick={() => consultaPDF(beneficiario.documentosDto?.urlTxt)}>
                                                                 <FontAwesomeIcon className='icons-table-ds' icon={faFilePdf} />
                                                             </button>
-                                                            <button className='btn btn-link p-0' onClick={() => eliminarBeneficiarios(beneficiario)}>
-                                                                <FontAwesomeIcon className='icons-table' icon={faTrash} />
-                                                            </button>
+                                                            {
+                                                                showBotomActivaBeneficiarios ?
+                                                                    <button className='btn btn-link p-0' onClick={() => eliminarBeneficiarios(beneficiario)}>
+                                                                        <FontAwesomeIcon className='icons-table' icon={faTrash} />
+                                                                    </button>
+                                                                    :
+                                                                    <></>
+                                                            }
                                                         </div>
                                                         :
                                                         <div className="d-flex justify-content-between">
                                                             <p className='p-label-form m-0'>Documento No: </p>
                                                             <p> {beneficiario.identificacionBen} </p>
-                                                            <button className='btn btn-link p-0' onClick={() => eliminarBeneficiarios(beneficiario)}>
-                                                                <FontAwesomeIcon className='icons-table' icon={faTrash} />
-                                                            </button>
+                                                            {
+                                                                showBotomActivaBeneficiarios ?
+                                                                    <button className='btn btn-link p-0' onClick={() => eliminarBeneficiarios(beneficiario)}>
+                                                                        <FontAwesomeIcon className='icons-table' icon={faTrash} />
+                                                                    </button>
+                                                                    :
+                                                                    <></>
+                                                            }                                                            
                                                         </div>
                                                 }
                                             </>
