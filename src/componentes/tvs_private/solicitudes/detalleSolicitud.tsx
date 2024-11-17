@@ -12,9 +12,27 @@ import FormDetalleInfoSolicitud from '../formDetalleInfoSolicitud/formDetalleInf
 
 const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta }) => {
 
+  const rolesPermitenEditar = ['ZONA_PUBLICA', 'USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
+  const [showBotomEditaDocumentos, setShowBotomEditaDocumentos] = useState(false);
+
+  const tiposDeArchivoEdita = [
+    { value: 'INITIAL', label: 'Seleccione' },
+    { value: 'FILE_1', label: 'Cedula de ciudadania' },
+    { value: 'FILE_2', label: 'Certificado de libertad' },
+    { value: 'FILE_3', label: 'Impuesto predial' }
+  ]
+  
+  const [tipoDeArchivoEdita, setTipoDeArchivoEdita] = useState('');
+  const [tipoDeArchivoEditaRef, setTipoDeArchivoEditaRef] = useState(false);
+
+  const [fileEdita, setFileEdita] = useState('');
+  const [fileEditaRef, setFileEditaRef] = useState(false);
+  const fileEditaInputRef = useRef<HTMLInputElement | null>(null);
+
   const [detalleSolicitud, setDetalleSolicitud] = useState<any>({});
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false);
   const [editaDetalleSolicitud, setEditaDetalleSolicitud] = useState(false);
+  const [activaEdicionDocumentos, setActivaEdicionDocumentos] = useState(false);
   const [activaBeneficiarios, setActivaBeneficiarios] = useState(false);
   const [beneficiariosList, setBeneficiariosList] = useState<IBeneficiarios[]>([]);
   const [eventosList, setEventosList] = useState<any[]>([])
@@ -22,6 +40,9 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   const formDetalleInfoSolicitudRef = useRef<FormDetalleInfoSolicitudHandle>(null);
 
   useEffect(() => {
+    if (rolesPermitenEditar.includes(zonaConsulta)) {
+      setShowBotomEditaDocumentos(true)
+    }
     if (!editaDetalleSolicitud) {
       consultaDetalleSolicitud();
     }
@@ -89,6 +110,44 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     window.open(pdfBlobUrl, '_blank');
   };
 
+  const activaVistaEditaDocumentos = () => {
+    setActivaEdicionDocumentos(!activaEdicionDocumentos)
+  }
+
+  const eventInputFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    setFileEditaRef(false)
+    if (fileList) {
+      const file = fileList[0];
+      if (file) {
+        if (file.type === "application/pdf") {
+          let valorFinalMB = 0;
+          for (let step = 0; step < fileList.length; step++) {
+            var fileSizeMB = fileList[step].size / 1024 / 1024;
+            valorFinalMB = valorFinalMB + fileSizeMB;
+          }
+          if (valorFinalMB < 10) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              if (reader.result && typeof reader.result === 'string') {
+                setFileEdita(reader.result)
+              }
+            };
+            reader.readAsDataURL(file);
+          } else {
+            toast("*El archivo cargado supera los 10 MB")
+            setFileEditaRef(true)
+          }
+        } else {
+          toast("El archivo cargado no está en formato PDF")
+          setFileEditaRef(true)
+        }
+      } else {
+        setFileEdita('')
+      }
+    }
+  }
+
   return (
     <>
       <div className='div-titulo-ds'>
@@ -114,10 +173,22 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           'Cargando ...'
       }
       <hr />
-      <div className="row mt-4">
-        <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+      <div className="div-info-beneficiarios">
+        <div className="">
+          <h4> Gestión documental </h4>
           <p className='mb-1'>A continuación, encontrará el listado de documentos asociados a la solicitud. (Dar click en cada uno para visualizar el archivo): </p>
         </div>
+        {
+          showBotomEditaDocumentos ?
+            <div className={activaEdicionDocumentos ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVistaEditaDocumentos()} >
+              <div className={activaEdicionDocumentos ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
+            </div>
+            :
+            <></>
+        }
+      </div>
+
+      <div className="row mt-0">
         {
           showDetalleSolicitud ?
             detalleSolicitud.urlDocumentsMod1.map((urlDoc: any, i: number) => {
@@ -133,6 +204,37 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             'Cargando ...'
         }
       </div>
+
+      <div className={activaEdicionDocumentos ? "div-form-beneficiarios-active" : "div-form-beneficiarios"} >
+        <div className="row">
+          <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+            <div className='div-form'>
+              <p className='p-label-form'>Seleccione el archivo: </p>
+              <select value={tipoDeArchivoEdita} onChange={(e) => setTipoDeArchivoEdita(e.target.value)} className={tipoDeArchivoEditaRef ? 'form-control form-control-error' : 'form-control'} >
+                {
+                  tiposDeArchivoEdita.map((key, i) => {
+                    return (
+                      <option key={i} value={key.value}>{key.label}</option>
+                    )
+                  })
+                }
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+            <div className='div-form'>
+              <p className='p-label-form'> Aqui el documento: </p>
+              <input ref={fileEditaInputRef} type="file" onChange={(e) => eventInputFiles(e)} className={fileEditaRef ? 'form-control form-control-error' : 'form-control'} />
+            </div>
+          </div>
+          <div className="col-12 col-sm-12 col-md-12 col-lg-6" ></div>
+          <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+            <div className='div-bottom-custom'>
+              <button className='btn btn-primary bottom-custom' onClick={() => { }} >Subir archivo</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <hr />
       <div className="row mt-0">
         <Beneficiarios idProcesamiento={idDetalleSolicitud} toast={toast} setCargando={setCargando}
@@ -142,7 +244,8 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           activaBeneficiarios={activaBeneficiarios}
           zonaConsulta={zonaConsulta} />
       </div>
-      <GestionSolicitud toast={toast} setCargando={setCargando} useSelect={detalleSolicitud.gestionSolicitud} idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} />
+      <GestionSolicitud toast={toast} setCargando={setCargando} useSelect={detalleSolicitud.gestionSolicitud}
+        idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} />
       <hr />
       <div className='div-style-form-whit-table'>
         <table className='table-info'>

@@ -8,7 +8,7 @@ import { AuthServices } from '../../services/authServices';
 
 const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando, setRedirectSolicitudes, setIdDetalleSolicitud, zonaConsulta }) => {
 
-    const rolesPermitenEliminar = ['USUARIO_ROOT']
+    const rolesPermitenEliminar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN']
     const [showBotomElimina, setShowBotomElimina] = useState(false);
 
     const [modalOpen, setModalOpen] = useState(false)
