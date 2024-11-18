@@ -17,12 +17,12 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
 
   const tiposDeArchivoEdita = [
     { value: 'INITIAL', label: 'Seleccione' },
-    { value: 'FILE_1', label: 'Cedula de ciudadania' },
+    { value: 'FILE_1', label: 'Cédula de ciudadania' },
     { value: 'FILE_2', label: 'Certificado de libertad' },
     { value: 'FILE_3', label: 'Impuesto predial' }
   ]
-  
-  const [tipoDeArchivoEdita, setTipoDeArchivoEdita] = useState('');
+
+  const [tipoDeArchivoEdita, setTipoDeArchivoEdita] = useState('INITIAL');
   const [tipoDeArchivoEditaRef, setTipoDeArchivoEditaRef] = useState(false);
 
   const [fileEdita, setFileEdita] = useState('');
@@ -148,6 +148,74 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     }
   }
 
+  const cargaArhivoEditaAction = () => {
+    let formValidado = [];
+    setTipoDeArchivoEditaRef(false)
+    if (tipoDeArchivoEdita === 'INITIAL') {
+      setTipoDeArchivoEditaRef(true)
+    }
+    if (fileEditaRef) {
+      formValidado.push('Error archivo');
+    } else {
+      if (fileEdita.length === 0) {
+        setFileEditaRef(true)
+        formValidado.push('Error archivo');
+      }
+    }
+    if (formValidado.length === 0) {
+      switch (tipoDeArchivoEdita) {
+        case 'FILE_1':
+          cargaDocumentos(idDetalleSolicitud, 1, 'DOCUMENTO')
+          break;
+        case 'FILE_2':
+          cargaDocumentos(idDetalleSolicitud, 2, 'CERTIFICADO DE LIBERTAD')
+          break;
+        case 'FILE_3':
+          cargaDocumentos(idDetalleSolicitud, 3, 'IMPUESTO PREDIAL')
+          break;
+        default:
+          break;
+      }
+    } else {
+      formValidado.splice(0, formValidado.length)
+      toast('Errores en el formulario, valide la información')
+    }
+  }
+
+  const cargaDocumentos = async (idProcesamiento: string, i: number, idArchivo: string) => {
+    const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/MODULO_1/${idProcesamiento}_${i}.txt`;
+    await cargaDocumentosService(fileEdita, pathBeneficiarioX, idArchivo)
+    resetForm()
+    consultaDetalleSolicitud();
+  }
+
+  const cargaDocumentosService = async (fileBase64: string, fileName: string, idArchivo: string) => {
+    setCargando(true)
+    const authServices = new AuthServices();
+    try {
+      const response: IGenericResponse = await authServices.requestPostFile(fileBase64, fileName);
+      if (response.estado) {
+
+        toast(`El archivo: ${idArchivo}, fue cargado satisfactoriamente`)
+      } else {
+        toast(`No fue posible cargar el archivo: ${idArchivo}`)
+      }
+      setCargando(false)
+    } catch (error) {
+      setCargando(false)
+      toast(`No fue posible cargar el archivo: ${idArchivo}`)
+    }
+  }
+
+  const resetForm = () => {
+    setTipoDeArchivoEdita('INITIAL')
+    setFileEdita('')
+    if (fileEditaInputRef.current) {
+      fileEditaInputRef.current.value = "";
+    }
+    setActivaEdicionDocumentos(false)
+  }
+
   return (
     <>
       <div className='div-titulo-ds'>
@@ -230,7 +298,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           <div className="col-12 col-sm-12 col-md-12 col-lg-6" ></div>
           <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
             <div className='div-bottom-custom'>
-              <button className='btn btn-primary bottom-custom' onClick={() => { }} >Subir archivo</button>
+              <button className='btn btn-primary bottom-custom' onClick={() => cargaArhivoEditaAction()} >Subir archivo</button>
             </div>
           </div>
         </div>
@@ -247,6 +315,8 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       <GestionSolicitud toast={toast} setCargando={setCargando} useSelect={detalleSolicitud.gestionSolicitud}
         idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} />
       <hr />
+      <h4> Historia de la solicitud </h4>
+      <p className='mb-1'>Aqui podra ver la operaciones más representativas de la solicitud: </p>
       <div className='div-style-form-whit-table'>
         <table className='table-info'>
           <thead>

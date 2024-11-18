@@ -10,9 +10,15 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
     const [observacion, setObservacion] = useState('');
 
     const list1 = [
-        { value: 'EVENTO_PREAPROBADO', label: 'Preaprobado' },
+        { value: 'INITIAL', label: 'Seleccione' },
+        { value: 'EVENTO_PREAPROBADO', label: 'Prearobado' },
         { value: 'EVENTO_NO_PREAPROBADO', label: 'No Preaprobado' },
         { value: 'EVENTO_DEVUELTO_GESTION', label: 'Devolución' }
+    ]
+
+    const list2 = [
+        { value: 'INITIAL', label: 'Seleccione' },
+        { value: 'EVENTO_ASIGNA_A_REVISION', label: 'Asignar a revisor documental' }
     ]
 
     const ejecutaEventoEstadoActon = () => {
@@ -66,12 +72,12 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
                 return (
                     <>
                         <hr />
+                        <h4> Que puedo hacer con la solicitud? </h4>
                         <div className="row">
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                                 <div className='div-form'>
                                     <p className='mb-3'>Seleccione la tipificación de solución para la solicitud:</p>
                                     <select value={valueSelected} onChange={(e) => setValueSelected(e.target.value)} className={valueSelectedRef ? 'form-control form-control-error' : 'form-control'} >
-                                        <option value='INITIAL'>Seleccione</option>
                                         {
                                             list1.map((key, i) => {
                                                 return (
@@ -97,7 +103,35 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
                 )
             case 'MODULO_2':
                 return (
-                    <>                        
+                    <>
+                        <hr />
+                        <h4> Que puedo hacer con la solicitud? </h4>
+                        <div className="row">
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <div className='div-form'>
+                                    <p className='mb-3'>Seleccione la tipificación de solución para la solicitud:</p>
+                                    <select value={valueSelected} onChange={(e) => setValueSelected(e.target.value)} className={valueSelectedRef ? 'form-control form-control-error' : 'form-control'} >
+                                        {
+                                            list2.map((key, i) => {
+                                                return (
+                                                    <option key={i} value={key.value}>{key.label}</option>
+                                                )
+                                            })
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <p className='p-label-form'>Observaciones</p>
+                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value)} autoComplete='off' />
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <div className='div-bottom-custom '>
+                                    <button className='btn btn-primary bottom-custom' onClick={() => ejecutaEventoEstadoActon()} >Enviar</button>
+                                </div>
+                            </div>
+                        </div>
                     </>
                 )
             default:
