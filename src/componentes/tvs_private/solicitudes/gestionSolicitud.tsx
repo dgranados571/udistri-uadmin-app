@@ -65,7 +65,6 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
         }
     }
 
-
     const validateSelected = () => {
         switch (useSelect) {
             case 'MODULO_1':

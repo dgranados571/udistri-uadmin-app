@@ -219,11 +219,12 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   return (
     <>
       <div className='div-titulo-ds'>
-        <h4 className='titulo-form'>Detalle de la solicitud: {detalleSolicitud.idDefSolicitud} </h4>
+        <h4 className='titulo-form'>Detalle de la solicitud:</h4>        
         <button className='btn btn-link bottom-custom-link' onClick={() => setRedirectSolicitudes('LISTA_SOLICITUDES')}>
           <FontAwesomeIcon className='icons-table-ds' icon={faRotateLeft} /><p className='margin-icons'>Volver</p>
         </button>
       </div>
+      <h4 className='titulo-form'>{detalleSolicitud.idDefSolicitud} </h4>
       {
         showDetalleSolicitud ?
           <>
@@ -243,8 +244,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       <hr />
       <div className="div-info-beneficiarios">
         <div className="">
-          <h4> Gestión documental </h4>
-          <p className='mb-1'>A continuación, encontrará el listado de documentos asociados a la solicitud. (Dar click en cada uno para visualizar el archivo): </p>
+          <h4> Gestión documental </h4>          
         </div>
         {
           showBotomEditaDocumentos ?
@@ -253,9 +253,9 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             </div>
             :
             <></>
-        }
+        }        
       </div>
-
+      <p className='mb-1'>A continuación, encontrará el listado de documentos asociados a la solicitud. (Dar click en cada uno para visualizar el archivo): </p>
       <div className="row mt-0">
         {
           showDetalleSolicitud ?
@@ -272,8 +272,8 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             'Cargando ...'
         }
       </div>
-
       <div className={activaEdicionDocumentos ? "div-form-beneficiarios-active" : "div-form-beneficiarios"} >
+        <p className='my-3'>Seleccione el tipo de documento y cargue el archivo que desea actualizar:</p>
         <div className="row">
           <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
             <div className='div-form'>
@@ -292,11 +292,11 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
             <div className='div-form'>
               <p className='p-label-form'> Aqui el documento: </p>
-              <input ref={fileEditaInputRef} type="file" onChange={(e) => eventInputFiles(e)} className={fileEditaRef ? 'form-control form-control-error' : 'form-control'} />
+              <input ref={fileEditaInputRef} type="file" 
+              onChange={(e) => eventInputFiles(e)} className={fileEditaRef ? 'form-control form-control-error' : 'form-control'} />
             </div>
-          </div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-6" ></div>
-          <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+          </div>          
+          <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
             <div className='div-bottom-custom'>
               <button className='btn btn-primary bottom-custom' onClick={() => cargaArhivoEditaAction()} >Subir archivo</button>
             </div>

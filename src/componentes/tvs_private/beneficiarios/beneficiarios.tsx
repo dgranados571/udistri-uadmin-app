@@ -225,10 +225,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
             )
         } else {
             return (
-                <>
-                    <h4 className='titulo-form'>Beneficiarios de la solicitud: </h4>
-                    <p className='mb-1'>A continuación, encontrará el detalle de los beneficiarios asociados a la solicitud: </p>
-                </>
+                <h4 className='titulo-form'>Beneficiarios de la solicitud: </h4>
             )
         }
     }
@@ -305,7 +302,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                         :
                         <></>
                 }
-            </div>
+            </div>            
             <div className={activaBeneficiarios ? "div-form-beneficiarios-active" : "div-form-beneficiarios"} >
                 <div className="row">
                     <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
@@ -333,6 +330,12 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                     </div>
                 </div>
             </div>
+            {
+                zonaConsulta === 'ZONA_PUBLICA' ?
+                    <></>
+                    :
+                    <p className='mb-1'>A continuación, encontrará el detalle de los beneficiarios asociados a la solicitud: </p>
+            }
             <div className="">
                 <div className="row">
                     {
@@ -387,7 +390,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                                                                     </button>
                                                                     :
                                                                     <></>
-                                                            }                                                            
+                                                            }
                                                         </div>
                                                 }
                                             </>
