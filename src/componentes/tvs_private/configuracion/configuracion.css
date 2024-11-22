@@ -34,6 +34,24 @@
     align-items: center;
 }
 
+.div-edita-notificacion{
+    display: flex;
+    justify-content: space-between;
+}
+
+.div-icon-informacion-notifica{
+    display: flex;
+    align-items: center;
+}
+
+.icon-notifica-si{
+    color: orange;
+}
+
+.icon-notifica-no{
+    color: darkslategray;
+}
+
 @media (min-width: 760px) {
 
     .div-modulos-padre{

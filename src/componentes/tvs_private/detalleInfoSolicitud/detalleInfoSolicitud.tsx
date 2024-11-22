@@ -57,14 +57,9 @@ const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({ idDetalleS
                     <p className='p-label-form'>Matrícula inmobiliaria: </p>
                     <p> {solicitud.matricula_inmobiliaria} </p>
                 </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-5" >
-                <div className='div-form'>
-                    <p className='p-label-form'> Observaciones: </p>
-                    <p> {solicitud.descripcion} </p>
-                </div>
-            </div>
-            <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
+            </div>    
+            <div className="col-12 col-sm-12 col-md-12 col-lg-4" ></div>        
+            <div className="col-12 col-sm-12 col-md-12 col-lg-4" >
                 {
                     showBotomEdita ?
                         <div className='div-titulo-ds'>

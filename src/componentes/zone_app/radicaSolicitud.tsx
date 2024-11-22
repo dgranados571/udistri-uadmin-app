@@ -352,7 +352,7 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-bottom-custom'>
-                            <button className='btn btn-primary bottom-custom' onClick={() => registraSolicitud()} >Registrar solicitud</button>
+                            <button className='btn btn-primary bottom-custom' onClick={() => registraSolicitud()} >Registrar</button>
                         </div>
                     </div>
                 </div>

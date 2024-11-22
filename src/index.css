@@ -65,7 +65,7 @@ p {
 }
 
 .bottom-custom {
-  width: 10rem;
+  width: 8rem;
   background-color: orange;
   color: white;
   border: 1px solid orange;
@@ -75,7 +75,7 @@ p {
 }
 
 .bottom-custom:hover {
-  width: 10rem;
+  width: 8rem;
   background-color: #E3E3E3;
   color: #5C5C5C;
   border: 1px solid #E3E3E3;
@@ -83,7 +83,7 @@ p {
 }
 
 .bottom-custom-secondary {
-  width: 10rem;
+  width: 8rem;
   background-color: #5C5C5C;
   color: white;
   border: 1px solid #5C5C5C;
@@ -93,7 +93,7 @@ p {
 }
 
 .bottom-custom-secondary:hover {
-  width: 10rem;
+  width: 8rem;
   background-color: #E3E3E3;
   color: #5C5C5C;
   border: 1px solid #E3E3E3;
@@ -274,7 +274,25 @@ p {
 }
 
 
-@media (min-width: 760px) {}
+@media (min-width: 760px) {
+
+  .bottom-custom {
+    width: 10rem;
+  }
+  
+  .bottom-custom:hover {
+    width: 10rem;
+  }
+  
+  .bottom-custom-secondary {
+    width: 10rem;
+  }
+  
+  .bottom-custom-secondary:hover {
+    width: 10rem;
+  }
+
+}
 
 @media (min-width: 1025px) {
 
@@ -295,7 +313,6 @@ p {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-
 
   .div-dashboard-content {
     position: relative;

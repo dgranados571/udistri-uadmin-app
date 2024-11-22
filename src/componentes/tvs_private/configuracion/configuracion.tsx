@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './configuracion.css'
-import { IConfiguracionProps, IGenericResponse, IListasSelect } from '../../../models/IProps'
+import { IConfiguracionProps } from '../../../models/IProps'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons'
 import ConfigMod1 from './configMod1'
