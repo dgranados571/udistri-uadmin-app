@@ -8,12 +8,25 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
 
     const [listaNotificacion, setListaNotificacion] = useState<IListNotificacionEmail[]>([]);
     const [activaEdicionCorreos, setActivaEdicionCorreos] = useState(false)
-    const [correosNotificacion, setCorreosNotificacion] = useState('')
-    const [activaEnvioCliente, setActivaEnvioCliente] = useState(false)
 
     useEffect(() => {
         consultaConfirguracionEnvioNotificaciones()
     }, [])
+
+    const setActivaEnvioCliente = (index: number, nuevoEstado: boolean) => {
+        const nuevaLista = listaNotificacion.map((item, i) => i === index ? { ...item, notificaUsuario: nuevoEstado } : item);
+        setListaNotificacion(nuevaLista);
+    }
+
+    const setCorreosDeEventos = (index: number, nuevoCorreo: string) => {
+        const nuevaListaNotificacion = listaNotificacion.map((item, i) => i === index ? { ...item, correosNotifica: nuevoCorreo } : item);
+        setListaNotificacion(nuevaListaNotificacion)
+    }
+
+    const cancelaEdicion = () => {
+        setActivaEdicionCorreos(false)
+        consultaConfirguracionEnvioNotificaciones()
+    }
 
     const consultaConfirguracionEnvioNotificaciones = async () => {
         const usuarioSession = sessionStorage.getItem('usuarioApp');
@@ -70,14 +83,16 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                                                     key.notificaUsuario ?
                                                         <>
                                                             <p className='p-label-form my-0'>Desactivar notificación al solicitante?:</p>
-                                                            <div className={key.notificaUsuario ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => setActivaEnvioCliente(!activaEnvioCliente)} >
+                                                            <div className={key.notificaUsuario ? "div-slide-padre-active" : "div-slide-padre"}
+                                                                onClick={() => setActivaEnvioCliente(i, !key.notificaUsuario)} >
                                                                 <div className={key.notificaUsuario ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
                                                             </div>
                                                         </>
                                                         :
                                                         <>
                                                             <p className='p-label-form my-0'>Activar notificación al solicitante?:</p>
-                                                            <div className={key.notificaUsuario ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => setActivaEnvioCliente(!activaEnvioCliente)} >
+                                                            <div className={key.notificaUsuario ? "div-slide-padre-active" : "div-slide-padre"}
+                                                                onClick={() => setActivaEnvioCliente(i, !key.notificaUsuario)} >
                                                                 <div className={key.notificaUsuario ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
                                                             </div>
                                                         </>
@@ -104,12 +119,12 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                                 <div className='div-form mt-3'>
                                     {
                                         activaEdicionCorreos ?
-                                            <textarea className='form-control' value={correosNotificacion}
-                                                onChange={(e) => setCorreosNotificacion(e.target.value)}
+                                            <textarea className='form-control' value={key.correosNotifica}
+                                                onChange={(e) => setCorreosDeEventos(i, e.target.value)}
                                                 autoComplete='off' />
                                             :
-                                            <textarea className='form-control' value={correosNotificacion} disabled
-                                                onChange={(e) => setCorreosNotificacion(e.target.value)}
+                                            <textarea className='form-control' value={key.correosNotifica}
+                                                disabled
                                                 autoComplete='off' />
                                     }
                                 </div>
@@ -123,7 +138,7 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                             activaEdicionCorreos ?
                                 <div className="d-flex mb-4">
                                     <button className='btn btn-primary bottom-custom' onClick={() => { }} >Guardar</button>
-                                    <button className='btn btn-secondary bottom-custom-secondary' onClick={() => setActivaEdicionCorreos(false)} >Cancelar</button>
+                                    <button className='btn btn-secondary bottom-custom-secondary' onClick={() => cancelaEdicion()} >Cancelar</button>
                                 </div>
                                 :
                                 <></>
@@ -132,7 +147,7 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                 </div>
             </div>
             <p className='p-label-form-text my-0'>** Agregue los correos a los que desea notificar separado por coma ','</p>
-            <p className='p-label-form-text my-0'>** Ej: correo1@gmail.com,correo2@gmail.com</p>
+            <p className='p-label-form-text my-0'>** Ej: correo1@gmail.com, correo2@gmail.com</p>
         </>
     )
 }
