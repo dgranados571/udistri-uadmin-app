@@ -24,9 +24,9 @@ export interface IRadicaSolicitudProps {
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface FormDetalleInfoSolicitudHandle { 
+export interface FormDetalleInfoSolicitudHandle {
     funcionHandle1: () => any;
-    funcionHandle2: () => void; 
+    funcionHandle2: () => void;
 }
 
 export interface FormDetalleInfoSolicitudProps {
@@ -123,7 +123,7 @@ export interface IModalProps {
     propsModal: IlPropsModal
 }
 
-export interface IlPropsModal{
+export interface IlPropsModal {
     titulo: string,
     descripcion: string,
     prop0?: string;
@@ -179,5 +179,12 @@ export interface IGestionSolicitudProps {
     useSelect: string,
     idDetalleSolicitud: string
     setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface IListNotificacionEmail {
+    nombreEvento: string,
+    labelEvento: string,
+    notificaUsuario: boolean,
+    correosNotifica: string
 }
 

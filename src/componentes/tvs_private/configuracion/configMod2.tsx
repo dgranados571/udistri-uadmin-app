@@ -1,43 +1,49 @@
 import React, { useEffect, useState } from 'react'
-import { IConfiguracionProps } from '../../../models/IProps'
+import { IConfiguracionProps, IGenericResponse, IListNotificacionEmail } from '../../../models/IProps'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
+import { AuthServices } from '../../services/authServices'
 
 const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
 
-    useEffect(() => {
-
-    }, [])
-
-    const listNotificacion = [
-        {
-            nombreEvento: 'EVENTO_PREAPROBADO',
-            notificaUsuario: false,
-            correosNotifica: 'ej: correo1@gmail.com, correo2@gmail.com'
-
-        },
-        {
-            nombreEvento: 'EVENTO_NO_PREAPROBADO',
-            notificaUsuario: true,
-            correosNotifica: 'ej: correo1@gmail.com, correo2@gmail.com'
-
-        },
-        {
-            nombreEvento: 'EVENTO_DEVUELTO_GESTION',
-            notificaUsuario: true,
-            correosNotifica: 'ej: correo1@gmail.com, correo2@gmail.com'
-
-        },
-    ]
-
+    const [listaNotificacion, setListaNotificacion] = useState<IListNotificacionEmail[]>([]);
     const [activaEdicionCorreos, setActivaEdicionCorreos] = useState(false)
     const [correosNotificacion, setCorreosNotificacion] = useState('')
     const [activaEnvioCliente, setActivaEnvioCliente] = useState(false)
 
+    useEffect(() => {
+        consultaConfirguracionEnvioNotificaciones()
+    }, [])
+
+    const consultaConfirguracionEnvioNotificaciones = async () => {
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
+            setCargando(true)
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
+            const authServices = new AuthServices();
+            const body = {
+                "usuarioApp": usuarioLocalStorage.usuario,
+            }
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 23);
+                if (response.estado) {
+                    setListaNotificacion(response.objeto)
+                } else {
+                    toast(response.mensaje);
+                }
+                setCargando(false);
+            } catch (error) {
+                toast('No es posible consultar la información, contacte al administrador');
+                setCargando(false);
+            }
+        } else {
+            toast('No es posible consultar la información, contacte al administrador')
+        }
+    }
+
     return (
         <>
             <hr />
-
             <div className='div-edita-notificacion'>
                 <h4>Configuración de notificación:</h4>
                 {
@@ -48,16 +54,14 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                             <FontAwesomeIcon className='icons-table-ds' icon={faPenToSquare} /><p className='margin-icons'>Editar</p>
                         </button>
                 }
-
             </div>
             <p className='mb-2'>Las notificaciones por correo electrónico se configuran de acuerdo con los eventos operativos de cada solicitud **:</p>
-
             <div className="row">
                 {
-                    listNotificacion.map((key, i) => {
+                    listaNotificacion.map((key, i) => {
                         return (
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6 mt-3" >
-                                <p className='p-label-menu-configura'>{key.nombreEvento}</p>
+                                <p className='p-label-menu-configura'>Evento: {key.labelEvento}</p>
                                 <div className="div-notifica-cliente">
                                     {
                                         activaEdicionCorreos ?
@@ -119,7 +123,7 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                             activaEdicionCorreos ?
                                 <div className="d-flex mb-4">
                                     <button className='btn btn-primary bottom-custom' onClick={() => { }} >Guardar</button>
-                                    <button className='btn btn-secondary bottom-custom-secondary' onClick={() => setActivaEdicionCorreos(false)} >Cancelar</button>                                    
+                                    <button className='btn btn-secondary bottom-custom-secondary' onClick={() => setActivaEdicionCorreos(false)} >Cancelar</button>
                                 </div>
                                 :
                                 <></>

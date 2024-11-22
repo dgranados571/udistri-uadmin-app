@@ -144,11 +144,10 @@ export const UtilUrl = () => {
       pathLambda: '/service/uadmin/getConfirguracionEnvioNotificaciones',
       urlDominioServidor
     }
-
   }
 
   return {
-    apiLambda: true,
+    apiLambda: false,
     url
   }
 
