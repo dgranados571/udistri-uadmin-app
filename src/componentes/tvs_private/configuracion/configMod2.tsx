@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { IConfiguracionProps, IGenericResponse, IListNotificacionEmail } from '../../../models/IProps'
+import { IConfiguracionProps, IGenericResponse, IListNotificacionEmail, IlPropsModal } from '../../../models/IProps'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
 import { AuthServices } from '../../services/authServices'
+import Modal from '../../tvs/modal/modal'
 
 const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
+
+    const [modalOpen, setModalOpen] = useState(false)
+    const [tipoModal, setTipoModal] = useState('')
+    const [propsModal, setPropsModal] = useState<IlPropsModal>({
+        titulo: '',
+        descripcion: '',
+    })
 
     const [listaNotificacion, setListaNotificacion] = useState<IListNotificacionEmail[]>([]);
     const [activaEdicionCorreos, setActivaEdicionCorreos] = useState(false)
@@ -26,6 +34,52 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
     const cancelaEdicion = () => {
         setActivaEdicionCorreos(false)
         consultaConfirguracionEnvioNotificaciones()
+    }
+
+    const guardaConfiguracionNotificacion = () => {
+        setPropsModal({
+            titulo: 'Módulo de notificaciones:',
+            descripcion: 'Esta seguro de actualizar la información?',
+        })
+        setModalOpen(true)
+        setTipoModal('MODAL_CONTROL_2')
+    }
+
+    const modalSi = () => {
+        setModalOpen(false)
+        actualizaConfirguracionEnvioNotificaciones()
+    }
+
+    const modalNo = () => {
+        setModalOpen(false)
+    }
+
+    const actualizaConfirguracionEnvioNotificaciones = async () => {
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
+            setCargando(true)
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
+            const authServices = new AuthServices();
+            const body = {
+                "usuarioApp": usuarioLocalStorage.usuario,
+                "listaNotificacion": listaNotificacion,
+            }
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 24);
+                if (response.estado) {
+                    setActivaEdicionCorreos(false)
+                    setListaNotificacion(response.objeto)
+                } else {
+                    toast(response.mensaje);
+                }
+                setCargando(false);
+            } catch (error) {
+                toast('No es posible consultar la información, contacte al administrador');
+                setCargando(false);
+            }
+        } else {
+            toast('No es posible consultar la información, contacte al administrador')
+        }
     }
 
     const consultaConfirguracionEnvioNotificaciones = async () => {
@@ -137,7 +191,7 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                         {
                             activaEdicionCorreos ?
                                 <div className="d-flex mb-4">
-                                    <button className='btn btn-primary bottom-custom' onClick={() => { }} >Guardar</button>
+                                    <button className='btn btn-primary bottom-custom' onClick={() => guardaConfiguracionNotificacion()} >Guardar</button>
                                     <button className='btn btn-secondary bottom-custom-secondary' onClick={() => cancelaEdicion()} >Cancelar</button>
                                 </div>
                                 :
@@ -148,6 +202,12 @@ const ConfigMod2: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
             </div>
             <p className='p-label-form-text my-0'>** Agregue los correos a los que desea notificar separado por coma ','</p>
             <p className='p-label-form-text my-0'>** Ej: correo1@gmail.com, correo2@gmail.com</p>
+            {
+                modalOpen ?
+                    <Modal tipoModal={tipoModal} modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+                    :
+                    <></>
+            }
         </>
     )
 }

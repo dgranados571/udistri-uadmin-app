@@ -16,7 +16,7 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
 
     const [menuLateral, setMenuLateral] = useState<IMenuLateral[]>([
         {
-            nombreItem: 'Inicio',
+            nombreItem: 'Gestión',
             className: 'div-item-menu active',
             iconMenu: faHome,
             controlVista: ''

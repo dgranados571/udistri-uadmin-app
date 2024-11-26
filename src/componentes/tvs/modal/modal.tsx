@@ -145,7 +145,7 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                         </div>
                     </>
                 )
-                case 'MODAL_RESUMEN_2':
+            case 'MODAL_RESUMEN_2':
                 return (
                     <>
                         <div className='div-modal-active'>
@@ -175,7 +175,7 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                                         <div className='div-info-item'>
                                             <p className='p-label-form-text m-1'>Matrícula inmobiliaria: </p>
                                             <p className='p-label-form m-1'>{propsModal.prop9} </p>
-                                        </div>                                        
+                                        </div>
                                         <p className='p-label-form'>Es correcta la información?:</p>
                                         <div className='d-flex justify-content-around mt-3'>
                                             <button className='btn btn-secondary bottom-custom-secondary' onClick={() => modalNo()}>Cancelar</button>

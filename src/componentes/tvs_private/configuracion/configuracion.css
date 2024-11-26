@@ -1,4 +1,4 @@
-.div-modulos-padre{
+.div-modulos-padre {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
@@ -6,7 +6,7 @@
     align-items: center;
 }
 
-.div-mod-x{
+.div-mod-x {
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
@@ -14,47 +14,51 @@
     align-items: center;
 }
 
-.icon-menu-configuracion{
+.icon-menu-configuracion {
     font-size: 3rem;
 }
 
-.icon-menu-configuracion-active{
+.icon-menu-configuracion-active {
     font-size: 3rem;
     color: orange;
 }
 
-.p-label-menu-configura{
+.p-label-menu-configura {
     font-weight: bold;
 }
 
-.div-notifica-cliente{
+.div-notifica-cliente {
     margin-top: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.div-edita-notificacion{
+.div-edita-notificacion {
     display: flex;
     justify-content: space-between;
 }
 
-.div-icon-informacion-notifica{
+.div-icon-informacion-notifica {
     display: flex;
     align-items: center;
 }
 
-.icon-notifica-si{
+.icon-notifica-si {
     color: orange;
 }
 
-.icon-notifica-no{
+.icon-notifica-no {
     color: darkslategray;
+}
+
+.width-100 {
+    width: 100%;
 }
 
 @media (min-width: 760px) {
 
-    .div-modulos-padre{
+    .div-modulos-padre {
         display: flex;
         justify-content: space-evenly;
         margin-top: 1rem;
@@ -64,7 +68,7 @@
 
 @media (min-width: 1025px) {
 
-    .div-mod-x{
+    .div-mod-x {
         margin-top: 0rem;
     }
 }

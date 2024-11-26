@@ -13,7 +13,7 @@ const ZoneRole2: React.FC<IZoneRoleProps> = ({ infoMenuUsuario, toast, setCargan
 
     const [menuLateral, setMenuLateral] = useState<IMenuLateral[]>([
         {
-            nombreItem: 'Inicio',
+            nombreItem: 'Gestión',
             className: 'div-item-menu active',
             iconMenu: faHome,
             controlVista: ''
