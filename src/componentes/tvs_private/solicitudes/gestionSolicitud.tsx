@@ -11,7 +11,7 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
 
     const list1 = [
         { value: 'INITIAL', label: 'Seleccione' },
-        { value: 'EVENTO_PREAPROBADO', label: 'Prearobado' },
+        { value: 'EVENTO_PREAPROBADO', label: 'Preaprobado' },
         { value: 'EVENTO_NO_PREAPROBADO', label: 'No Preaprobado' },
         { value: 'EVENTO_DEVUELTO_GESTION', label: 'Devolución' }
     ]
