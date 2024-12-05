@@ -11,9 +11,11 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
     const [showBotomActivaBeneficiarios, setShowBotomActivaBeneficiarios] = useState(false);
 
     const [nombresBeneficiario, setNombresBeneficiario] = useState('');
+    const [apellidosBeneficiario, setApellidosBeneficiario] = useState('');
     const [numIdentificacionBeneficiario, setNumIdentificacionBeneficiario] = useState('');
 
     const [nombresBeneficiarioRef, setNombresBeneficiarioRef] = useState(false);
+    const [apellidosBeneficiarioRef, setApellidosBeneficiarioRef] = useState(false);
     const [numIdentificacionBeneficiarioRef, setNumIdentificacionBeneficiarioRef] = useState(false);
 
     const [fileBeneficiario, setFileBeneficiario] = useState('');
@@ -34,12 +36,14 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
 
     const resetFormBeneficiarioAction = () => {
         setNombresBeneficiario('')
+        setApellidosBeneficiario('')
         setNumIdentificacionBeneficiario('')
         setFileBeneficiario('')
         if (fileBeneficiarioInputRef.current) {
             fileBeneficiarioInputRef.current.value = ""
         }
         setNombresBeneficiarioRef(false)
+        setApellidosBeneficiarioRef(false)
         setNumIdentificacionBeneficiarioRef(false)
         setFileBeneficiarioRef(false)
     }
@@ -89,6 +93,11 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
             setNombresBeneficiarioRef(true)
             formValidado.push('Nombres Beneficiario');
         }
+        setApellidosBeneficiarioRef(false)
+        if (apellidosBeneficiario.length === 0) {
+            setApellidosBeneficiarioRef(true)
+            formValidado.push('Apellidos Beneficiario');
+        }
         setNumIdentificacionBeneficiarioRef(false)
         if (numIdentificacionBeneficiario.length === 0) {
             setNumIdentificacionBeneficiarioRef(true)
@@ -101,6 +110,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
             if (zonaConsulta === 'ZONA_PUBLICA') {
                 const benneficiarioObj: IBeneficiarios = {
                     nombresBen: nombresBeneficiario,
+                    apellidosBen: apellidosBeneficiario,
                     identificacionBen: numIdentificacionBeneficiario,
                     documentoPdfBen: fileBeneficiario,
                     registraDocPdf: fileBeneficiario.length > 0 ? true : false
@@ -120,6 +130,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
         setCargando(true)
         const body = {
             "nombresBen": nombresBeneficiario,
+            "apellidosBen": apellidosBeneficiario,
             "identificacionBen": numIdentificacionBeneficiario,
             "registraDocPdf": fileBeneficiario.length > 0 ? true : false,
             "idProcesamiento": idProcesamiento
@@ -286,6 +297,29 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
         }
     }
 
+    const contenedorBotonAction = () => {
+        if (zonaConsulta === 'ZONA_PUBLICA') {
+            return (
+                <>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-6" ></div>
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+                        <div className='div-bottom-custom'>
+                            <button className='btn btn-primary bottom-custom' onClick={() => { agregaBeneficiarioAction() }} >Agregar</button>
+                        </div>
+                    </div>
+                </>
+            )
+        } else {
+            return (
+                <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                    <div className='div-bottom-custom'>
+                        <button className='btn btn-primary bottom-custom' onClick={() => { agregaBeneficiarioAction() }} >Agregar</button>
+                    </div>
+                </div>
+            )
+        }
+    }
+
     return (
         <>
             <div className="div-info-beneficiarios">
@@ -302,9 +336,15 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                         :
                         <></>
                 }
-            </div>            
+            </div>
             <div className={activaBeneficiarios ? "div-form-beneficiarios-active" : "div-form-beneficiarios"} >
                 <div className="row">
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+                        <div className='div-form'>
+                            <p className='p-label-form'>Apellidos del beneficiario: </p>
+                            <input type="text" value={apellidosBeneficiario} onChange={(e) => setApellidosBeneficiario(e.target.value)} className={apellidosBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
+                        </div>
+                    </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'>Nombres del beneficiario: </p>
@@ -323,18 +363,16 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                             <input ref={fileBeneficiarioInputRef} type="file" onChange={(e) => eventInputFilesBeneficiario(e)} className={fileBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
-                        <div className='div-bottom-custom'>
-                            <button className='btn btn-primary bottom-custom' onClick={() => { agregaBeneficiarioAction() }} >Agregar</button>
-                        </div>
-                    </div>
+                    {
+                        contenedorBotonAction()
+                    }
                 </div>
             </div>
             {
                 zonaConsulta === 'ZONA_PUBLICA' ?
                     <></>
                     :
-                    <p className='mb-1'>A continuación, encontrará el detalle de los beneficiarios asociados a la solicitud: </p>
+                    <p className='my-2'>A continuación, encontrará el detalle de los beneficiarios asociados a la solicitud: </p>
             }
             <div className="">
                 <div className="row">
@@ -347,7 +385,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                                     </div>
                                     <div className='d-flex justify-content-start align-items-start' >
                                         <p className='p-label-form m-0'> Nombre: </p>
-                                        <p className='mx-2'> {beneficiario.nombresBen} </p>
+                                        <p className='mx-2'> {beneficiario.nombresBen} {beneficiario.apellidosBen} </p>
                                     </div>
                                     {
                                         zonaConsulta === 'ZONA_PUBLICA' ?

@@ -76,6 +76,12 @@
 
 .div-form-beneficiarios-active{
     overflow: hidden;
+    height: 22rem;
+    transition: 0.5s;
+}
+
+.div-form-documents-active{
+    overflow: hidden;
     height: 18rem;
     transition: 0.5s;
 }
@@ -107,6 +113,12 @@
     }
 
     .div-form-beneficiarios-active{
+        overflow: hidden;
+        height: 13rem;
+        transition: 0.5s;
+    }
+
+    .div-form-documents-active{
         overflow: hidden;
         height: 12rem;
         transition: 0.5s;

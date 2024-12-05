@@ -255,7 +255,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             <></>
         }
       </div>
-      <div className={activaEdicionDocumentos ? "div-form-beneficiarios-active" : "div-form-beneficiarios"} >
+      <div className={activaEdicionDocumentos ? "div-form-documents-active" : "div-form-beneficiarios"} >
         <p className='my-2'>Seleccione el tipo de documento y cargue el archivo que desea actualizar:</p>
         <div className="row">
           <div className="col-12 col-sm-12 col-md-12 col-lg-6" >

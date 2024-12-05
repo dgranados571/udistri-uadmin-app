@@ -48,7 +48,7 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                 return (
                     <div className="d-flex justify-content-between mt-2" >
                         <div className='' >
-                            <p>{benficiario.nombresBen}</p>
+                            <p>{benficiario.nombresBen} {benficiario.apellidosBen}</p>
                         </div>
                         <div className='' >
                             <p>{benficiario.identificacionBen}</p>

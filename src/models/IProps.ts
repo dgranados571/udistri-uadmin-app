@@ -165,6 +165,7 @@ export interface IPaginacion {
 
 export interface IBeneficiarios {
     nombresBen: string,
+    apellidosBen: string,
     identificacionBen: string,
     documentoPdfBen: string
     registraDocPdf: boolean,
