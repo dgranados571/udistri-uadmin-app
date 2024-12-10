@@ -149,6 +149,12 @@ export const UtilUrl = () => {
       urlEntornoLambda,
       pathLambda: '/service/uadmin/actualizaConfiguracionEnvioNotificaciones',
       urlDominioServidor
+    },
+    25: {
+      urlEntornoLocal,
+      urlEntornoLambda,
+      pathLambda: '/service/uadmin/getMunicipiosPorDepartamento',
+      urlDominioServidor
     }
   }
 

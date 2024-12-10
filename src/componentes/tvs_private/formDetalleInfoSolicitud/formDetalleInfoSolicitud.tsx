@@ -16,7 +16,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
     }));
 
     useEffect(() => {
-        obtieneMunicipioService()
+        obtieneDepartamentoService()
         if (zonaConsulta !== 'ZONA_PUBLICA') {
             setValuesForm()
         }
@@ -29,6 +29,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
         descripcion: '',
     })
 
+    const [departamentosList, setDepartamentosList] = useState<IListasSelect[]>([]);
     const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
 
     const [nombres, setNombres] = useState('');
@@ -37,6 +38,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
     const [correo, setCorreo] = useState('');
     const [telefono, setTelefono] = useState('');
     const [matriculaInmobiliaria, setMatriculaInmobiliaria] = useState('');
+    const [departamento, setDepartamento] = useState('INITIAL');
     const [municipio, setMunicipio] = useState('INITIAL');
 
     const [nombresRef, setNombresRef] = useState(false);
@@ -45,6 +47,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
     const [correoRef, setCorreoRef] = useState(false);
     const [telefonoRef, setTelefonoRef] = useState(false);
     const [matriculaInmobiliariaRef, setMatriculaInmobiliariaRef] = useState(false);
+    const [departamentoRef, setDepartamentoRef] = useState(false);
     const [municipioRef, setMunicipioRef] = useState(false);
 
     const validaFormularioSolicitud = () => {
@@ -79,6 +82,11 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
             formValidado.push('matriculaInmobiliaria');
             setMatriculaInmobiliariaRef(true)
         }
+        setDepartamentoRef(false)
+        if (departamento === 'INITIAL') {
+            formValidado.push('departamento');
+            setDepartamentoRef(true)
+        }
         setMunicipioRef(false)
         if (municipio === 'INITIAL') {
             formValidado.push('municipio');
@@ -92,7 +100,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
                 prop3: correo,
                 prop4: telefono,
                 prop9: matriculaInmobiliaria,
-                prop10: municipio
+                prop10: `${departamento}:${municipio}`
             }
         } else {
             formValidado.splice(0, formValidado.length)
@@ -124,20 +132,57 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
         setCorreo(solicitud.correo)
         setTelefono(solicitud.telefono)
         setMatriculaInmobiliaria(solicitud.matricula_inmobiliaria)
-        setMunicipio(solicitud.departamento_municipio)
+        let partesDM = solicitud.departamento_municipio.split(":");
+        setDepartamento(partesDM[0])
+        obtieneMunicipioService(partesDM[0])
+        setMunicipio(partesDM[1])
     }
 
-    const obtieneMunicipioService = async () => {
+    const obtieneDepartamentoService = async () => {
         setCargando(true);
         const authServices = new AuthServices();
         try {
-            const response: IGenericResponse = await authServices.requestPost({}, 17);
+            const response: IGenericResponse = await authServices.requestPost({}, 15);
             if (response.estado) {
                 const arrayDepartamentos = Array.from(response.objeto);
-                const municipiosList = arrayDepartamentos.map((element: any) => {
+                const departamentosList = arrayDepartamentos.map((element: any) => {
                     return {
-                        value: `${element.departamentoMunObj.id_departamento}:${element.municipioObj.id_municipio}`,
-                        label: `${element.municipioObj.municipio} -- ${element.departamentoMunObj.id_departamento}.${element.municipioObj.id_municipio}`
+                        value: element.id_departamento,
+                        label: element.departamento
+                    }
+                })
+                setDepartamentosList(departamentosList)
+            } else {
+                toast(response.mensaje)
+            }
+            setCargando(false);
+        } catch (error) {
+            toast('No es posible consultar la información, contacte al administrador')
+            setCargando(false)
+        }
+    }
+
+    const obtieneMunicipioAction = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setMunicipio('INITIAL')
+        const idDepartamento = e.target.value
+        setDepartamento(idDepartamento)
+        obtieneMunicipioService(idDepartamento)
+    }
+
+    const obtieneMunicipioService = async (idDepartamento: string) => {
+        setCargando(true);
+        const body = {
+            "idDepartamento": idDepartamento,
+        }
+        const authServices = new AuthServices();
+        try {
+            const response: IGenericResponse = await authServices.requestPost(body, 25);
+            if (response.estado) {
+                const arrayMunicipios = Array.from(response.objeto);
+                const municipiosList = arrayMunicipios.map((element: any) => {
+                    return {
+                        value: element.id_municipio,
+                        label: element.municipio
                     }
                 })
                 setMunicipiosList(municipiosList)
@@ -152,19 +197,24 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
     }
 
     const actualizaSolicitud = () => {
-        setPropsModal({
-            titulo: 'Resumen de la actualización:',
-            descripcion: '',
-            prop0: nombres,
-            prop1: apellidos,
-            prop2: numeroIdentificacion,
-            prop3: correo,
-            prop4: telefono,
-            prop9: matriculaInmobiliaria,
-            prop10: municipio
-        })
-        setModalOpen(true)
-        setTipoModal('MODAL_RESUMEN_2')
+        const validaForm = validaFormularioSolicitud()
+        if (validaForm) {
+            setPropsModal({
+                titulo: 'Resumen de la actualización:',
+                descripcion: '',
+                prop0: nombres,
+                prop1: apellidos,
+                prop2: numeroIdentificacion,
+                prop3: correo,
+                prop4: telefono,
+                prop9: matriculaInmobiliaria,
+                prop10: `${departamento}:${municipio}`
+            })
+            setModalOpen(true)
+            setTipoModal('MODAL_RESUMEN_2')
+        } else {
+            toast('Errores en el formulario de registro, valide la información')
+        }
     }
 
     const modalSi = () => {
@@ -263,6 +313,21 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
                 </div>
                 <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form'>
+                        <p className='p-label-form'> Departamento: </p>
+                        <select value={departamento} onChange={(e) => obtieneMunicipioAction(e)} className={departamentoRef ? 'form-control form-control-error' : 'form-control'} >
+                            <option value='INITIAL'>Seleccione</option>
+                            {
+                                departamentosList.map((key, i) => {
+                                    return (
+                                        <option key={i} value={key.value}>{key.label}</option>
+                                    )
+                                })
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                    <div className='div-form'>
                         <p className='p-label-form'> Municipio: </p>
                         <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={municipioRef ? 'form-control form-control-error' : 'form-control'} >
                             <option value='INITIAL'>Seleccione</option>
@@ -276,7 +341,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
                         </select>
                     </div>
                 </div>
-                <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
                     <div className='div-bottom-custom'>
                         {
                             zonaConsulta !== 'ZONA_PUBLICA' ?
