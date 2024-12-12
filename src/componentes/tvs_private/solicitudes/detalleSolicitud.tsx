@@ -15,11 +15,21 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   const rolesPermitenEditar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
   const [showBotomEditaDocumentos, setShowBotomEditaDocumentos] = useState(false);
 
-  const tiposDeArchivoEdita = [
+  const tiposDeArchivoEditaF1 = [
     { value: 'INITIAL', label: 'Seleccione' },
     { value: 'FILE_1', label: 'Cédula de ciudadania' },
     { value: 'FILE_2', label: 'Certificado de libertad' },
     { value: 'FILE_3', label: 'Impuesto predial' }
+  ]
+
+  const tiposDeArchivoEditaF2 = [
+    { value: 'INITIAL', label: 'Seleccione' },
+    { value: 'FILE_4', label: 'Certificado de Disponibilidad Agua.' },
+    { value: 'FILE_5', label: 'Certificado de Disponibilidad Energía.' },
+    { value: 'FILE_6', label: 'Certificado Uso del Suelo.' },
+    { value: 'FILE_7', label: 'Certificado de No Riesgo.' },
+    { value: 'FILE_8', label: 'Certificado de Aváluo Catastral.' },
+    { value: 'FILE_9', label: 'Lista de Verificación Documental' }
   ]
 
   const [tipoDeArchivoEdita, setTipoDeArchivoEdita] = useState('INITIAL');
@@ -32,7 +42,10 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   const [detalleSolicitud, setDetalleSolicitud] = useState<any>({});
   const [showDetalleSolicitud, setShowDetalleSolicitud] = useState(false);
   const [editaDetalleSolicitud, setEditaDetalleSolicitud] = useState(false);
-  const [activaEdicionDocumentos, setActivaEdicionDocumentos] = useState(false);
+
+  const [activaEdicionDocumentosF1, setActivaEdicionDocumentosF1] = useState(false);
+  const [activaEdicionDocumentosF2, setActivaEdicionDocumentosF2] = useState(false);
+
   const [activaBeneficiarios, setActivaBeneficiarios] = useState(false);
   const [beneficiariosList, setBeneficiariosList] = useState<IBeneficiarios[]>([]);
   const [eventosList, setEventosList] = useState<any[]>([])
@@ -110,8 +123,12 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     window.open(pdfBlobUrl, '_blank');
   };
 
-  const activaVistaEditaDocumentos = () => {
-    setActivaEdicionDocumentos(!activaEdicionDocumentos)
+  const activaVista1EditaDocumentos = () => {
+    setActivaEdicionDocumentosF1(!activaEdicionDocumentosF1)
+  }
+
+  const activaVista2EditaDocumentos = () => {
+    setActivaEdicionDocumentosF2(!activaEdicionDocumentosF2)
   }
 
   const eventInputFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,13 +182,31 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     if (formValidado.length === 0) {
       switch (tipoDeArchivoEdita) {
         case 'FILE_1':
-          cargaDocumentos(idDetalleSolicitud, 1, 'DOCUMENTO')
+          cargaDocumentos(idDetalleSolicitud, 1, 'DOCUMENTO', 'MODULO_1')
           break;
         case 'FILE_2':
-          cargaDocumentos(idDetalleSolicitud, 2, 'CERTIFICADO DE LIBERTAD')
+          cargaDocumentos(idDetalleSolicitud, 2, 'CERTIFICADO DE LIBERTAD', 'MODULO_1')
           break;
         case 'FILE_3':
-          cargaDocumentos(idDetalleSolicitud, 3, 'IMPUESTO PREDIAL')
+          cargaDocumentos(idDetalleSolicitud, 3, 'IMPUESTO PREDIAL', 'MODULO_1')
+          break;
+        case 'FILE_4':
+          cargaDocumentos(idDetalleSolicitud, 4, 'Certificado de Disponibilidad Agua'.toUpperCase(), 'MODULO_2')
+          break;
+        case 'FILE_5':
+          cargaDocumentos(idDetalleSolicitud, 5, 'Certificado de Disponibilidad Energía'.toUpperCase(), 'MODULO_2')
+          break;
+        case 'FILE_6':
+          cargaDocumentos(idDetalleSolicitud, 6, 'Certificado Uso del Suelo'.toUpperCase(), 'MODULO_2')
+          break;
+        case 'FILE_7':
+          cargaDocumentos(idDetalleSolicitud, 7, 'Certificado de No Riesgo'.toUpperCase(), 'MODULO_2')
+          break;
+        case 'FILE_8':
+          cargaDocumentos(idDetalleSolicitud, 8, 'Certificado de Aváluo Catastral'.toUpperCase(), 'MODULO_2')
+          break;
+        case 'FILE_9':
+          cargaDocumentos(idDetalleSolicitud, 9, 'Lista de Verificación Documental'.toUpperCase(), 'MODULO_2')
           break;
         default:
           break;
@@ -182,8 +217,8 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     }
   }
 
-  const cargaDocumentos = async (idProcesamiento: string, i: number, idArchivo: string) => {
-    const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/MODULO_1/${idProcesamiento}_${i}.txt`;
+  const cargaDocumentos = async (idProcesamiento: string, i: number, idArchivo: string, moduloBucket: string) => {
+    const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/${moduloBucket}/${idProcesamiento}_${i}.txt`;
     await cargaDocumentosService(fileEdita, pathBeneficiarioX, idArchivo)
     resetForm()
     consultaDetalleSolicitud();
@@ -195,7 +230,6 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     try {
       const response: IGenericResponse = await authServices.requestPostFile(fileBase64, fileName);
       if (response.estado) {
-
         toast(`El archivo: ${idArchivo}, fue cargado satisfactoriamente`)
       } else {
         toast(`No fue posible cargar el archivo: ${idArchivo}`)
@@ -213,7 +247,8 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     if (fileEditaInputRef.current) {
       fileEditaInputRef.current.value = "";
     }
-    setActivaEdicionDocumentos(false)
+    setActivaEdicionDocumentosF1(false)
+    setActivaEdicionDocumentosF2(false)
   }
 
   return (
@@ -246,16 +281,20 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
         <div className="">
           <h4> Gestión documental </h4>
         </div>
+      </div>
+      <p className='my-2'>A continuación, encontrará el listado de documentos asociados a la solicitud: </p>
+      <div className="div-info-beneficiarios">
+        <p className='p-label-menu-configura my-2'>Documentos Fase 1:</p>
         {
           showBotomEditaDocumentos ?
-            <div className={activaEdicionDocumentos ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVistaEditaDocumentos()} >
-              <div className={activaEdicionDocumentos ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
+            <div className={activaEdicionDocumentosF1 ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVista1EditaDocumentos()} >
+              <div className={activaEdicionDocumentosF1 ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
             </div>
             :
             <></>
         }
       </div>
-      <div className={activaEdicionDocumentos ? "div-form-documents-active" : "div-form-beneficiarios"} >
+      <div className={activaEdicionDocumentosF1 ? "div-form-documents-active" : "div-form-beneficiarios"} >
         <p className='my-2'>Seleccione el tipo de documento y cargue el archivo que desea actualizar:</p>
         <div className="row">
           <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
@@ -263,7 +302,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
               <p className='p-label-form'>Seleccione el archivo: </p>
               <select value={tipoDeArchivoEdita} onChange={(e) => setTipoDeArchivoEdita(e.target.value)} className={tipoDeArchivoEditaRef ? 'form-control form-control-error' : 'form-control'} >
                 {
-                  tiposDeArchivoEdita.map((key, i) => {
+                  tiposDeArchivoEditaF1.map((key, i) => {
                     return (
                       <option key={i} value={key.value}>{key.label}</option>
                     )
@@ -286,7 +325,6 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           </div>
         </div>
       </div>
-      <p className='my-2'>A continuación, encontrará el listado de documentos asociados a la solicitud: </p>
       <div className="row mt-0">
         {
           showDetalleSolicitud ?
@@ -303,6 +341,66 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             'Cargando ...'
         }
       </div>
+
+      <div className="div-info-beneficiarios">
+        <p className='p-label-menu-configura my-2'>Documentos Fase 2:</p>
+        {
+          showBotomEditaDocumentos ?
+            <div className={activaEdicionDocumentosF2 ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVista2EditaDocumentos()} >
+              <div className={activaEdicionDocumentosF2 ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
+            </div>
+            :
+            <></>
+        }
+      </div>
+      <div className={activaEdicionDocumentosF2 ? "div-form-documents-active" : "div-form-beneficiarios"} >
+        <p className='my-2'>Seleccione el tipo de documento y cargue el archivo que desea actualizar:</p>
+        <div className="row">
+          <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+            <div className='div-form'>
+              <p className='p-label-form'>Seleccione el archivo: </p>
+              <select value={tipoDeArchivoEdita} onChange={(e) => setTipoDeArchivoEdita(e.target.value)} className={tipoDeArchivoEditaRef ? 'form-control form-control-error' : 'form-control'} >
+                {
+                  tiposDeArchivoEditaF2.map((key, i) => {
+                    return (
+                      <option key={i} value={key.value}>{key.label}</option>
+                    )
+                  })
+                }
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+            <div className='div-form'>
+              <p className='p-label-form'> Aqui el documento: </p>
+              <input ref={fileEditaInputRef} type="file"
+                onChange={(e) => eventInputFiles(e)} className={fileEditaRef ? 'form-control form-control-error' : 'form-control'} />
+            </div>
+          </div>
+          <div className="col-12 col-sm-12 col-md-12 col-lg-12 mt-1" >
+            <div className='div-bottom-custom'>
+              <button className='btn btn-primary bottom-custom' onClick={() => cargaArhivoEditaAction()} >Subir archivo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row mt-0">
+        {
+          showDetalleSolicitud ?
+            detalleSolicitud.urlDocumentsMod2.map((urlDoc: any, i: number) => {
+              return (
+                <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+                  <button className='btn btn-link bottom-custom-link' onClick={() => consultaPDF(urlDoc.urlTxt)}>
+                    <FontAwesomeIcon className='icons-table-ds' icon={faFilePdf} /><p>{urlDoc.nombreArchivo}</p>
+                  </button>
+                </div>
+              )
+            })
+            :
+            'Cargando ...'
+        }
+      </div>
+
       <hr />
       <div className="row mt-0">
         <Beneficiarios idProcesamiento={idDetalleSolicitud} toast={toast} setCargando={setCargando}
