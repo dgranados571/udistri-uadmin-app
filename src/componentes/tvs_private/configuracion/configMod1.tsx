@@ -195,7 +195,8 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando, zonaCon
         setIdMunicipioEliminar(municipioDto)
         setPropsModal({
             titulo: 'Eliminar Municipio?',
-            descripcion: `Esta seguro de eliminar el minicipio: ${municipioDto.municipioObj.municipio} - ${municipioDto.departamentoMunObj.departamento} ?`
+            descripcion: `Esta seguro de eliminar el municipio: ${municipioDto.municipioObj.municipio} - ${municipioDto.departamentoMunObj.departamento} ?
+            Tenga en cuenta que debera reasignar un departamento y municipio a las solicitudes que esten asociadas al actual municipio.`
         })
     }
 
