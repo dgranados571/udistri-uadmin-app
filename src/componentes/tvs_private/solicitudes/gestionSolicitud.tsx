@@ -31,7 +31,7 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
         { value: 'INITIAL', label: 'Seleccione' },
         { value: 'EVENTO_VIABLE', label: 'Viable' },
         { value: 'EVENTO_NO_VIABLE', label: 'No Viable' },
-        { value: 'EVENTO_DEVUELTO_INGENIERIA', label: 'Devolución' }
+        { value: 'EVENTO_DEVUELTO_INGENIERIA', label: 'Devolución a Ingeniería' }
     ]
 
     const ejecutaEventoEstadoActon = () => {

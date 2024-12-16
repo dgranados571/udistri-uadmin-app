@@ -40,7 +40,7 @@ const ZoneRole1: React.FC<IZoneRoleProps> = ({ infoMenuUsuario, toast, setCargan
                 )            
             default:
                 return (
-                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta= {zonaConsulta} ></Solicitudes>
+                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta= {zonaConsulta} />
                 )
         }
     }

@@ -101,6 +101,7 @@ export interface IDetalleInfoSolicitudProps {
 export interface IConfiguracionProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+    zonaConsulta: string
 }
 
 export interface IPaginadorProps {

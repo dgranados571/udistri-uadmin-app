@@ -56,11 +56,11 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                 )
             case 'VISTA_CONFIGURACION':
                 return (
-                    <Configuracion toast={toast} setCargando={setCargando} />
+                    <Configuracion toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta}/>
                 )
             default:
                 return (
-                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta}></Solicitudes>
+                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
                 )
         }
     }

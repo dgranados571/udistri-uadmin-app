@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { IConfiguracionProps, IGenericResponse, IListasSelect } from '../../../models/IProps'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { IConfiguracionProps, IGenericResponse, IListasSelect, IlPropsModal } from '../../../models/IProps'
 import { AuthServices } from '../../services/authServices'
+import Modal from '../../tvs/modal/modal'
 
-const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
+const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando, zonaConsulta }) => {
+
+    const rolesPermitenEliminar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN']
+    const [showBotomElimina, setShowBotomElimina] = useState(false);
+
+    const [modalOpen, setModalOpen] = useState(false)
+    const [propsModal, setPropsModal] = useState<IlPropsModal>({
+        titulo: '',
+        descripcion: '',
+    })
 
     const [departamento, setDepartamento] = useState('')
     const [idDepartamento, setIdDepartamento] = useState('')
@@ -21,7 +33,12 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
     const [departamentosList, setDepartamentosList] = useState<IListasSelect[]>([]);
     const [municipiosList, setMunicipiosList] = useState<any[]>([])
 
+    const [idMunicipioEliminar, setIdMunicipioEliminar] = useState({})
+
     useEffect(() => {
+        if (rolesPermitenEliminar.includes(zonaConsulta)) {
+            setShowBotomElimina(true)
+        }
         obtieneDepartamentoService()
         obtieneMunicipioService()
     }, [])
@@ -173,6 +190,44 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
         }
     }
 
+    const eliminarMunicipio = (municipioDto: any) => {
+        setModalOpen(true)
+        setIdMunicipioEliminar(municipioDto)
+        setPropsModal({
+            titulo: 'Eliminar Municipio?',
+            descripcion: `Esta seguro de eliminar el minicipio: ${municipioDto.municipioObj.municipio} - ${municipioDto.departamentoMunObj.departamento} ?`
+        })
+    }
+
+    const modalSi = () => {
+        setModalOpen(false)
+        eliminarMunicipioService()
+    }
+
+    const modalNo = () => {
+        setModalOpen(false)        
+    }
+
+    const eliminarMunicipioService = async () => {
+        setCargando(true);
+        const authServices = new AuthServices();
+        const body = {
+            "municipioDto": idMunicipioEliminar,
+        }
+        try {
+            const response: IGenericResponse = await authServices.requestPost(body, 26);
+            if (response.estado) {
+                obtieneDepartamentoService()
+                obtieneMunicipioService()
+            }
+            toast(response.mensaje)
+            setCargando(false);
+        } catch (error) {
+            toast('No es posible consultar la información, contacte al administrador')
+            setCargando(false)
+        }
+    }
+
     return (
         <>
             <hr />
@@ -246,6 +301,9 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                             <td className='td-info'>
                                 <p className='p-label-form'>Id municipio</p>
                             </td>
+                            <td className='td-info'>
+                                <p className='p-label-form'>Acciones</p>
+                            </td>
                         </tr>
                     </thead>
                     <tbody>
@@ -262,6 +320,18 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                                         <td className='td-info'>
                                             <p className=''>SKU-{municipioDto.departamentoMunObj.id_departamento}.{municipioDto.municipioObj.id_municipio}</p>
                                         </td>
+                                        <td className='td-info'>
+                                            {
+                                                showBotomElimina ?
+                                                    <>
+                                                        <button className='btn btn-link bottom-custom-link' onClick={() => eliminarMunicipio(municipioDto)}>
+                                                            <FontAwesomeIcon className='icons-table-ds' icon={faTrash} /><p className='margin-icons'>Eliminar</p>
+                                                        </button>
+                                                    </>
+                                                    :
+                                                    <></>
+                                            }
+                                        </td>
                                     </tr>
                                 )
                             })
@@ -269,6 +339,12 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
                     </tbody>
                 </table>
             </div>
+            {
+                modalOpen ?
+                    <Modal tipoModal='MODAL_CONTROL_2' modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+                    :
+                    <></>
+            }
         </>
     )
 }

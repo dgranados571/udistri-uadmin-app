@@ -6,7 +6,7 @@ import { faEnvelope, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons'
 import ConfigMod1 from './configMod1'
 import ConfigMod2 from './configMod2'
 
-const Configuracion: React.FC<IConfiguracionProps> = ({ toast, setCargando }) => {
+const Configuracion: React.FC<IConfiguracionProps> = ({ toast, setCargando, zonaConsulta}) => {
 
     const [redirectModConfig, setRedirectModConfig] = useState('')
 
@@ -14,11 +14,11 @@ const Configuracion: React.FC<IConfiguracionProps> = ({ toast, setCargando }) =>
         switch (redirectModConfig) {
             case 'CONFIG_MOD_1':
                 return (
-                    <ConfigMod1 toast={toast} setCargando={setCargando} />
+                    <ConfigMod1 toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta}/>
                 )
             case 'CONFIG_MOD_2':
                 return (
-                    <ConfigMod2 toast={toast} setCargando={setCargando} />
+                    <ConfigMod2 toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta}/>
                 )
             default:
                 return (

@@ -5,8 +5,6 @@ export class AuthServices {
 
     requestPost(body: any, indexUrl: number): Promise<any> {
         const { url, apiLambda } = UtilUrl();
-        console.log('URL component --> ', url[indexUrl].pathLambda)
-        console.log('Body request --> ', body)
         let urlRq: string;
         let headers: any;
         const f = new FormData();
@@ -45,7 +43,6 @@ export class AuthServices {
             'Content-Type': 'multipart/form-data'
         }
         const urlService = url[1].urlEntornoLambda;
-        console.log('Data request --> ', urlService, f)
         return new Promise((resolve, reject) => {
             axios.post(urlService, f, {
                 headers
