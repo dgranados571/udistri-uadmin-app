@@ -23,7 +23,7 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
 
     const list2 = [
         { value: 'INITIAL', label: 'Seleccione' },
-        { value: 'EVENTO_ESTUDIO_VIABILIDAD', label: 'A estudio de viabilidad' },
+        { value: 'EVENTO_ESTUDIO_VIABILIDAD', label: 'Viabilidad de estudios técnicos' },
         { value: 'EVENTO_DEVUELTO_GESTION', label: 'Devolución' }
     ]
 

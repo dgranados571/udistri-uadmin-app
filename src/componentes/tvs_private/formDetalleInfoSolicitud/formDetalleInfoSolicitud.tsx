@@ -278,37 +278,37 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
                 <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form'>
                         <p className='p-label-form'>Apellidos: </p>
-                        <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className={apellidosRef ? 'form-control form-control-error' : 'form-control'} />
+                        <input type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value.toUpperCase())} className={apellidosRef ? 'form-control form-control-error' : 'form-control'} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form'>
                         <p className='p-label-form'>Nombres: </p>
-                        <input type="text" value={nombres} onChange={(e) => setNombres(e.target.value)} className={nombresRef ? 'form-control form-control-error' : 'form-control'} />
+                        <input type="text" value={nombres} onChange={(e) => setNombres(e.target.value.toUpperCase())} className={nombresRef ? 'form-control form-control-error' : 'form-control'} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form'>
                         <p className='p-label-form'>Cédula: </p>
-                        <input type="text" value={numeroIdentificacion} onChange={(e) => setNumeroIdentificacion(e.target.value)} className={numeroIdentificacionRef ? 'form-control form-control-error' : 'form-control'} />
+                        <input type="text" value={numeroIdentificacion} onChange={(e) => setNumeroIdentificacion(e.target.value.toUpperCase())} className={numeroIdentificacionRef ? 'form-control form-control-error' : 'form-control'} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form'>
                         <p className='p-label-form'>Correo: </p>
-                        <input type="text" value={correo} onChange={(e) => setCorreo(e.target.value)} className={correoRef ? 'form-control form-control-error' : 'form-control'} />
+                        <input type="text" value={correo} onChange={(e) => setCorreo(e.target.value.toUpperCase())} className={correoRef ? 'form-control form-control-error' : 'form-control'} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form'>
                         <p className='p-label-form'> Teléfono: </p>
-                        <input type="text" value={telefono} onChange={(e) => setTelefono(e.target.value)} className={telefonoRef ? 'form-control form-control-error' : 'form-control'} />
+                        <input type="text" value={telefono} onChange={(e) => setTelefono(e.target.value.toUpperCase())} className={telefonoRef ? 'form-control form-control-error' : 'form-control'} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                     <div className='div-form'>
                         <p className='p-label-form'> Matricula inmobiliaria: </p>
-                        <input type="text" value={matriculaInmobiliaria} onChange={(e) => setMatriculaInmobiliaria(e.target.value)} className={matriculaInmobiliariaRef ? 'form-control form-control-error' : 'form-control'} />
+                        <input type="text" value={matriculaInmobiliaria} onChange={(e) => setMatriculaInmobiliaria(e.target.value.toUpperCase())} className={matriculaInmobiliariaRef ? 'form-control form-control-error' : 'form-control'} />
                     </div>
                 </div>
                 <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
@@ -319,7 +319,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
                             {
                                 departamentosList.map((key, i) => {
                                     return (
-                                        <option key={i} value={key.value}>{key.label}</option>
+                                        <option key={i} value={key.value}>{key.label.toUpperCase()}</option>
                                     )
                                 })
                             }
@@ -334,7 +334,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
                             {
                                 municipiosList.map((key, i) => {
                                     return (
-                                        <option key={i} value={key.value}>{key.label}</option>
+                                        <option key={i} value={key.value}>{key.label.toUpperCase()}</option>
                                     )
                                 })
                             }

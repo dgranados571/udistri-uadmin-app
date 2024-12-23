@@ -28,8 +28,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     { value: 'FILE_5', label: 'Certificado de Disponibilidad Energía.' },
     { value: 'FILE_6', label: 'Certificado Uso del Suelo.' },
     { value: 'FILE_7', label: 'Certificado de No Riesgo.' },
-    { value: 'FILE_8', label: 'Certificado de Aváluo Catastral.' },
-    { value: 'FILE_9', label: 'Lista de Verificación Documental' }
+    { value: 'FILE_8', label: 'Lista de Verificación Documental' }
   ]
 
   const [tipoDeArchivoEdita, setTipoDeArchivoEdita] = useState('INITIAL');
@@ -203,10 +202,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           cargaDocumentos(idDetalleSolicitud, 7, 'Certificado de No Riesgo'.toUpperCase(), 'MODULO_2')
           break;
         case 'FILE_8':
-          cargaDocumentos(idDetalleSolicitud, 8, 'Certificado de Aváluo Catastral'.toUpperCase(), 'MODULO_2')
-          break;
-        case 'FILE_9':
-          cargaDocumentos(idDetalleSolicitud, 9, 'Lista de Verificación Documental'.toUpperCase(), 'MODULO_2')
+          cargaDocumentos(idDetalleSolicitud, 8, 'Lista de Verificación Documental'.toUpperCase(), 'MODULO_2')
           break;
         default:
           break;
@@ -259,7 +255,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           <FontAwesomeIcon className='icons-table-ds' icon={faRotateLeft} /><p className='margin-icons'>Volver</p>
         </button>
       </div>
-      <h4 className='titulo-form'>{detalleSolicitud.idDefSolicitud} </h4>
+      <h5 className='titulo-form'>{detalleSolicitud.idDefSolicitud}</h5>
       {
         showDetalleSolicitud ?
           <>

@@ -342,19 +342,19 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
                     <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'>Apellidos del beneficiario: </p>
-                            <input type="text" value={apellidosBeneficiario} onChange={(e) => setApellidosBeneficiario(e.target.value)} className={apellidosBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
+                            <input type="text" value={apellidosBeneficiario} onChange={(e) => setApellidosBeneficiario(e.target.value.toUpperCase())} className={apellidosBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'>Nombres del beneficiario: </p>
-                            <input type="text" value={nombresBeneficiario} onChange={(e) => setNombresBeneficiario(e.target.value)} className={nombresBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
+                            <input type="text" value={nombresBeneficiario} onChange={(e) => setNombresBeneficiario(e.target.value.toUpperCase())} className={nombresBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'>Cédula beneficiario: </p>
-                            <input type="text" value={numIdentificacionBeneficiario} onChange={(e) => setNumIdentificacionBeneficiario(e.target.value)} className={numIdentificacionBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
+                            <input type="text" value={numIdentificacionBeneficiario} onChange={(e) => setNumIdentificacionBeneficiario(e.target.value.toUpperCase())} className={numIdentificacionBeneficiarioRef ? 'form-control form-control-error' : 'form-control'} />
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
