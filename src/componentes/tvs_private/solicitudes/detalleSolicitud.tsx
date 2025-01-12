@@ -249,16 +249,23 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       }
     }
     if (formValidado.length === 0) {
-
+      const nombreArchivo = `${nombreDeArchivoAnexo}`;
+      cargaDocumentosAnexos(idDetalleSolicitud, nombreArchivo.trim().replace(/\s+/g, "_"), nombreDeArchivoAnexo.toUpperCase(), 'MODULO_ANEXOS')
     } else {
       formValidado.splice(0, formValidado.length)
       toast('Errores en el formulario, valide la información')
     }
-
   }
 
   const cargaDocumentos = async (idProcesamiento: string, i: number, idArchivo: string, moduloBucket: string) => {
     const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/${moduloBucket}/${idProcesamiento}_${i}.txt`;
+    await cargaDocumentosService(fileEdita, pathBeneficiarioX, idArchivo)
+    resetForm()
+    consultaDetalleSolicitud();
+  }
+
+  const cargaDocumentosAnexos = async (idProcesamiento: string, nombreArchivo: string, idArchivo: string, moduloBucket: string) => {
+    const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/${moduloBucket}/${nombreArchivo}.txt`;
     await cargaDocumentosService(fileEdita, pathBeneficiarioX, idArchivo)
     resetForm()
     consultaDetalleSolicitud();
@@ -283,6 +290,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
 
   const resetForm = () => {
     setTipoDeArchivoEdita('INITIAL')
+    setNombreDeArchivoAnexo('')
     setFileEdita('')
     if (fileEditaInputRef1.current) {
       fileEditaInputRef1.current.value = "";
@@ -528,7 +536,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
             <div className='div-form'>
               <p className='p-label-form'>Nombre del archivo: </p>
-              <input type="text" value={nombreDeArchivoAnexo} onChange={(e) => setNombreDeArchivoAnexo(e.target.value.toUpperCase())} className={nombreDeArchivoAnexoRef ? 'form-control form-control-error' : 'form-control'} />
+              <input type="text" value={nombreDeArchivoAnexo} onChange={(e) => setNombreDeArchivoAnexo(e.target.value)} className={nombreDeArchivoAnexoRef ? 'form-control form-control-error' : 'form-control'} />
             </div>
           </div>
           <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
