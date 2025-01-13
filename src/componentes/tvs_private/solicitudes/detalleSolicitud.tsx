@@ -32,7 +32,24 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   ]
 
   const tiposDeArchivoEditaF3 = [
-    { value: 'INITIAL', label: 'Seleccione' }
+    { value: 'INITIAL', label: 'Seleccione' },
+    { value: 'FILE_9', label: 'Copia de la última escritura del predio.' },
+    { value: 'FILE_10', label: 'Paz y salvo del impuesto predial.' },
+    { value: 'FILE_11', label: 'Documentos de los vecinos.' },
+    { value: 'FILE_12', label: 'Notificación a vecinos' },
+    { value: 'FILE_13', label: 'Certificado de solicitud de licencia.' },
+    { value: 'FILE_14', label: 'Poder para solicitud de licencia.' },
+    { value: 'FILE_15', label: 'Firmar planos y formato notarial. ' },
+    { value: 'FILE_16', label: 'Radicado de la licencia.' },
+    { value: 'FILE_17', label: 'Certificación de avalúo catastral.' },
+    { value: 'FILE_18', label: 'Certificación de nomenclatura.' },
+    { value: 'FILE_19', label: 'Formulario de postulación.' },
+    { value: 'FILE_20', label: 'Certificado de responsabilidad documental.' },
+    { value: 'FILE_21', label: 'Formulario de cartilla de especificaciones.' },
+    { value: 'FILE_22', label: 'Contrato de obra.' },
+    { value: 'FILE_23', label: 'Contrato de voluntariado.' },
+    { value: 'FILE_24', label: 'Formulario de declaración jurada.' },
+
   ]
 
   const [tipoDeArchivoEdita, setTipoDeArchivoEdita] = useState('INITIAL');
@@ -223,6 +240,54 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           break;
         case 'FILE_8':
           cargaDocumentos(idDetalleSolicitud, 8, 'Lista de Verificación Documental'.toUpperCase(), 'MODULO_2')
+          break;
+        case 'FILE_9':
+          cargaDocumentos(idDetalleSolicitud, 9, 'Copia de la última escritura del predio'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_10':
+          cargaDocumentos(idDetalleSolicitud, 10, 'Paz y salvo del impuesto predial'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_11':
+          cargaDocumentos(idDetalleSolicitud, 11, 'Documentos de los vecinos'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_12':
+          cargaDocumentos(idDetalleSolicitud, 12, 'Notificación a vecinos'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_13':
+          cargaDocumentos(idDetalleSolicitud, 13, 'Certificado de solicitud de licencia'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_14':
+          cargaDocumentos(idDetalleSolicitud, 14, 'Poder para solicitud de licencia'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_15':
+          cargaDocumentos(idDetalleSolicitud, 15, 'Firmar planos y formato notarial'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_16':
+          cargaDocumentos(idDetalleSolicitud, 16, 'Radicado de la licencia'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_17':
+          cargaDocumentos(idDetalleSolicitud, 17, 'Certificación de avalúo catastral'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_18':
+          cargaDocumentos(idDetalleSolicitud, 18, 'Certificación de nomenclatura'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_19':
+          cargaDocumentos(idDetalleSolicitud, 19, 'Formulario de postulación'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_20':
+          cargaDocumentos(idDetalleSolicitud, 20, 'Certificado de responsabilidad documental'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_21':
+          cargaDocumentos(idDetalleSolicitud, 21, 'Formulario de cartilla de especificaciones'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_22':
+          cargaDocumentos(idDetalleSolicitud, 22, 'Contrato de obra'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_23':
+          cargaDocumentos(idDetalleSolicitud, 23, 'Contrato de voluntariado'.toUpperCase(), 'MODULO_3')
+          break;
+        case 'FILE_24':
+          cargaDocumentos(idDetalleSolicitud, 24, 'Formulario de declaración jurada'.toUpperCase(), 'MODULO_3')
           break;
         default:
           break;
