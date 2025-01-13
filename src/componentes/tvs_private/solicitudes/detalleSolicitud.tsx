@@ -24,11 +24,11 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
 
   const tiposDeArchivoEditaF2 = [
     { value: 'INITIAL', label: 'Seleccione' },
-    { value: 'FILE_4', label: 'Certificado de Disponibilidad Agua.' },
-    { value: 'FILE_5', label: 'Certificado de Disponibilidad Energía.' },
-    { value: 'FILE_6', label: 'Certificado Uso del Suelo.' },
-    { value: 'FILE_7', label: 'Certificado de No Riesgo.' },
-    { value: 'FILE_8', label: 'Lista de Verificación Documental' }
+    { value: 'FILE_4', label: 'Certificado de disponibilidad agua.' },
+    { value: 'FILE_5', label: 'Certificado de disponibilidad energía.' },
+    { value: 'FILE_6', label: 'Certificado uso del suelo.' },
+    { value: 'FILE_7', label: 'Certificado de no riesgo.' },
+    { value: 'FILE_8', label: 'Lista de verificación documental' }
   ]
 
   const tiposDeArchivoEditaF3 = [
