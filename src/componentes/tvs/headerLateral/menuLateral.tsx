@@ -23,7 +23,7 @@ const MenuLateralComponent: React.FC<IMenuLateralProps> = ({ setOpenMenu, seleci
                             <img src={logoBase64} alt='idelpan-logo' className='img-logo-idelpan'></img>
                         </div>
                     </div>
-                    <div className='div-dashboard-info-padre'>
+                    <div className='div-dashboard-info-padre' style={{ overflow: "auto" }}>
                         <div className='div-dashboard-info'>
                             <p className='m-0'>{infoMenuUsuario.nombre_completo} </p>
                         </div>
