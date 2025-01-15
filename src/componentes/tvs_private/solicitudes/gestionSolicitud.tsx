@@ -34,6 +34,16 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
         { value: 'EVENTO_DEVUELTO_INGENIERIA', label: 'Devolución a Ingeniería' }
     ]
 
+    const list4 = [
+        { value: 'INITIAL', label: 'Seleccione' },
+        { value: 'EVENTO_ENVIADO_POSTULACION', label: 'Enviar a postulación' }]
+
+    const list5 = [
+        { value: 'INITIAL', label: 'Seleccione' },
+        { value: 'EVENTO_OBTENCION_SUBSIDIO', label: 'Obtiene subsidio' },
+        { value: 'EVENTO_DEVUELTO_INGENIERIA', label: 'Devolución a Ingeniería' }
+    ]
+
     const ejecutaEventoEstadoActon = () => {
         let formValidado = [];
         setValueSelectedRef(false)
@@ -103,7 +113,7 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                                 <p className='p-label-form'>Observaciones</p>
-                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value)} autoComplete='off' />
+                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value.toUpperCase())} autoComplete='off' />
                             </div>
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                                 <div className='div-bottom-custom '>
@@ -136,7 +146,7 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                                 <p className='p-label-form'>Observaciones</p>
-                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value)} autoComplete='off' />
+                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value.toUpperCase())} autoComplete='off' />
                             </div>
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                                 <div className='div-bottom-custom '>
@@ -169,7 +179,7 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                                 <p className='p-label-form'>Observaciones</p>
-                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value)} autoComplete='off' />
+                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value.toUpperCase())} autoComplete='off' />
                             </div>
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                                 <div className='div-bottom-custom '>
@@ -202,7 +212,73 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                                 <p className='p-label-form'>Observaciones</p>
-                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value)} autoComplete='off' />
+                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value.toUpperCase())} autoComplete='off' />
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <div className='div-bottom-custom '>
+                                    <button className='btn btn-primary bottom-custom' onClick={() => ejecutaEventoEstadoActon()} >Enviar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
+            case 'MODULO_4':
+                return (
+                    <>
+                        <hr />
+                        <h4> Que puedo hacer con la solicitud? </h4>
+                        <div className="row">
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <div className='div-form'>
+                                    <p className='mb-3'>Seleccione la tipificación de solución para la solicitud:</p>
+                                    <select value={valueSelected} onChange={(e) => setValueSelected(e.target.value)} className={valueSelectedRef ? 'form-control form-control-error' : 'form-control'} >
+                                        {
+                                            list4.map((key, i) => {
+                                                return (
+                                                    <option key={i} value={key.value}>{key.label}</option>
+                                                )
+                                            })
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <p className='p-label-form'>Observaciones</p>
+                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value.toUpperCase())} autoComplete='off' />
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <div className='div-bottom-custom '>
+                                    <button className='btn btn-primary bottom-custom' onClick={() => ejecutaEventoEstadoActon()} >Enviar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
+            case 'MODULO_5':
+                return (
+                    <>
+                        <hr />
+                        <h4> Que puedo hacer con la solicitud? </h4>
+                        <div className="row">
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <div className='div-form'>
+                                    <p className='mb-3'>Seleccione la tipificación de solución para la solicitud:</p>
+                                    <select value={valueSelected} onChange={(e) => setValueSelected(e.target.value)} className={valueSelectedRef ? 'form-control form-control-error' : 'form-control'} >
+                                        {
+                                            list5.map((key, i) => {
+                                                return (
+                                                    <option key={i} value={key.value}>{key.label}</option>
+                                                )
+                                            })
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <p className='p-label-form'>Observaciones</p>
+                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value.toUpperCase())} autoComplete='off' />
                             </div>
                             <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                                 <div className='div-bottom-custom '>
