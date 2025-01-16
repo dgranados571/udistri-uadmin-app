@@ -391,11 +391,11 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     }
   }
 
-  const cargaImagenesAction = () => {
+  const cargaImagenesAction = async () => {
     if (filesImages.length > 0) {
       for (let index = 0; index < filesImages.length; index++) {
         const pathImageX = `OT_UADMIN/${idDetalleSolicitud}/MODULO_IMAGES/imagen_${index}.txt`;
-        cargaDocumentosService(filesImages[index], pathImageX, 'Imagen_' + index)
+        await cargaDocumentosService(filesImages[index], pathImageX, 'Imagen_' + index)
       }
       resetForm()
       consultaDetalleSolicitud();
