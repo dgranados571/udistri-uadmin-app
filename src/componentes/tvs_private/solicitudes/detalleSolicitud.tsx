@@ -1,19 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './solicitudes.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFilePdf, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
+import { faFilePdf, faRotateLeft, faTrash, faEye } from '@fortawesome/free-solid-svg-icons'
 
-import { FormDetalleInfoSolicitudHandle, IBeneficiarios, IDetalleSolicitudProps, IGenericResponse } from '../../../models/IProps'
+import { FormDetalleInfoSolicitudHandle, IBeneficiarios, IDetalleSolicitudProps, IGenericResponse, IListasImages, IlPropsModal } from '../../../models/IProps'
 import { AuthServices } from '../../services/authServices'
 import GestionSolicitud from './gestionSolicitud'
 import Beneficiarios from '../beneficiarios/beneficiarios'
 import DetalleInfoSolicitud from '../detalleInfoSolicitud/detalleInfoSolicitud'
 import FormDetalleInfoSolicitud from '../formDetalleInfoSolicitud/formDetalleInfoSolicitud'
+import Modal from '../../tvs/modal/modal'
 
 const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta }) => {
 
   const rolesPermitenEditar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
   const [showBotomEditaDocumentos, setShowBotomEditaDocumentos] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false)
+  const [propsModal, setPropsModal] = useState<IlPropsModal>({
+    titulo: '',
+    descripcion: '',
+  })
 
   const tiposDeArchivoEditaF1 = [
     { value: 'INITIAL', label: 'Seleccione' },
@@ -49,7 +56,6 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     { value: 'FILE_22', label: 'Contrato de obra.' },
     { value: 'FILE_23', label: 'Contrato de voluntariado.' },
     { value: 'FILE_24', label: 'Formulario de declaración jurada.' },
-
   ]
 
   const [tipoDeArchivoEdita, setTipoDeArchivoEdita] = useState('INITIAL');
@@ -58,9 +64,10 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   const [nombreDeArchivoAnexo, setNombreDeArchivoAnexo] = useState('');
   const [nombreDeArchivoAnexoRef, setNombreDeArchivoAnexoRef] = useState(false);
 
+  const [imageEdita, setImageEdita] = useState('');
   const [fileEdita, setFileEdita] = useState('');
   const [filesImages, setFilesImages] = useState<string[]>([]);
-  const [filesImagesView, setFilesImagesView] = useState<string[]>([]);
+  const [filesImagesView, setFilesImagesView] = useState<IListasImages[]>([]);
   const [fileEditaRef, setFileEditaRef] = useState(false);
   const fileEditaInputRef1 = useRef<HTMLInputElement | null>(null);
   const fileEditaInputRef2 = useRef<HTMLInputElement | null>(null);
@@ -108,7 +115,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           setBeneficiariosList(response.objeto.beneficiariosList)
           setEventosList(response.objeto.eventosSolicitud)
           setShowDetalleSolicitud(true);
-          listaImagenes(response.objeto.urlImages)
+          await listaImagenes(response.objeto.urlImages)
         } else {
           toast(response.mensaje);
         }
@@ -119,6 +126,25 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       }
     } else {
       toast('No es posible consultar la información, contacte al administrador')
+    }
+  }
+
+  const listaImagenes = async (urlImages: any[]) => {
+    if (urlImages.length > 0) {
+      let formImages: IListasImages[] = [];
+      for (let i = 0; i < urlImages.length; i++) {
+        const imgFormat = await consultaImageBase64(urlImages[i].urlTxt)
+        if (imgFormat) {
+          const imgElement: IListasImages = {
+            imgBase64: imgFormat,
+            urlTxt: urlImages[i].urlTxt
+          }
+          formImages.push(imgElement);
+        }
+      }
+      setFilesImagesView(formImages)
+    } else {
+      setFilesImagesView([])
     }
   }
 
@@ -458,17 +484,45 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     setActivaEdicionDocumentosAnexos(false)
   }
 
-  const listaImagenes = async (urlImages: any[]) => {
-    if (urlImages.length > 0) {
-      let formImages: string[] = [];
-      for (let i = 0; i < urlImages.length; i++) {
-        const imgFormat = await consultaImageBase64(urlImages[i].urlTxt)
-        if (imgFormat) {
-          formImages.push(imgFormat);
-        }
-      }
-      setFilesImagesView(formImages)
+  const eliminaImage = (urlTxt: string) => {
+    setPropsModal({
+      titulo: 'Eliminar imagen',
+      descripcion: `Esta seguro de eliminar la imagen seleccionada ?`
+    })
+    setImageEdita(urlTxt)
+    setModalOpen(true)
+  }
+
+  const eliminarImageService = async () => {
+    setCargando(true)
+    const authServices = new AuthServices();
+    const body = {
+      "idProcesamiento": idDetalleSolicitud,
+      "moduloS3": "MODULO_IMAGES",
+      "urlTxt": imageEdita,
     }
+    try {
+      const response: IGenericResponse = await authServices.requestPost(body, 27);
+      toast(response.mensaje)
+      if (response.estado) {
+        consultaDetalleSolicitud();
+      } else {
+        setCargando(false)
+      }
+    } catch (error) {
+      toast('No es posible eliminar la solicitud, contacte al administrador')
+      setCargando(false)
+    }
+  }
+
+  const modalSi = () => {
+    eliminarImageService()
+    setModalOpen(false)
+  }
+
+  const modalNo = () => {
+    setModalOpen(false)
+
   }
 
   return (
@@ -756,11 +810,23 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       </div>
       <div className="row mt-3">
         {
-          filesImagesView.map((imgBase64: any, key: number) => {
+          filesImagesView.map((imgElement, key: number) => {
             return (
-              <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-3">
-                <img src={imgBase64} className='img-lista-solicitud' />
-              </div>
+              <>
+                <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-3">
+                  <div className="div-action-images-padre">
+                    <img src={imgElement.imgBase64} className='img-lista-solicitud' />
+                    <div className="div-action-images">
+                      <button className='btn btn-link bottom-custom-link' >
+                        <FontAwesomeIcon className='icons-image' icon={faEye} />
+                      </button>
+                      <button className='btn btn-link bottom-custom-link' onClick={() => eliminaImage(imgElement.urlTxt)}>
+                        <FontAwesomeIcon className='icons-image' icon={faTrash} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
             )
           })
         }
@@ -810,6 +876,12 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           </tbody>
         </table>
       </div>
+      {
+        modalOpen ?
+          <Modal tipoModal='MODAL_CONTROL_2' modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+          :
+          <></>
+      }
     </>
   )
 }

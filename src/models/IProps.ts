@@ -175,6 +175,11 @@ export interface IBeneficiarios {
     }
 }
 
+export interface IListasImages {
+    imgBase64: string,
+    urlTxt: string
+}
+
 export interface IGestionSolicitudProps {
     toast: Function,
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;

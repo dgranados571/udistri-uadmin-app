@@ -1,16 +1,16 @@
-.div-titulo-ds{
+.div-titulo-ds {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 100%;
 }
 
-.icons-table-ds{
+.icons-table-ds {
     margin: 0px 0px 0px 8px;
     color: blueviolet;
 }
 
-.icons-table-ds:hover{
+.icons-table-ds:hover {
     color: orange;
     margin: 0px 0px 0px 8px;
 }
@@ -19,16 +19,33 @@
     margin: 0px;
 }
 
-.img-lista-solicitud{
+.img-lista-solicitud {
     width: 100%;
     height: 15rem;
     object-fit: cover;
 }
 
+.div-action-images-padre {
+    position: relative;
+}
+
+.div-action-images {
+    display: flex;
+    position: absolute;
+    top: 0px;
+    right: 5px;
+}
+
+.icons-image {
+    margin: 0px 0px 0px 8px;
+    color: orange;
+    font-size: 20px;
+}
+
 @media (min-width: 760px) {}
 
 @media (min-width: 1025px) {
-    
+
     .margin-icons {
         margin: 0px 5px;
     }
