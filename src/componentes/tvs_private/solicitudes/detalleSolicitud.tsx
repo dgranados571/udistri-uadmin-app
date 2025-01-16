@@ -59,6 +59,8 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   const [nombreDeArchivoAnexoRef, setNombreDeArchivoAnexoRef] = useState(false);
 
   const [fileEdita, setFileEdita] = useState('');
+  const [filesImages, setFilesImages] = useState<string[]>([]);
+  const [filesImagesView, setFilesImagesView] = useState<string[]>([]);
   const [fileEditaRef, setFileEditaRef] = useState(false);
   const fileEditaInputRef1 = useRef<HTMLInputElement | null>(null);
   const fileEditaInputRef2 = useRef<HTMLInputElement | null>(null);
@@ -102,10 +104,11 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       try {
         const response: IGenericResponse = await authServices.requestPost(body, 10);
         if (response.estado) {
-          setBeneficiariosList(response.objeto.beneficiariosList)
           setDetalleSolicitud(response.objeto);
+          setBeneficiariosList(response.objeto.beneficiariosList)
           setEventosList(response.objeto.eventosSolicitud)
           setShowDetalleSolicitud(true);
+          listaImagenes(response.objeto.urlImages)
         } else {
           toast(response.mensaje);
         }
@@ -151,6 +154,29 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     window.open(pdfBlobUrl, '_blank');
   };
 
+  const consultaImageBase64 = async (urlTxt: string): Promise<string | null> => {
+    setCargando(true);
+    const authServices = new AuthServices();
+    try {
+      const body = {
+        "urlTxt": urlTxt,
+      }
+      const response: IGenericResponse = await authServices.requestPost(body, 12);
+      if (response.estado) {
+        setCargando(false);
+        return response.objeto
+      } else {
+        toast(response.mensaje);
+        setCargando(false);
+        return null
+      }
+    } catch (error) {
+      toast('No es posible consultar la información, contacte al administrador');
+      setCargando(false);
+      return null
+    }
+  }
+
   const activaVista1EditaDocumentos = () => {
     setActivaEdicionDocumentosF1(!activaEdicionDocumentosF1)
   }
@@ -165,6 +191,49 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
 
   const activaVistaAnexosEditaDocumentos = () => {
     setActivaEdicionDocumentosAnexos(!activaEdicionDocumentosAnexos)
+  }
+
+  const eventInputFilesImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    setFileEditaRef(false)
+    if (fileList) {
+      const validImageTypes = ['image/jpeg', 'image/png'];
+      let controlTypeImage = true;
+      for (let i = 0; i < fileList.length; i++) {
+        if (!validImageTypes.includes(fileList[i].type)) {
+          controlTypeImage = false
+          break;
+        }
+      }
+      if (controlTypeImage) {
+        let valorFinalMB = 0;
+        for (let step = 0; step < fileList.length; step++) {
+          var fileSizeMB = fileList[step].size / 1024 / 1024;
+          valorFinalMB = valorFinalMB + fileSizeMB;
+        }
+        if (valorFinalMB < 10) {
+          const base64Files: string[] = [];
+          Array.from(fileList).forEach((file) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              if (reader.result && typeof reader.result === 'string') {
+                base64Files.push(reader.result);
+                if (base64Files.length === fileList.length) {
+                  setFilesImages(base64Files);
+                }
+              }
+            };
+            reader.readAsDataURL(file);
+          });
+        } else {
+          toast("*Los archivos cargados supera los 10 MB")
+          setFileEditaRef(true)
+        }
+      } else {
+        setFileEditaRef(true)
+        toast('Solo permite archivo JPEG y PNG')
+      }
+    }
   }
 
   const eventInputFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -322,6 +391,19 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     }
   }
 
+  const cargaImagenesAction = () => {
+    if (filesImages.length > 0) {
+      for (let index = 0; index < filesImages.length; index++) {
+        const pathImageX = `OT_UADMIN/${idDetalleSolicitud}/MODULO_IMAGES/imagen_${index}.txt`;
+        cargaDocumentosService(filesImages[index], pathImageX, 'Imagen_' + index)
+      }
+      resetForm()
+      consultaDetalleSolicitud();
+    } else {
+      toast('No hay imagenes para cargar.')
+    }
+  }
+
   const cargaDocumentos = async (idProcesamiento: string, i: number, idArchivo: string, moduloBucket: string) => {
     const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/${moduloBucket}/${idProcesamiento}_${i}.txt`;
     await cargaDocumentosService(fileEdita, pathBeneficiarioX, idArchivo)
@@ -357,6 +439,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     setTipoDeArchivoEdita('INITIAL')
     setNombreDeArchivoAnexo('')
     setFileEdita('')
+    setFilesImages([])
     if (fileEditaInputRef1.current) {
       fileEditaInputRef1.current.value = "";
     }
@@ -373,6 +456,19 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     setActivaEdicionDocumentosF2(false)
     setActivaEdicionDocumentosF3(false)
     setActivaEdicionDocumentosAnexos(false)
+  }
+
+  const listaImagenes = async (urlImages: any[]) => {
+    if (urlImages.length > 0) {
+      let formImages: string[] = [];
+      for (let i = 0; i < urlImages.length; i++) {
+        const imgFormat = await consultaImageBase64(urlImages[i].urlTxt)
+        if (imgFormat) {
+          formImages.push(imgFormat);
+        }
+      }
+      setFilesImagesView(formImages)
+    }
   }
 
   return (
@@ -524,7 +620,6 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             'Cargando ...'
         }
       </div>
-
       <div className="div-info-beneficiarios">
         <p className='p-label-menu-configura my-2'>Documentos Fase 3:</p>
         {
@@ -583,7 +678,6 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             'Cargando ...'
         }
       </div>
-
       <div className="div-info-beneficiarios">
         <p className='p-label-menu-configura my-2'>Documentos Anexos:</p>
         {
@@ -634,7 +728,6 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
             'Cargando ...'
         }
       </div>
-
       <hr />
       <div className="row mt-0">
         <Beneficiarios idProcesamiento={idDetalleSolicitud} toast={toast} setCargando={setCargando}
@@ -646,6 +739,32 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       </div>
       <GestionSolicitud toast={toast} setCargando={setCargando} useSelect={detalleSolicitud.gestionSolicitud}
         idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} />
+      <hr />
+      <h4> Registro fotográfico: </h4>
+      <p className='mb-1'>Cargue las imagenes de manera simultanea solo en formato JPEG o PNG: </p>
+      <div className="row">
+        <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+          <div className='div-form'>
+            <input ref={fileEditaInputRefAnexo} type="file" multiple onChange={(e) => eventInputFilesImages(e)} className={fileEditaRef ? 'form-control form-control-error' : 'form-control'} />
+          </div>
+        </div>
+        <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-1" >
+          <div className='div-bottom-custom mt-0'>
+            <button className='btn btn-primary bottom-custom' onClick={() => cargaImagenesAction()} >Cargar imagenes</button>
+          </div>
+        </div>
+      </div>
+      <div className="row mt-3">
+        {
+          filesImagesView.map((imgBase64: any, key: number) => {
+            return (
+              <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-3">
+                <img src={imgBase64} className='img-lista-solicitud' />
+              </div>
+            )
+          })
+        }
+      </div>
       <hr />
       <h4> Historia de la solicitud </h4>
       <p className='mb-1'>Aqui podra ver la operaciones más representativas de la solicitud: </p>
