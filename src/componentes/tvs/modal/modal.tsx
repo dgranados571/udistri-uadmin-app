@@ -224,6 +224,20 @@ const Modal: React.FC<IModalProps> = ({ tipoModal, modalSi, modalNo, propsModal 
                         </div>
                     </>
                 )
+            case 'MODAL_IMAGEN':
+                return (
+                    <>
+                        <div className='div-modal-active'>
+                            <div className='div-content-element-padre' onClick={() => modalNo()}>
+                                <div className='div-content-element'>
+                                    <div className='div-size-content'>
+                                    <img src={propsModal.descripcion} className='img-lista-solicitud-modal' />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
             default:
                 break;
         }

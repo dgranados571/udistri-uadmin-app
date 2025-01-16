@@ -17,10 +17,12 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   const [showBotomEditaDocumentos, setShowBotomEditaDocumentos] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false)
+   const [tipoModal, setTipoModal] = useState('')
   const [propsModal, setPropsModal] = useState<IlPropsModal>({
     titulo: '',
     descripcion: '',
   })
+
 
   const tiposDeArchivoEditaF1 = [
     { value: 'INITIAL', label: 'Seleccione' },
@@ -484,7 +486,17 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
     setActivaEdicionDocumentosAnexos(false)
   }
 
+  const vizualizaImagen = (imgBase64: string) => {
+    setTipoModal('MODAL_IMAGEN')
+    setPropsModal({
+      titulo: '',
+      descripcion: imgBase64
+    })
+    setModalOpen(true)
+  }
+
   const eliminaImage = (urlTxt: string) => {
+    setTipoModal('MODAL_CONTROL_2')
     setPropsModal({
       titulo: 'Eliminar imagen',
       descripcion: `Esta seguro de eliminar la imagen seleccionada ?`
@@ -815,7 +827,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
               <>
                 <div className="col-12 col-sm-12 col-md-12 col-lg-6 mt-3">
                   <div className="div-action-images-padre">
-                    <img src={imgElement.imgBase64} className='img-lista-solicitud' />
+                    <img src={imgElement.imgBase64} className='img-lista-solicitud' onClick={() => vizualizaImagen(imgElement.imgBase64)} />
                     <div className="div-action-images">
                       <button className='btn btn-link bottom-custom-link' >
                         <FontAwesomeIcon className='icons-image' icon={faEye} />
@@ -878,7 +890,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       </div>
       {
         modalOpen ?
-          <Modal tipoModal='MODAL_CONTROL_2' modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+          <Modal tipoModal= {tipoModal} modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
           :
           <></>
       }

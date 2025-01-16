@@ -23,6 +23,13 @@
     width: 100%;
     height: 15rem;
     object-fit: cover;
+    cursor: pointer;
+}
+
+.img-lista-solicitud-modal{
+    width: 100%;
+    height: 25rem;
+    object-fit: contain;
 }
 
 .div-action-images-padre {
