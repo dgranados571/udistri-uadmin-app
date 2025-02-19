@@ -14,6 +14,7 @@ import Modal from '../../tvs/modal/modal'
 const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta }) => {
 
   const rolesPermitenEditar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
+  const [showBotomEditaDocumentosFase1, setShowBotomEditaDocumentosFase1] = useState(false);
   const [showBotomEditaDocumentos, setShowBotomEditaDocumentos] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -94,6 +95,10 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   useEffect(() => {
     if (rolesPermitenEditar.includes(zonaConsulta)) {
       setShowBotomEditaDocumentos(true)
+      setShowBotomEditaDocumentosFase1(true)
+    }
+    if(zonaConsulta === 'USUARIO_ROLE_3'){
+      setShowBotomEditaDocumentosFase1(true)
     }
     if (!editaDetalleSolicitud) {
       consultaDetalleSolicitud();
@@ -572,7 +577,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       <div className="div-info-beneficiarios">
         <p className='p-label-menu-configura my-2'>Documentos Fase 1:</p>
         {
-          showBotomEditaDocumentos ?
+          showBotomEditaDocumentosFase1 ?
             <div className={activaEdicionDocumentosF1 ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVista1EditaDocumentos()} >
               <div className={activaEdicionDocumentosF1 ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
             </div>

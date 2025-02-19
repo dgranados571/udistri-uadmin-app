@@ -45,7 +45,7 @@ const ZonePrivate: React.FC<IZoneProps> = () => {
                 )
             case 'ROLE_ADMIN':
                 return (
-                    <ZoneAdmin infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROLE_ADMIN'/>
+                    <ZoneAdmin infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROLE_ADMIN' />
                 )
             case 'ROLE_1':
                 return (
@@ -54,6 +54,10 @@ const ZonePrivate: React.FC<IZoneProps> = () => {
             case 'ROLE_2':
                 return (
                     <ZoneRole2 infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROLE_2' />
+                )
+            case 'ROLE_3':
+                return (
+                    <ZoneRole2 infoMenuUsuario={infoMenuUsuario} toast={toast} setCargando={setCargando} zonaConsulta='USUARIO_ROLE_3' />
                 )
             default:
                 return (

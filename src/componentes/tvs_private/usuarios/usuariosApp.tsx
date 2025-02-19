@@ -72,7 +72,8 @@ const UsuariosApp: React.FC<IUsuariosAppProps> = ({ toast, setCargando, zonaCons
         { value: 'INITIAL', label: 'Seleccione' },
         { value: 'ROLE_ADMIN', label: 'Administrador de aplicación' },
         { value: 'ROLE_1', label: 'Gestor documental' },
-        { value: 'ROLE_2', label: 'Revisor documental' }
+        { value: 'ROLE_2', label: 'Revisor documental' },
+        { value: 'ROLE_3', label: 'Creador de solicitudes' }
     ]
 
     const guardaUsuarioAction = () => {
