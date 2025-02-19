@@ -56,11 +56,30 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                 )
             case 'VISTA_CONFIGURACION':
                 return (
-                    <Configuracion toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta}/>
+                    <Configuracion toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
                 )
             default:
                 return (
-                    <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                    <>
+                        <div className='div-dashboard-header-busqueda-padre'>
+                            <div className="div-dashboard-header-busqueda">
+                                <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                {
+                                    /*
+                                }
+                                    <input type="text" className='form-control form-imput-busqueda' placeholder='Buscador' autoComplete='off' />
+                                    <div className="div-cantidad-carrito"></div>
+                                {
+                                    */
+                                }
+                            </div>
+                        </div>
+                        <div className="div-dashboard-content">
+                            {
+                                <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                            }
+                        </div>
+                    </>
                 )
         }
     }
@@ -73,18 +92,9 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                         <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
-                        <div className='div-dashboard-header-busqueda-padre'>
-                            <div className="div-dashboard-header-busqueda">
-                                <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
-                                <input type="text" className='form-control form-imput-busqueda' placeholder='Buscador' autoComplete='off' />
-                                <div className="div-cantidad-carrito"></div>
-                            </div>
-                        </div>
-                        <div className="div-dashboard-content">
-                            {
-                                validateRedirect()
-                            }
-                        </div>
+                        {
+                            validateRedirect()
+                        }
                     </div>
                 </div>
             </div>
