@@ -170,7 +170,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
-                        <p className='p-info-filtros'>Para reiniciar la busqueda, bastara con limpiar los filtros*</p>
+                        <p className='p-info-filtros'>Para reiniciar la búsqueda, bastará con limpiar los filtros*</p>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-bottom-custom'>
