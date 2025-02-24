@@ -49,6 +49,12 @@
     font-size: 20px;
 }
 
+.p-info-filtros{
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+}
+
 @media (min-width: 760px) {}
 
 @media (min-width: 1025px) {
