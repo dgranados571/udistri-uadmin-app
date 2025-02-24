@@ -37,27 +37,17 @@ const ZoneRole1: React.FC<IZoneRoleProps> = ({ infoMenuUsuario, toast, setCargan
             case 'VISTA_MI_CUENTA':
                 return (
                     <>MI CUENTA</>
-                )            
+                )
             default:
                 return (
                     <>
                         <div className='div-dashboard-header-busqueda-padre'>
                             <div className="div-dashboard-header-busqueda">
                                 <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
-                                {
-                                    /*
-                                }
-                                    <input type="text" className='form-control form-imput-busqueda' placeholder='Buscador' autoComplete='off' />
-                                    <div className="div-cantidad-carrito"></div>
-                                {
-                                    */
-                                }
                             </div>
                         </div>
                         <div className="div-dashboard-content">
-                            {
-                                <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
-                            }
+                            <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
                         </div>
                     </>
                 )

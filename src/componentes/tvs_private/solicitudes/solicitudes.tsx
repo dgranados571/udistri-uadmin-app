@@ -13,14 +13,10 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
             case 'LISTA_SOLICITUDES':
                 return (
                     <>
-                        <div className='div-style-form'>
-                            <h4>Solicitudes de aplicación</h4>
                             <ListaSolicitudes toast={toast} setCargando={setCargando}
                                 setRedirectSolicitudes={setRedirectSolicitudes}
                                 setIdDetalleSolicitud={setIdDetalleSolicitud}
                                 zonaConsulta={zonaConsulta} />
-                        </div>
-
                     </>
                 )
             case 'DETALLE_SOLICITUD':

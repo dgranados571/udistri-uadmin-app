@@ -17,10 +17,30 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
         descripcion: '',
     })
 
+    const eventosList = [
+        { value: 'INITIAL', label: 'Seleccione' },
+        { value: 'CREA_SOLICITUD', label: 'Solicitud creada' },
+        { value: 'EVENTO_PREAPROBADO', label: 'Preaprobado' },
+        { value: 'EVENTO_NO_PREAPROBADO', label: 'No Preaprobado' },
+        { value: 'EVENTO_ESTUDIO_VIABILIDAD', label: 'Viabilidad de estudios técnicos' },
+        { value: 'EVENTO_VIABLE', label: 'Viable' },
+        { value: 'EVENTO_NO_VIABLE', label: 'No Viable' },
+        { value: 'EVENTO_DEVUELTO_GESTION', label: 'Devuelto a gestión' },
+        { value: 'EVENTO_DEVUELTO_INGENIERIA', label: 'Devuelto a Ingeniería' },
+        { value: 'EVENTO_ENVIADO_POSTULACION', label: 'Enviar a postulación' },
+        { value: 'EVENTO_OBTENCION_SUBSIDIO', label: 'Obtiene subsidio' }
+    ]
+
+    const [nombreFiltro, setNombreFiltro] = useState('')
+    const [nombreFiltroRef, setNombreFiltroRef] = useState(false)
+
+    const [eventoFiltro, setEventoFiltro] = useState('INITIAL')
+    const [eventoFiltroRef, setEventoFiltroRef] = useState(false)
+
     const [solicitudesList, setSolicitudesList] = useState<any[]>([])
 
     const [paginacionSolicitudes, setPaginacionSolicitudes] = useState(
-        { totalElementos: '', elementosPorPagina: '10', paginaActual: '1' }
+        { totalElementos: '', elementosPorPagina: '20', paginaActual: '1' }
     );
 
     const [idSolicitudEliminar, setIdSolicitudEliminar] = useState('')
@@ -80,6 +100,8 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                 "usuarioApp": usuarioLocalStorage.usuario,
                 "elementosPorPagina": paginacionSolicitudes.elementosPorPagina,
                 "paginaActual": paginacionSolicitudes.paginaActual,
+                "nombreFiltro": nombreFiltro,
+                "eventoFiltro": eventoFiltro
             }
             try {
                 const response: IGenericResponse = await authServices.requestPost(body, 8);
@@ -113,7 +135,41 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
 
     return (
         <>
-            <div className='mt-3'>
+            <div className="div-style-form">
+                <h4>Filtrar elementos:</h4>
+                <div className="row">
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <div className='div-form'>
+                            <p className='p-label-form'>Por evento: </p>
+                            <select value={eventoFiltro} onChange={(e) => setEventoFiltro(e.target.value)} className={eventoFiltroRef ? 'form-control form-control-error' : 'form-control'} >
+                                {
+                                    eventosList.map((key, i) => {
+                                        return (
+                                            <option key={i} value={key.value}>{key.label}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <div className='div-form'>
+                            <p className='p-label-form'>Por No. identificación </p>
+                            <input value={nombreFiltro} onChange={(e) => setNombreFiltro(e.target.value)} type="text" className={nombreFiltroRef ? 'form-control form-control-error' : 'form-control'} placeholder='' autoComplete='off' />
+                        </div>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <p className=''>Para reiniciar la busqueda, bastara con limpiar los filtros*</p>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <div className='div-bottom-custom'>
+                            <button className='btn btn-primary bottom-custom' onClick={() => consultaInformacionSolicitudesApp()} >Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className='div-style-form mt-3'>
+                <h4>Solicitudes de aplicación</h4>
                 {
                     solicitudesList.length > 0 ?
                         <>
@@ -159,7 +215,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                             <div className='d-flex'>
                                                                 <button className='btn btn-link bottom-custom-link' onClick={() => detalleSolicitud(solicitud.solicitud.id_procesamiento)}>
                                                                     <FontAwesomeIcon className='icons-table-ds' icon={faEye} /><p className='margin-icons'>Ver</p>
-                                                                </button>                                                                
+                                                                </button>
                                                                 {
                                                                     showBotomElimina ?
                                                                         <button className='btn btn-link' onClick={() => eliminarSolicitud(solicitud.solicitud.id_procesamiento)}>
@@ -188,6 +244,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                         :
                         <p className=''>No hay información</p>
                 }
+
             </div>
             {
                 modalOpen ?
