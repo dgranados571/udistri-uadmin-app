@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Paginador } from '../../tvs/paginacion/paginador';
 import Modal from '../../tvs/modal/modal';
-import { IGenericResponse, IListaSolicitudesProps, IlPropsModal } from '../../../models/IProps';
+import { IGenericResponse, IListaSolicitudesProps, IListasSelect, IlPropsModal } from '../../../models/IProps';
 import { AuthServices } from '../../services/authServices';
 
 const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando, setRedirectSolicitudes, setIdDetalleSolicitud, zonaConsulta }) => {
@@ -32,10 +32,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
     ]
 
     const [nombreFiltro, setNombreFiltro] = useState('')
-    const [nombreFiltroRef, setNombreFiltroRef] = useState(false)
-
     const [eventoFiltro, setEventoFiltro] = useState('INITIAL')
-    const [eventoFiltroRef, setEventoFiltroRef] = useState(false)
 
     const [solicitudesList, setSolicitudesList] = useState<any[]>([])
 
@@ -45,10 +42,17 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
 
     const [idSolicitudEliminar, setIdSolicitudEliminar] = useState('')
 
+    const [departamentosList, setDepartamentosList] = useState<IListasSelect[]>([]);
+    const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
+
+    const [departamento, setDepartamento] = useState('INITIAL');
+    const [municipio, setMunicipio] = useState('INITIAL');
+
     useEffect(() => {
         if (rolesPermitenEliminar.includes(zonaConsulta)) {
             setShowBotomElimina(true)
         }
+        obtieneDepartamentoService()
         consultaInformacionSolicitudesApp();
     }, [paginacionSolicitudes.paginaActual])
 
@@ -100,8 +104,10 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                 "usuarioApp": usuarioLocalStorage.usuario,
                 "elementosPorPagina": paginacionSolicitudes.elementosPorPagina,
                 "paginaActual": paginacionSolicitudes.paginaActual,
-                "nombreFiltro": nombreFiltro,
-                "eventoFiltro": eventoFiltro
+                "eventoFiltro": eventoFiltro,
+                "nombreFiltro": nombreFiltro.trim(),
+                "departamentoFiltro": departamento,
+                "municipioFiltro": municipio
             }
             try {
                 const response: IGenericResponse = await authServices.requestPost(body, 8);
@@ -144,6 +150,75 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
         }
     }
 
+    const obtieneMunicipioAction = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setMunicipio('INITIAL')
+        const idDepartamento = e.target.value
+        setDepartamento(idDepartamento)
+        obtieneMunicipioService(idDepartamento)
+    }
+
+    const obtieneMunicipioService = async (idDepartamento: string) => {
+        setCargando(true);
+        const body = {
+            "idDepartamento": idDepartamento,
+        }
+        const authServices = new AuthServices();
+        try {
+            const response: IGenericResponse = await authServices.requestPost(body, 25);
+            if (response.estado) {
+                const arrayMunicipios = Array.from(response.objeto);
+                const municipiosList = arrayMunicipios.map((element: any) => {
+                    return {
+                        value: element.id_municipio,
+                        label: element.municipio
+                    }
+                })
+                setMunicipiosList(municipiosList)
+            } else {
+                toast(response.mensaje)
+            }
+            setCargando(false);
+        } catch (error) {
+            toast('No es posible consultar la información, contacte al administrador')
+            setCargando(false)
+        }
+    }
+
+    const obtieneDepartamentoService = async () => {
+        setCargando(true);
+        const authServices = new AuthServices();
+        try {
+            const response: IGenericResponse = await authServices.requestPost({}, 15);
+            if (response.estado) {
+                const arrayDepartamentos = Array.from(response.objeto);
+                const departamentosList = arrayDepartamentos.map((element: any) => {
+                    return {
+                        value: element.id_departamento,
+                        label: element.departamento
+                    }
+                })
+                setDepartamentosList(departamentosList)
+            } else {
+                toast(response.mensaje)
+            }
+            setCargando(false);
+        } catch (error) {
+            toast('No es posible consultar la información, contacte al administrador')
+            setCargando(false)
+        }
+    }
+
+    const limpiarFiltros = () => {
+        setEventoFiltro('INITIAL')
+        setNombreFiltro('')
+        setDepartamento('INITIAL')
+        setMunicipio('INITIAL')
+        setPaginacionSolicitudes({
+            ...paginacionSolicitudes,
+            paginaActual: '0',
+        })
+    }
+
     return (
         <>
             <div className="div-style-form">
@@ -152,7 +227,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'>Por evento: </p>
-                            <select value={eventoFiltro} onChange={(e) => setEventoFiltro(e.target.value)} className={eventoFiltroRef ? 'form-control form-control-error' : 'form-control'} >
+                            <select value={eventoFiltro} onChange={(e) => setEventoFiltro(e.target.value)} className='form-control' >
                                 {
                                     eventosList.map((key, i) => {
                                         return (
@@ -166,7 +241,37 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'>Por No. identificación </p>
-                            <input value={nombreFiltro} onChange={(e) => setNombreFiltro(e.target.value)} type="text" className={nombreFiltroRef ? 'form-control form-control-error' : 'form-control'} placeholder='' autoComplete='off' />
+                            <input value={nombreFiltro} onChange={(e) => setNombreFiltro(e.target.value)} type="text" className='form-control' placeholder='' autoComplete='off' />
+                        </div>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <div className='div-form'>
+                            <p className='p-label-form'>Por Departamento: </p>
+                            <select value={departamento} onChange={(e) => obtieneMunicipioAction(e)} className='form-control' >
+                                <option value='INITIAL'>Seleccione</option>
+                                {
+                                    departamentosList.map((key, i) => {
+                                        return (
+                                            <option key={i} value={key.value}>{key.label.toUpperCase()}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <div className='div-form'>
+                            <p className='p-label-form'>Por Municipio: </p>
+                            <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className='form-control' >
+                                <option value='INITIAL'>Seleccione</option>
+                                {
+                                    municipiosList.map((key, i) => {
+                                        return (
+                                            <option key={i} value={key.value}>{key.label.toUpperCase()}</option>
+                                        )
+                                    })
+                                }
+                            </select>
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
@@ -174,6 +279,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-bottom-custom'>
+                            <button className='btn btn-secondary bottom-custom-secondary' onClick={() => limpiarFiltros()} >Limpiar búsqueda</button>
                             <button className='btn btn-primary bottom-custom' onClick={() => ejecutaFiltros()} >Buscar</button>
                         </div>
                     </div>
