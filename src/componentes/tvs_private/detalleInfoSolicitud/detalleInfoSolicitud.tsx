@@ -5,14 +5,32 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
 const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({ idDetalleSolicitud, solicitud, setEditaDetalleSolicitud, zonaConsulta }) => {
 
-    const rolesPermitenEditar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
     const [showBotomEdita, setShowBotomEdita] = useState(false);
 
     useEffect(() => {
-        if (rolesPermitenEditar.includes(zonaConsulta)) {
-            setShowBotomEdita(true)
-        }
+        seteaControlDeAccionesFormulario()
     }, [])
+
+    const seteaControlDeAccionesFormulario = () => {
+        switch (zonaConsulta) {
+            case 'USUARIO_ROOT':
+                setShowBotomEdita(true)    
+                break;
+            case 'USUARIO_ROLE_ADMIN':
+                setShowBotomEdita(true)
+                break;
+            case 'USUARIO_ROLE_1':
+                setShowBotomEdita(true)
+                break;
+            case 'USUARIO_ROLE_2':
+                break;
+            case 'USUARIO_ROLE_3':
+                setShowBotomEdita(true)
+                break;
+            default:
+                break;
+        }
+    }
 
     return (
         <div className="row">

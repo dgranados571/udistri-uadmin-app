@@ -13,12 +13,13 @@ import Modal from '../../tvs/modal/modal'
 
 const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta }) => {
 
-  const rolesPermitenEditar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN', 'USUARIO_ROLE_1']
   const [showBotomEditaDocumentosFase1, setShowBotomEditaDocumentosFase1] = useState(false);
-  const [showBotomEditaDocumentos, setShowBotomEditaDocumentos] = useState(false);
+  const [showBotomEditaDocumentosFase2, setShowBotomEditaDocumentosFase2] = useState(false);
+  const [showBotomEditaDocumentosFase3, setShowBotomEditaDocumentosFase3] = useState(false);
+  const [showBotomEditaDocumentosAnexos, setShowBotomEditaDocumentosAnexos] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false)
-   const [tipoModal, setTipoModal] = useState('')
+  const [tipoModal, setTipoModal] = useState('')
   const [propsModal, setPropsModal] = useState<IlPropsModal>({
     titulo: '',
     descripcion: '',
@@ -93,17 +94,42 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
   const formDetalleInfoSolicitudRef = useRef<FormDetalleInfoSolicitudHandle>(null);
 
   useEffect(() => {
-    if (rolesPermitenEditar.includes(zonaConsulta)) {
-      setShowBotomEditaDocumentos(true)
-      setShowBotomEditaDocumentosFase1(true)
-    }
-    if(zonaConsulta === 'USUARIO_ROLE_3'){
-      setShowBotomEditaDocumentosFase1(true)
-    }
+    seteaControlDeAccionesFormulario()
     if (!editaDetalleSolicitud) {
       consultaDetalleSolicitud();
     }
   }, [editaDetalleSolicitud])
+
+  const seteaControlDeAccionesFormulario = () => {
+    switch (zonaConsulta) {
+      case 'USUARIO_ROOT':
+        setShowBotomEditaDocumentosFase1(true)
+        setShowBotomEditaDocumentosFase2(true)
+        setShowBotomEditaDocumentosFase3(true)
+        setShowBotomEditaDocumentosAnexos(true)
+        break;
+      case 'USUARIO_ROLE_ADMIN':
+        setShowBotomEditaDocumentosFase1(true)
+        setShowBotomEditaDocumentosFase2(true)
+        setShowBotomEditaDocumentosFase3(true)
+        setShowBotomEditaDocumentosAnexos(true)
+        break;
+      case 'USUARIO_ROLE_1':
+        setShowBotomEditaDocumentosFase1(true)
+        setShowBotomEditaDocumentosFase2(true)
+        setShowBotomEditaDocumentosFase3(true)
+        setShowBotomEditaDocumentosAnexos(true)
+        break;
+      case 'USUARIO_ROLE_2':
+
+        break;
+      case 'USUARIO_ROLE_3':
+        setShowBotomEditaDocumentosFase1(true)
+        break;
+      default:
+        break;
+    }
+  }
 
   const consultaDetalleSolicitud = async () => {
     const usuarioSession = sessionStorage.getItem('usuarioApp');
@@ -636,7 +662,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       <div className="div-info-beneficiarios">
         <p className='p-label-menu-configura my-2'>Documentos Fase 2:</p>
         {
-          showBotomEditaDocumentos ?
+          showBotomEditaDocumentosFase2 ?
             <div className={activaEdicionDocumentosF2 ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVista2EditaDocumentos()} >
               <div className={activaEdicionDocumentosF2 ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
             </div>
@@ -694,7 +720,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       <div className="div-info-beneficiarios">
         <p className='p-label-menu-configura my-2'>Documentos Fase 3:</p>
         {
-          showBotomEditaDocumentos ?
+          showBotomEditaDocumentosFase3 ?
             <div className={activaEdicionDocumentosF3 ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVista3EditaDocumentos()} >
               <div className={activaEdicionDocumentosF3 ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
             </div>
@@ -752,7 +778,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       <div className="div-info-beneficiarios">
         <p className='p-label-menu-configura my-2'>Documentos Anexos:</p>
         {
-          showBotomEditaDocumentos ?
+          showBotomEditaDocumentosAnexos ?
             <div className={activaEdicionDocumentosAnexos ? "div-slide-padre-active" : "div-slide-padre"} onClick={() => activaVistaAnexosEditaDocumentos()} >
               <div className={activaEdicionDocumentosAnexos ? "div-slide-hijo-active" : "div-slide-hijo"}></div>
             </div>
@@ -895,7 +921,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
       </div>
       {
         modalOpen ?
-          <Modal tipoModal= {tipoModal} modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
+          <Modal tipoModal={tipoModal} modalSi={modalSi} modalNo={modalNo} propsModal={propsModal} />
           :
           <></>
       }

@@ -23,9 +23,7 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
     const fileBeneficiarioInputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
-        if (rolesPermitenEditar.includes(zonaConsulta)) {
-            setShowBotomActivaBeneficiarios(true)
-        }
+        seteaControlDeAccionesFormulario()
         if (!activaBeneficiarios) {
             resetFormBeneficiarioAction()
             if (zonaConsulta === 'ZONA_PUBLICA') {
@@ -33,6 +31,30 @@ const Beneficiarios: React.FC<IBeneficiariosProps> = ({ idProcesamiento, toast, 
             }
         }
     }, [activaBeneficiarios])
+
+    const seteaControlDeAccionesFormulario = () => {
+        switch (zonaConsulta) {
+            case 'ZONA_PUBLICA':
+                setShowBotomActivaBeneficiarios(true)
+                break;
+            case 'USUARIO_ROOT':
+                setShowBotomActivaBeneficiarios(true)
+                break;
+            case 'USUARIO_ROLE_ADMIN':
+                setShowBotomActivaBeneficiarios(true)
+                break;
+            case 'USUARIO_ROLE_1':
+                setShowBotomActivaBeneficiarios(true)
+                break;
+            case 'USUARIO_ROLE_2':
+                break;
+            case 'USUARIO_ROLE_3':
+                setShowBotomActivaBeneficiarios(true)
+                break;
+            default:
+                break;
+        }
+    }
 
     const resetFormBeneficiarioAction = () => {
         setNombresBeneficiario('')
