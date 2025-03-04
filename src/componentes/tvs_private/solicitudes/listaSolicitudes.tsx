@@ -217,6 +217,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
             ...paginacionSolicitudes,
             paginaActual: '0',
         })
+        setMunicipiosList([])
     }
 
     return (
