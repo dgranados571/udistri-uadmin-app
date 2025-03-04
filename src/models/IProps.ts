@@ -95,7 +95,8 @@ export interface IDetalleInfoSolicitudProps {
     idDetalleSolicitud: string;
     solicitud: any;
     setEditaDetalleSolicitud: React.Dispatch<React.SetStateAction<boolean>>;
-    zonaConsulta: string
+    zonaConsulta: string;
+    departamentoMunicipioLabel: string
 }
 
 export interface IConfiguracionProps {

@@ -55,6 +55,14 @@
     height: 100%;
 }
 
+.p-info-elementos-paginador{
+    display: flex;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: flex-end;
+    font-weight: bold;
+}
+
 @media (min-width: 760px) {}
 
 @media (min-width: 1025px) {

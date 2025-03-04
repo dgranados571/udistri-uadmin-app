@@ -3,7 +3,7 @@ import { IDetalleInfoSolicitudProps } from '../../../models/IProps'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
-const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({ idDetalleSolicitud, solicitud, setEditaDetalleSolicitud, zonaConsulta }) => {
+const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({ idDetalleSolicitud, solicitud, setEditaDetalleSolicitud, zonaConsulta, departamentoMunicipioLabel }) => {
 
     const [showBotomEdita, setShowBotomEdita] = useState(false);
 
@@ -14,7 +14,7 @@ const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({ idDetalleS
     const seteaControlDeAccionesFormulario = () => {
         switch (zonaConsulta) {
             case 'USUARIO_ROOT':
-                setShowBotomEdita(true)    
+                setShowBotomEdita(true)
                 break;
             case 'USUARIO_ROLE_ADMIN':
                 setShowBotomEdita(true)
@@ -76,7 +76,12 @@ const DetalleInfoSolicitud: React.FC<IDetalleInfoSolicitudProps> = ({ idDetalleS
                     <p> {solicitud.matricula_inmobiliaria} </p>
                 </div>
             </div>
-            <div className="col-12 col-sm-12 col-md-12 col-lg-4" ></div>
+            <div className="col-12 col-sm-12 col-md-12 col-lg-4" >
+                <div className='div-form'>
+                    <p className='p-label-form'>Ubicación: </p>
+                    <p> {departamentoMunicipioLabel} </p>
+                </div>
+            </div>
             <div className="col-12 col-sm-12 col-md-12 col-lg-4" >
                 {
                     showBotomEdita ?

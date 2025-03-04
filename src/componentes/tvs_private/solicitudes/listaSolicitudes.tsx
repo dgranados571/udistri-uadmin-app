@@ -305,6 +305,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                 <p className='p-label-form'>Nombre</p>
                                             </td>
                                             <td className='td-info'>
+                                                <p className='p-label-form'>Ubicación</p>
+                                            </td>
+                                            <td className='td-info'>
                                                 <p className='p-label-form'>Estado</p>
                                             </td>
                                             <td className='td-info'>
@@ -325,6 +328,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                         </td>
                                                         <td className='td-info'>
                                                             <p className=''>{solicitud.solicitud.nombres} {solicitud.solicitud.apellidos}</p>
+                                                        </td>
+                                                        <td className='td-info'>
+                                                            <p className=''> {solicitud.solicitud.departamento_municipio} </p>
                                                         </td>
                                                         <td className='td-info'>
                                                             <p className=''> {solicitud.solicitud.estado} </p>
@@ -356,7 +362,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
                                     <Paginador elementsPaginacion={paginacionSolicitudes} setElementsPaginacion={setPaginacionSolicitudes} />
                                 </div>
-                                <div className="col-12 col-sm-12 col-md-12 col-lg-3" ></div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
+                                    <p className="p-info-elementos-paginador">Total elementos {paginacionSolicitudes.totalElementos} </p>
+                                </div>
                             </div>
                         </>
                         :

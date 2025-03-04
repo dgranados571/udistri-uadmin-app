@@ -587,7 +587,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
                 :
                 <DetalleInfoSolicitud idDetalleSolicitud={idDetalleSolicitud}
                   solicitud={detalleSolicitud.solicitud} setEditaDetalleSolicitud={setEditaDetalleSolicitud}
-                  zonaConsulta={zonaConsulta} />
+                  zonaConsulta={zonaConsulta} departamentoMunicipioLabel={detalleSolicitud.departamentoMunicipioLabel} />
             }
           </>
           :
@@ -900,8 +900,8 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
               eventosList.map((evento: any, key: number) => {
                 return (
                   <tr key={key} className='tr-tablet'>
-                    <td className='td-info'>
-                      <p className=''>{evento.fecha_evento}</p>
+                    <td className='td-info w-auto'>
+                      <p className='' style={{width: "100px"}}>{evento.fecha_evento}</p>
                     </td>
                     <td className='td-info'>
                       <p className=''>{evento.resultado_operacion}</p>
