@@ -31,8 +31,18 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
         { value: 'EVENTO_OBTENCION_SUBSIDIO', label: 'Obtiene subsidio' }
     ]
 
-    const [nombreFiltro, setNombreFiltro] = useState('')
+    const opcionDiasUltimaActualizacion = [
+        { value: 'INITIAL', label: 'Seleccione' },
+        { value: 'OPTION_1', label: 'Menor a 5 dias' },
+        { value: 'OPTION_2', label: 'Entre 5 y 15 dias' },
+        { value: 'OPTION_3', label: 'Mayor a 15 dias' },
+    ]
+    
     const [eventoFiltro, setEventoFiltro] = useState('INITIAL')
+    const [nombreFiltro, setNombreFiltro] = useState('')
+    const [departamentoFiltro, setDepartamentoFiltro] = useState('INITIAL');
+    const [municipioFiltro, setMunicipioFiltro] = useState('INITIAL');
+    const [diasUltimaActualizacionFiltro, setDiasUltimaActualizacionFiltro] = useState('INITIAL');
 
     const [solicitudesList, setSolicitudesList] = useState<any[]>([])
 
@@ -44,9 +54,6 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
 
     const [departamentosList, setDepartamentosList] = useState<IListasSelect[]>([]);
     const [municipiosList, setMunicipiosList] = useState<IListasSelect[]>([]);
-
-    const [departamento, setDepartamento] = useState('INITIAL');
-    const [municipio, setMunicipio] = useState('INITIAL');
 
     useEffect(() => {
         if (rolesPermitenEliminar.includes(zonaConsulta)) {
@@ -106,8 +113,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                 "paginaActual": paginacionSolicitudes.paginaActual,
                 "eventoFiltro": eventoFiltro,
                 "nombreFiltro": nombreFiltro.trim(),
-                "departamentoFiltro": departamento,
-                "municipioFiltro": municipio
+                "departamentoFiltro": departamentoFiltro,
+                "municipioFiltro": municipioFiltro,
+                "diasUltimaActualizacionFiltro": diasUltimaActualizacionFiltro
             }
             try {
                 const response: IGenericResponse = await authServices.requestPost(body, 8);
@@ -151,9 +159,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
     }
 
     const obtieneMunicipioAction = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setMunicipio('INITIAL')
+        setMunicipioFiltro('INITIAL')
         const idDepartamento = e.target.value
-        setDepartamento(idDepartamento)
+        setDepartamentoFiltro(idDepartamento)
         obtieneMunicipioService(idDepartamento)
     }
 
@@ -211,8 +219,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
     const limpiarFiltros = () => {
         setEventoFiltro('INITIAL')
         setNombreFiltro('')
-        setDepartamento('INITIAL')
-        setMunicipio('INITIAL')
+        setDepartamentoFiltro('INITIAL')
+        setMunicipioFiltro('INITIAL')
+        setDiasUltimaActualizacionFiltro('INITIAL')
         setPaginacionSolicitudes({
             ...paginacionSolicitudes,
             paginaActual: '0',
@@ -248,7 +257,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'>Por Departamento: </p>
-                            <select value={departamento} onChange={(e) => obtieneMunicipioAction(e)} className='form-control' >
+                            <select value={departamentoFiltro} onChange={(e) => obtieneMunicipioAction(e)} className='form-control' >
                                 <option value='INITIAL'>Seleccione</option>
                                 {
                                     departamentosList.map((key, i) => {
@@ -263,7 +272,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-form'>
                             <p className='p-label-form'>Por Municipio: </p>
-                            <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className='form-control' >
+                            <select value={municipioFiltro} onChange={(e) => setMunicipioFiltro(e.target.value)} className='form-control' >
                                 <option value='INITIAL'>Seleccione</option>
                                 {
                                     municipiosList.map((key, i) => {
@@ -275,6 +284,21 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                             </select>
                         </div>
                     </div>
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                        <div className='div-form'>
+                            <p className='p-label-form'>Por dias de última actualización: </p>
+                            <select value={diasUltimaActualizacionFiltro} onChange={(e) => setDiasUltimaActualizacionFiltro(e.target.value)} className='form-control' >
+                                {
+                                    opcionDiasUltimaActualizacion.map((key, i) => {
+                                        return (
+                                            <option key={i} value={key.value}>{key.label}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <p className='p-info-filtros'>Para reiniciar la búsqueda, bastará con limpiar los filtros*</p>
                     </div>
@@ -311,6 +335,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                 <p className='p-label-form'>Estado</p>
                                             </td>
                                             <td className='td-info'>
+                                                <p className='p-label-form'>Ultima actualización</p>
+                                            </td>
+                                            <td className='td-info'>
                                                 <p className='p-label-form'>Acciones</p>
                                             </td>
                                         </tr>
@@ -334,6 +361,9 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                                                         </td>
                                                         <td className='td-info'>
                                                             <p className=''> {solicitud.solicitud.estado} </p>
+                                                        </td>
+                                                        <td className='td-info'>
+                                                            <p className=''> {solicitud.diasUltimaActualizacion} </p>
                                                         </td>
                                                         <td className='td-info'>
                                                             <div className='d-flex'>

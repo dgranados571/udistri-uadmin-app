@@ -58,26 +58,71 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
         switch (redirect) {
             case 'VISTA_USUARIOS_APP':
                 return (
-                    <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                    <>
+                        <div className='div-container'>
+                            <div className="row">
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
+                                    <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
+                                    <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                                </div>
+                            </div>
+                        </div>
+                    </>
+
                 )
             case 'VISTA_MI_CUENTA':
                 return (
-                    <>MI CUENTA</>
+                    <>
+                        <div className='div-container'>
+                            <div className="row">
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
+                                    <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
+
+                                </div>
+                            </div>
+                        </div>
+                    </>
                 )
             case 'VISTA_CONFIGURACION':
                 return (
-                    <Configuracion toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                    <>
+                        <div className='div-container'>
+                            <div className="row">
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
+                                    <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
+                                    <Configuracion toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                                </div>
+                            </div>
+                        </div>
+                    </>
                 )
             default:
                 return (
                     <>
-                        <div className='div-dashboard-header-busqueda-padre'>
-                            <div className="div-dashboard-header-busqueda">
-                                <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                        <div className='div-container'>
+                            <div className="row">
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
+                                    <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
+                                    <div className='div-dashboard-header-busqueda-padre'>
+                                        <div className="div-dashboard-header-busqueda">
+                                            <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                                    <div className="div-dashboard-content">
+                                        <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="div-dashboard-content">
-                            <Solicitudes toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
                         </div>
                     </>
                 )
@@ -86,18 +131,9 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
 
     return (
         <>
-            <div className='div-container'>
-                <div className="row">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
-                        <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
-                    </div>
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
-                        {
-                            validateRedirect()
-                        }
-                    </div>
-                </div>
-            </div>
+            {
+                validateRedirect()
+            }
         </>
     )
 }
