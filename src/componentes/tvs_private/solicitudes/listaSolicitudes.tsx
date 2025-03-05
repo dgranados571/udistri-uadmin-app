@@ -304,7 +304,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
                     </div>
                     <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
                         <div className='div-bottom-custom'>
-                            <button className='btn btn-secondary bottom-custom-secondary' onClick={() => limpiarFiltros()} >Limpiar búsqueda</button>
+                            <button className='btn btn-secondary bottom-custom-secondary' onClick={() => limpiarFiltros()} >Limpiar filtros</button>
                             <button className='btn btn-primary bottom-custom' onClick={() => ejecutaFiltros()} >Buscar</button>
                         </div>
                     </div>
