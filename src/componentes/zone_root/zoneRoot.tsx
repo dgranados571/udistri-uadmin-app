@@ -65,7 +65,16 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
                                     <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
                                 </div>
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
-                                    <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                                    <div className='div-dashboard-header-busqueda-padre'>
+                                        <div className="div-dashboard-header-busqueda">
+                                            <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                                    <div className="div-dashboard-content">
+                                        <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +90,16 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
                                     <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
                                 </div>
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
-
+                                    <div className='div-dashboard-header-busqueda-padre'>
+                                        <div className="div-dashboard-header-busqueda">
+                                            <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                                    <div className="div-dashboard-content">
+                                        Modulo mi cuenta
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +114,16 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
                                     <MenuLateralComponent setOpenMenu={setOpenMenu} selecionaMenu={selecionaMenu} menuLateral={menuLateral} openMenu={openMenu} infoMenuUsuario={infoMenuUsuario} />
                                 </div>
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-9" >
-                                    <Configuracion toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                                    <div className='div-dashboard-header-busqueda-padre'>
+                                        <div className="div-dashboard-header-busqueda">
+                                            <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
+                                    <div className="div-dashboard-content">
+                                        <Configuracion toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +142,7 @@ const ZoneRoot: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargand
                                         <div className="div-dashboard-header-busqueda">
                                             <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-12" >
                                     <div className="div-dashboard-content">

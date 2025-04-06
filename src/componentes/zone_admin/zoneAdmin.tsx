@@ -52,11 +52,29 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
         switch (redirect) {
             case 'VISTA_USUARIOS_APP':
                 return (
-                    <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                    <>
+                        <div className='div-dashboard-header-busqueda-padre'>
+                            <div className="div-dashboard-header-busqueda">
+                                <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                            </div>
+                        </div>
+                        <div className="div-dashboard-content">
+                            <UsuariosApp toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                        </div>
+                    </>
                 )
             case 'VISTA_CONFIGURACION':
                 return (
-                    <Configuracion toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                    <>
+                        <div className='div-dashboard-header-busqueda-padre'>
+                            <div className="div-dashboard-header-busqueda">
+                                <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                            </div>
+                        </div>
+                        <div className="div-dashboard-content">
+                            <Configuracion toast={toast} setCargando={setCargando} zonaConsulta={zonaConsulta} />
+                        </div>
+                    </>
                 )
             default:
                 return (
