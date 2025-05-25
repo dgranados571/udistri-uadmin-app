@@ -11,7 +11,8 @@ import DetalleInfoSolicitud from '../detalleInfoSolicitud/detalleInfoSolicitud'
 import FormDetalleInfoSolicitud from '../formDetalleInfoSolicitud/formDetalleInfoSolicitud'
 import Modal from '../../tvs/modal/modal'
 
-const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta }) => {
+const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando, setRedirectSolicitudes, idDetalleSolicitud, zonaConsulta,
+  setExecuteConsultaSolicitudes, executeConsultaSolicitudes }) => {
 
   const [showBotomEditaDocumentosFase1, setShowBotomEditaDocumentosFase1] = useState(false);
   const [showBotomEditaDocumentosFase2, setShowBotomEditaDocumentosFase2] = useState(false);
@@ -568,11 +569,16 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
 
   }
 
+  const volverListaSolicitudes = () => {
+    setExecuteConsultaSolicitudes(!executeConsultaSolicitudes)
+    setRedirectSolicitudes('LISTA_SOLICITUDES')
+  }
+
   return (
     <>
       <div className='div-titulo-ds'>
         <h4 className='titulo-form'>Detalle de la solicitud:</h4>
-        <button className='btn btn-link bottom-custom-link' onClick={() => setRedirectSolicitudes('LISTA_SOLICITUDES')}>
+        <button className='btn btn-link bottom-custom-link' onClick={() => volverListaSolicitudes()}>
           <FontAwesomeIcon className='icons-table-ds' icon={faRotateLeft} /><p className='margin-icons'>Volver</p>
         </button>
       </div>
@@ -835,7 +841,9 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
           zonaConsulta={zonaConsulta} />
       </div>
       <GestionSolicitud toast={toast} setCargando={setCargando} useSelect={detalleSolicitud.gestionSolicitud}
-        idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} />
+        idDetalleSolicitud={idDetalleSolicitud} setRedirectSolicitudes={setRedirectSolicitudes} 
+        setExecuteConsultaSolicitudes={setExecuteConsultaSolicitudes} executeConsultaSolicitudes={executeConsultaSolicitudes}
+        />
       <hr />
       <h4> Registro fotográfico: </h4>
       <p className='mb-1'>Cargue las imagenes de manera simultanea solo en formato JPEG o PNG: </p>
@@ -901,7 +909,7 @@ const DetalleSolicitud: React.FC<IDetalleSolicitudProps> = ({ toast, setCargando
                 return (
                   <tr key={key} className='tr-tablet'>
                     <td className='td-info w-auto'>
-                      <p className='' style={{width: "100px"}}>{evento.fecha_evento}</p>
+                      <p className='' style={{ width: "100px" }}>{evento.fecha_evento}</p>
                     </td>
                     <td className='td-info'>
                       <p className=''>{evento.resultado_operacion}</p>

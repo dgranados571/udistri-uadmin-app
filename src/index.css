@@ -24,7 +24,7 @@ p {
 
 .p-label-form {
   font-size: 15px;
-  color: #5C5C5C;
+  color: #1C1D25;
   font-weight: 500;
   margin-bottom: 5px;
   margin-top: 5px;
@@ -32,7 +32,7 @@ p {
 
 .p-label-form-text {
   font-size: 15px;
-  color: #5C5C5C;
+  color: #1C1D25;
   margin-bottom: 0px;
   margin-top: 0px;
 }
@@ -77,16 +77,16 @@ p {
 .bottom-custom:hover {
   width: 8rem;
   background-color: #E3E3E3;
-  color: #5C5C5C;
+  color: #1C1D25;
   border: 1px solid #E3E3E3;
   margin: 0rem 1rem;
 }
 
 .bottom-custom-secondary {
   width: 8rem;
-  background-color: #5C5C5C;
+  background-color: #1C1D25;
   color: white;
-  border: 1px solid #5C5C5C;
+  border: 1px solid #1C1D25;
   border-radius: 20px;
   padding: 5px 0px;
   margin: 0rem 1rem;
@@ -95,19 +95,19 @@ p {
 .bottom-custom-secondary:hover {
   width: 8rem;
   background-color: #E3E3E3;
-  color: #5C5C5C;
+  color: #1C1D25;
   border: 1px solid #E3E3E3;
   margin: 0rem 1rem;
 }
 
-.bottom-custom-link{
+.bottom-custom-link {
   color: blueviolet;
   font-weight: bolder;
   display: flex;
   align-items: center;
 }
 
-.bottom-custom-link:hover{
+.bottom-custom-link:hover {
   color: orange;
 }
 
@@ -236,17 +236,17 @@ p {
   margin: 0px 12px 0px 8px;
 }
 
-.div-style-form-whit-table{
+.div-style-form-whit-table {
   width: 100%;
   overflow: auto;
 }
 
-.table-info{
+.table-info {
   width: 100%;
-  min-width: 50rem;
+  min-width: 80rem;
 }
 
-.icons-table{
+.icons-table {
   color: blueviolet;
 }
 
@@ -273,23 +273,132 @@ p {
   margin-right: 1rem;
 }
 
+.div-targer-admin-padre {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.div-targer-admin {
+  width: 12rem;
+  height: 6rem;
+  background-color: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.div-targer-admin-sin-hover {
+  width: 12rem;
+  height: 6rem;
+  background-color: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.div-targer-admin:hover {
+  width: 12rem;
+  height: 6rem;
+  background-color: rgb(200, 192, 228);
+  border-radius: 12px;
+  box-shadow: 0px 2px 30px 18px rgba(245, 213, 213, 0.8);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+}
+
+.div-targer-admin:hover .p-menu-label {
+  color: orange;
+}
+
+.icon-menu-principal {
+  font-size: 2rem;
+  margin-top: 1rem;
+}
+
+.div-targer-action {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  background-color: #1c1d25;
+  width: 100%;
+  border-radius: 0px 0px 8px 8px;
+  padding: 5px 0;
+}
+
+.div-targer-sin-action {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  background-color: #1c1d25;
+  width: 100%;
+  border-radius: 0px 0px 8px 8px;
+  padding: 5px 0;
+}
+
+.p-menu-label {
+  color: white;
+}
+
+.p-menu-label-active {
+  color: orange;
+}
+
+.dasboard-label-header-menu {
+  font-size: 1.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
 
 @media (min-width: 760px) {
 
   .bottom-custom {
     width: 10rem;
   }
-  
+
   .bottom-custom:hover {
     width: 10rem;
   }
-  
+
   .bottom-custom-secondary {
     width: 10rem;
   }
-  
+
   .bottom-custom-secondary:hover {
     width: 10rem;
+  }
+
+  .div-targer-admin-padre {
+    display: flex;
+    justify-content: center;
+    margin-top: 0rem;
+  }
+
+  .div-targer-admin {
+    width: 14rem;
+    height: 8rem;
+  }
+
+  .div-targer-admin-sin-hover {
+    width: 14rem;
+    height: 8rem;
+  }
+
+  .div-targer-admin:hover {
+    width: 14rem;
+    height: 8rem;
+  }
+
+  .icon-menu-principal {
+    font-size: 4rem;
+    margin-top: 1.50rem;
   }
 
 }
@@ -332,6 +441,18 @@ p {
     padding: 5px;
     border-radius: 6px;
     margin-bottom: 1rem;
+  }
+
+  .table-info {
+    width: 100%;
+    min-width: 50rem;
+  }
+
+  .dasboard-label-header-menu {
+    display: none;
+    font-size: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 
 }

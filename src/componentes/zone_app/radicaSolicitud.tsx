@@ -247,45 +247,65 @@ const RadicaSolicitud: React.FC<IRadicaSolicitudProps> = ({ toast, setCargando }
     }
 
     const cargaDocumentos = async (idProcesamiento: string) => {
+        let formValidado = [];
         const uploadFile1 = file1.length > 0 ? true : false;
         if (uploadFile1) {
             const pathFinal1 = `OT_UADMIN/${idProcesamiento}/MODULO_1/${idProcesamiento}_1.txt`;
-            await cargaDocumentosService(file1, pathFinal1, 'DOCUMENTO', idProcesamiento)
+            const uploadSucces = await cargaDocumentosService(file1, pathFinal1, idProcesamiento)
+            if (!uploadSucces) {
+                formValidado.push('Error cargando Archivo DOCUMENTO');
+            }
         }
 
         const uploadFile2 = file2.length > 0 ? true : false;
         if (uploadFile2) {
             const pathFinal2 = `OT_UADMIN/${idProcesamiento}/MODULO_1/${idProcesamiento}_2.txt`;
-            await cargaDocumentosService(file2, pathFinal2, 'CERTIFICADO DE LIBERTAD', idProcesamiento)
+            const uploadSucces = await cargaDocumentosService(file2, pathFinal2, idProcesamiento)
+            if (!uploadSucces) {
+                formValidado.push('Error formulario CERTIFICADO DE LIBERTAD');
+            }
         }
 
         const uploadFile3 = file3.length > 0 ? true : false;
         if (uploadFile3) {
             const pathFinal3 = `OT_UADMIN/${idProcesamiento}/MODULO_1/${idProcesamiento}_3.txt`;
-            await cargaDocumentosService(file3, pathFinal3, 'IMPUESTO PREDIAL', idProcesamiento)
+            const uploadSucces = await cargaDocumentosService(file3, pathFinal3, idProcesamiento)
+            if (!uploadSucces) {
+                formValidado.push('Error formulario IMPUESTO PREDIAL');
+            }
         }
 
         for (let i = 0; i < beneficiariosList.length; i++) {
             if (beneficiariosList[i].documentoPdfBen.length > 0) {
                 const pathBeneficiarioX = `OT_UADMIN/${idProcesamiento}/MODULO_BEN/${idProcesamiento}_${i}.txt`;
-                await cargaDocumentosService(beneficiariosList[i].documentoPdfBen, pathBeneficiarioX, `DOCUMENTO beneficiario: ${beneficiariosList[i].nombresBen}`, idProcesamiento)
+                const uploadSucces = await cargaDocumentosService(beneficiariosList[i].documentoPdfBen, pathBeneficiarioX, idProcesamiento)
+                if (!uploadSucces) {
+                    formValidado.push(`Error formulario DOCUMENTO beneficiario: ${beneficiariosList[i].nombresBen}`);
+                }
             }
         }
+        if (formValidado.length === 0) {
+            toast(`Los archivos fueron cargados satisfactoriamente`)
+        } else {
+            formValidado.splice(0, formValidado.length)
+            toast(`Existieron algunos errores cargando los documnetos, porfavor contacte al administrador`)
+        }
+
     }
 
-    const cargaDocumentosService = async (fileBase64: string, fileName: string, idArchivo: string, idProcesamiento: string) => {
+    const cargaDocumentosService = async (fileBase64: string, fileName: string, idProcesamiento: string) => {
         const authServices = new AuthServices();
         try {
             const response: IGenericResponse = await authServices.requestPostFile(fileBase64, fileName);
             if (response.estado) {
-                toast(`El archivo: ${idArchivo}, fue cargado satisfactoriamente`)
-            } else {
-                toast(`No fue posible cargar el archivo: ${idArchivo}`)
+                return true
+            } else {                            
                 await controlRegistroBeneficiariosService(idProcesamiento, fileName)
+                return false
             }
-        } catch (error) {
-            toast(`No fue posible cargar el archivo: ${idArchivo}`)
+        } catch (error) {            
             await controlRegistroBeneficiariosService(idProcesamiento, fileName)
+            return false
         }
     }
 

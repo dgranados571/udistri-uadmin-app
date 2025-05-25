@@ -6,6 +6,8 @@ import { logoBase64 } from './imgLogo'
 import { IZoneProps } from '../../models/IProps';
 import Login from './login';
 import { useNavigate } from 'react-router-dom';
+import { faFolderOpen, faUser } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const LoginIndex: React.FC<IZoneProps> = () => {
 
@@ -23,10 +25,24 @@ const LoginIndex: React.FC<IZoneProps> = () => {
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-8" >
-                        <div className='div-menu-principal'>
-                            <button className='btn btn-link a-link-custom' onClick={() => navigate('/radica-solicitud')}  >Registrar solicitud</button>
-                            <button className='btn btn-link a-link-custom-active' >Gestionar solicitudes</button>
-                        </div>
+                        <div className="row m-0">
+                            <div className="col-6 col-sm-6 col-md-6 col-lg-6 div-targer-admin-padre" >
+                                <div className='div-targer-admin' onClick={() => navigate('/radica-solicitud')}>
+                                    <FontAwesomeIcon className='icon-menu-principal' icon={faFolderOpen} />
+                                    <div className='div-targer-action'>
+                                        <p className='p-menu-label'>Registrar solicitud</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6 col-sm-6 col-md-6 col-lg-6 div-targer-admin-padre" >
+                                <div className='div-targer-admin'>
+                                    <FontAwesomeIcon className='icon-menu-principal' icon={faUser} />
+                                    <div className='div-targer-action'>
+                                        <p className='p-menu-label-active' >Ingresar</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
                     </div>
                 </div>
                 <Login toast={toast} setCargando={setCargando} />

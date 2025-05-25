@@ -10,14 +10,14 @@
 .p-menu-principal-item {
     margin-left: 2rem;
     font-size: 19px;
-    color: #5C5C5C;
+    color: #1C1D25;;
     cursor: pointer;
 }
 
 .p-menu-principal-item-active {
     margin-left: 2rem;
     font-size: 19px;
-    color: #5C5C5C;
+    color: #1C1D25;;
     cursor: pointer;
     font-weight: bold;
 }

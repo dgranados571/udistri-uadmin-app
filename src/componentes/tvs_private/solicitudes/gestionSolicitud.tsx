@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { IGenericResponse, IGestionSolicitudProps } from '../../../models/IProps';
 import { AuthServices } from '../../services/authServices';
 
-const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando, useSelect, idDetalleSolicitud, setRedirectSolicitudes }) => {
+const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando, useSelect, idDetalleSolicitud, setRedirectSolicitudes,
+    setExecuteConsultaSolicitudes, executeConsultaSolicitudes
+ }) => {
 
     const [valueSelected, setValueSelected] = useState('INITIAL');
     const [valueSelectedRef, setValueSelectedRef] = useState(false);
@@ -18,30 +20,39 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
         { value: 'INITIAL', label: 'Seleccione' },
         { value: 'EVENTO_PREAPROBADO', label: 'Preaprobado' },
         { value: 'EVENTO_NO_PREAPROBADO', label: 'No Preaprobado' },
-        { value: 'EVENTO_DEVUELTO_GESTION', label: 'Devolución' }
+        { value: 'EVENTO_DEVUELTO_GESTION_CREADOR_SOLICITUD', label: 'Devolución a gestor - creador solicitud' }
     ]
 
     const list2 = [
         { value: 'INITIAL', label: 'Seleccione' },
-        { value: 'EVENTO_ESTUDIO_VIABILIDAD', label: 'Viabilidad de estudios técnicos' },
-        { value: 'EVENTO_DEVUELTO_GESTION', label: 'Devolución' }
+        { value: 'EVENTO_ESTUDIO_VIABILIDAD', label: 'Viable técnicamente' },
+        { value: 'EVENTO_DEVUELTO_GESTION', label: 'Devolución a gestor' },
+        { value: 'EVENTO_NO_APROBADO', label: 'No aprobado' }
     ]
 
     const list3 = [
         { value: 'INITIAL', label: 'Seleccione' },
-        { value: 'EVENTO_VIABLE', label: 'Viable' },
-        { value: 'EVENTO_NO_VIABLE', label: 'No Viable' },
-        { value: 'EVENTO_DEVUELTO_INGENIERIA', label: 'Devolución a Ingeniería' }
+        { value: 'EVENTO_FACTIBLE_ACTUALIZACION', label: 'Factible para actualización' },
+        { value: 'EVENTO_DEVUELTO_GESTION', label: 'Devolución a gestor' },
+        { value: 'EVENTO_NO_APROBADO', label: 'No aprobado' }
     ]
 
     const list4 = [
         { value: 'INITIAL', label: 'Seleccione' },
-        { value: 'EVENTO_ENVIADO_POSTULACION', label: 'Enviar a postulación' }]
+        { value: 'EVENTO_LICENCIAR', label: 'Licenciar' },
+        { value: 'EVENTO_NO_APROBADO', label: 'No aprobado' }
+    ]
 
     const list5 = [
         { value: 'INITIAL', label: 'Seleccione' },
-        { value: 'EVENTO_OBTENCION_SUBSIDIO', label: 'Obtiene subsidio' },
-        { value: 'EVENTO_DEVUELTO_INGENIERIA', label: 'Devolución a Ingeniería' }
+        { value: 'EVENTO_LICENCIA_SUBSIDIO', label: 'Licencia y subsidio' }
+    ]
+    
+    const list6 = [
+        { value: 'INITIAL', label: 'Seleccione' },
+        { value: 'EVENTO_VO_BO_SUBSIDIO', label: 'Vo-Bo Subsidio' },
+        { value: 'EVENTO_DEVUELTO_GESTION', label: 'Devolución a gestor' },
+        { value: 'EVENTO_NO_APROBADO', label: 'No aprobado' }
     ]
 
     const ejecutaEventoEstadoActon = () => {
@@ -74,6 +85,7 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
             }
             try {
                 const response: IGenericResponse = await authServices.requestPost(body, 18);
+                setExecuteConsultaSolicitudes(!executeConsultaSolicitudes)
                 if (response.estado) {
                     setRedirectSolicitudes('LISTA_SOLICITUDES')
                 }
@@ -267,6 +279,39 @@ const GestionSolicitud: React.FC<IGestionSolicitudProps> = ({ toast, setCargando
                                     <select value={valueSelected} onChange={(e) => setValueSelected(e.target.value)} className={valueSelectedRef ? 'form-control form-control-error' : 'form-control'} >
                                         {
                                             list5.map((key, i) => {
+                                                return (
+                                                    <option key={i} value={key.value}>{key.label}</option>
+                                                )
+                                            })
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" ></div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <p className='p-label-form'>Observaciones</p>
+                                <textarea className='form-control' value={observacion} onChange={(e) => setObservacion(e.target.value.toUpperCase())} autoComplete='off' />
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <div className='div-bottom-custom '>
+                                    <button className='btn btn-primary bottom-custom' onClick={() => ejecutaEventoEstadoActon()} >Enviar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
+            case 'MODULO_6':
+                return (
+                    <>
+                        <hr />
+                        <h4> Que puedo hacer con la solicitud? </h4>
+                        <div className="row">
+                            <div className="col-12 col-sm-12 col-md-6 col-lg-6" >
+                                <div className='div-form'>
+                                    <p className='mb-3'>Seleccione la tipificación de solución para la solicitud:</p>
+                                    <select value={valueSelected} onChange={(e) => setValueSelected(e.target.value)} className={valueSelectedRef ? 'form-control form-control-error' : 'form-control'} >
+                                        {
+                                            list6.map((key, i) => {
                                                 return (
                                                     <option key={i} value={key.value}>{key.label}</option>
                                                 )

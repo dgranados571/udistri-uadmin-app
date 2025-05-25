@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { logoBase64 } from './imgLogo'
 import { IZoneProps } from '../../models/IProps';
 import { useNavigate } from 'react-router-dom';
+import { faFolderOpen, faUser } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const RadicaSolitudIndex: React.FC<IZoneProps> = () => {
 
@@ -23,9 +25,23 @@ const RadicaSolitudIndex: React.FC<IZoneProps> = () => {
                         </div>
                     </div>
                     <div className="col-12 col-sm-12 col-md-12 col-lg-8" >
-                        <div className='div-menu-principal'>
-                            <button className='btn btn-link a-link-custom-active' >Registrar solicitud</button>
-                            <button className='btn btn-link a-link-custom' onClick={() => navigate('/login')} >Gestionar solicitudes</button>
+                        <div className="row m-0">
+                            <div className="col-6 col-sm-6 col-md-6 col-lg-6 div-targer-admin-padre" >
+                                <div className='div-targer-admin'>
+                                    <FontAwesomeIcon className='icon-menu-principal' icon={faFolderOpen} />
+                                    <div className='div-targer-action'>
+                                        <p className= 'p-menu-label-active'>Registrar solicitud</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6 col-sm-6 col-md-6 col-lg-6 div-targer-admin-padre" >
+                                <div className='div-targer-admin' onClick={() => { navigate('/login') }}>
+                                    <FontAwesomeIcon className='icon-menu-principal' icon={faUser} />
+                                    <div className='div-targer-action'>
+                                        <p className='p-menu-label' >Ingresar</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

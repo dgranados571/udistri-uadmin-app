@@ -115,6 +115,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
         setCorreo('')
         setTelefono('')
         setMatriculaInmobiliaria('')
+        setDepartamento('INITIAL')
         setMunicipio('INITIAL')
         setNombresRef(false)
         setApellidosRef(false)
@@ -122,6 +123,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
         setCorreoRef(false)
         setTelefonoRef(false)
         setMatriculaInmobiliariaRef(false)
+        setDepartamentoRef(false)
         setMunicipioRef(false)
     }
 

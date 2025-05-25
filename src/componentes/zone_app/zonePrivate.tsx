@@ -17,7 +17,8 @@ const ZonePrivate: React.FC<IZoneProps> = () => {
     const [infoMenuUsuario, setInfoMenuUsuario] = useState({
         usuario: '',
         nombre_completo: '',
-        id_procesamiento: ''
+        id_procesamiento: '',
+        role: ''
     })
 
     useEffect(() => {
@@ -25,10 +26,13 @@ const ZonePrivate: React.FC<IZoneProps> = () => {
         let usuarioLocalStorage = sessionStorage.getItem('usuarioApp');
         if (!!usuarioLocalStorage) {
             const usuarioLocalStorageObj = JSON.parse(usuarioLocalStorage)
+
+            
             setInfoMenuUsuario({
                 usuario: usuarioLocalStorageObj.usuario,
                 nombre_completo: usuarioLocalStorageObj.nombre + ' ' + usuarioLocalStorageObj.apellidos,
-                id_procesamiento: usuarioLocalStorageObj.id_procesamiento
+                id_procesamiento: usuarioLocalStorageObj.id_procesamiento,
+                role: usuarioLocalStorageObj.role
             })
             setRedirectZone(usuarioLocalStorageObj.role)
             setCargando(false);

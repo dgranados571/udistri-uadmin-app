@@ -56,6 +56,7 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                         <div className='div-dashboard-header-busqueda-padre'>
                             <div className="div-dashboard-header-busqueda">
                                 <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                <h4 className="dasboard-label-header-menu">Usuarios</h4>
                             </div>
                         </div>
                         <div className="div-dashboard-content">
@@ -69,6 +70,7 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                         <div className='div-dashboard-header-busqueda-padre'>
                             <div className="div-dashboard-header-busqueda">
                                 <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                <h4 className="dasboard-label-header-menu">Configuración</h4>
                             </div>
                         </div>
                         <div className="div-dashboard-content">
@@ -82,6 +84,7 @@ const ZoneAdmin: React.FC<IZoneRootProps> = ({ infoMenuUsuario, toast, setCargan
                         <div className='div-dashboard-header-busqueda-padre'>
                             <div className="div-dashboard-header-busqueda">
                                 <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                <h4 className="dasboard-label-header-menu">Gestión</h4>
                             </div>
                         </div>
                         <div className="div-dashboard-content">

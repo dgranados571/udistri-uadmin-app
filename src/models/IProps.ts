@@ -80,7 +80,11 @@ export interface IListaSolicitudesProps {
     setCargando: React.Dispatch<React.SetStateAction<boolean>>;
     setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
     setIdDetalleSolicitud: React.Dispatch<React.SetStateAction<string>>;
-    zonaConsulta: string
+    zonaConsulta: string;
+    solicitudesList: any[]
+
+    setExecuteConsultaSolicitudes: React.Dispatch<React.SetStateAction<boolean>>;
+    executeConsultaSolicitudes: boolean
 }
 
 export interface IDetalleSolicitudProps {
@@ -89,6 +93,9 @@ export interface IDetalleSolicitudProps {
     setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
     idDetalleSolicitud: string,
     zonaConsulta: string
+
+    setExecuteConsultaSolicitudes: React.Dispatch<React.SetStateAction<boolean>>;
+    executeConsultaSolicitudes: boolean
 }
 
 export interface IDetalleInfoSolicitudProps {
@@ -105,6 +112,28 @@ export interface IConfiguracionProps {
     zonaConsulta: string
 }
 
+export interface IFitrosSolicitudesProps {
+    toast: Function,
+    setCargando: React.Dispatch<React.SetStateAction<boolean>>;
+
+    setFaseFiltro: React.Dispatch<React.SetStateAction<string>>;
+    setEventoFiltro: React.Dispatch<React.SetStateAction<string>>;
+    setNombreFiltro: React.Dispatch<React.SetStateAction<string>>;
+    setDepartamentoFiltro: React.Dispatch<React.SetStateAction<string>>;
+    setMunicipioFiltro: React.Dispatch<React.SetStateAction<string>>;
+    setDiasUltimaActualizacionFiltro: React.Dispatch<React.SetStateAction<string>>;
+
+    faseFiltro: string;
+    eventoFiltro: string;
+    nombreFiltro: string;
+    departamentoFiltro: string;
+    municipioFiltro: string;
+    diasUltimaActualizacionFiltro: string;
+
+    setExecuteConsultaSolicitudes: React.Dispatch<React.SetStateAction<boolean>>;
+    executeConsultaSolicitudes: boolean
+}
+
 export interface IPaginadorProps {
     elementsPaginacion: any
     setElementsPaginacion: React.Dispatch<React.SetStateAction<any>>;
@@ -116,6 +145,10 @@ export interface IMenuLateralProps {
     menuLateral: IMenuLateral[],
     openMenu: boolean,
     infoMenuUsuario: IUsuarioSession
+}
+
+export interface IInstruccionFaseProps {
+    role: string,
 }
 
 export interface IModalProps {
@@ -152,6 +185,7 @@ export interface IUsuarioSession {
     usuario: string;
     nombre_completo: string;
     id_procesamiento: string
+    role: string
 }
 
 export interface IListasSelect {
@@ -187,6 +221,9 @@ export interface IGestionSolicitudProps {
     useSelect: string,
     idDetalleSolicitud: string
     setRedirectSolicitudes: React.Dispatch<React.SetStateAction<string>>;
+
+    setExecuteConsultaSolicitudes: React.Dispatch<React.SetStateAction<boolean>>;
+    executeConsultaSolicitudes: boolean
 }
 
 export interface IListNotificacionEmail {

@@ -4,14 +4,30 @@ import { faSignOut } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useNavigate } from 'react-router-dom'
 import { IMenuLateralProps } from '../../../models/IProps'
+import InstruccionFase from '../instrucionesFases/instruccionFase'
 
 const MenuLateralComponent: React.FC<IMenuLateralProps> = ({ setOpenMenu, selecionaMenu, menuLateral, openMenu, infoMenuUsuario }) => {
+
+    const rolesMap: Map<string, string> = new Map([
+        ['USUARIO_ROOT', 'Role Root'],
+        ['ROLE_ADMIN', 'Administrador de aplicación'],
+        ['ROLE_1', 'Gestor documental'],
+        ['ROLE_2', 'Revisor documental'],
+        ['ROLE_3', 'Creador de solicitudes']
+    ]);
 
     const navigate = useNavigate();
 
     const cerrarSesion = () => {
         sessionStorage.clear();
         navigate('/login');
+    }
+
+    const getLabelRole = () => {
+        const roleActive = rolesMap.get(infoMenuUsuario.role) || ''
+        return (
+            <p className='m-0'>{roleActive} </p>
+        )
     }
 
     return (
@@ -29,6 +45,11 @@ const MenuLateralComponent: React.FC<IMenuLateralProps> = ({ setOpenMenu, seleci
                         </div>
                         <div className='div-dashboard-info'>
                             <p className='m-0'>{infoMenuUsuario.usuario} </p>
+                        </div>
+                        <div className='div-dashboard-info'>
+                            {
+                                getLabelRole()
+                            }
                         </div>
                     </div>
                 </div>
@@ -50,6 +71,7 @@ const MenuLateralComponent: React.FC<IMenuLateralProps> = ({ setOpenMenu, seleci
                         </div>
                     </div>
                 </div>
+                <InstruccionFase role={infoMenuUsuario.role} />
             </div>
         </>
     )

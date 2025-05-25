@@ -44,6 +44,7 @@ const ZoneRole2: React.FC<IZoneRoleProps> = ({ infoMenuUsuario, toast, setCargan
                         <div className='div-dashboard-header-busqueda-padre'>
                             <div className="div-dashboard-header-busqueda">
                                 <FontAwesomeIcon icon={faBars} className='dasboard-icon-header-menu' onClick={() => setOpenMenu(true)} />
+                                <h4 className="dasboard-label-header-menu">Gestión</h4>
                             </div>
                         </div>
                         <div className="div-dashboard-content">
