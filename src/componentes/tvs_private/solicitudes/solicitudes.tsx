@@ -53,7 +53,7 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
                 setPaginacionSolicitudes({
                     ...paginacionSolicitudes,
                     totalElementos: response.objeto.totalElementos
-                })                
+                })
                 if (!response.estado) {
                     toast(response.mensaje)
                 }
@@ -80,15 +80,16 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
                                 diasUltimaActualizacionFiltro={diasUltimaActualizacionFiltro}
                                 setExecuteConsultaSolicitudes={setExecuteConsultaSolicitudes} executeConsultaSolicitudes={executeConsultaSolicitudes}
                             />
-                        </div>    
+                        </div>
                         <div className='div-style-form mt-3'>
                             <ListaSolicitudes toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} setIdDetalleSolicitud={setIdDetalleSolicitud}
-                                zonaConsulta={zonaConsulta} solicitudesList={solicitudesList} 
+                                zonaConsulta={zonaConsulta} solicitudesList={solicitudesList}
                                 setExecuteConsultaSolicitudes={setExecuteConsultaSolicitudes} executeConsultaSolicitudes={executeConsultaSolicitudes} />
                             <div className="row ">
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-3" ></div>
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
-                                    <Paginador elementsPaginacion={paginacionSolicitudes} setElementsPaginacion={setPaginacionSolicitudes} />
+                                    <Paginador elementsPaginacion={paginacionSolicitudes} setElementsPaginacion={setPaginacionSolicitudes}
+                                        setExecuteConsultaSolicitudes={setExecuteConsultaSolicitudes} executeConsultaSolicitudes={executeConsultaSolicitudes} />
                                 </div>
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
                                     <p className="p-info-elementos-paginador">Total elementos {paginacionSolicitudes.totalElementos} </p>
@@ -102,9 +103,9 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
                     <>
                         <div className='div-style-form'>
                             <DetalleSolicitud toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} idDetalleSolicitud={idDetalleSolicitud}
-                                zonaConsulta={zonaConsulta} 
+                                zonaConsulta={zonaConsulta}
                                 setExecuteConsultaSolicitudes={setExecuteConsultaSolicitudes} executeConsultaSolicitudes={executeConsultaSolicitudes}
-                                />
+                            />
                         </div>
                     </>
                 )

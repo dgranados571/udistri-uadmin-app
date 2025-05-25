@@ -2,26 +2,27 @@ import React, { useState } from 'react'
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './instruccionFase.css';
-import F1GD from '../../../img/F1GD.jpeg'
-import F2GD from '../../../img/F2GD.jpeg'
-import F3GD from '../../../img/F3GD.jpeg'
-import F4GD from '../../../img/F4GD.jpeg'
-import F5GD from '../../../img/F5GD.jpeg'
-import F6GD from '../../../img/F6GD.jpeg'
-
-import F1RD from '../../../img/F1RD.jpeg'
-import F2RD from '../../../img/F2RD.jpeg'
-import F3RD from '../../../img/F3RD.jpeg'
-import F4RD from '../../../img/F4RD.jpeg'
-import F5RD from '../../../img/F5RD.jpeg'
-import F6RD from '../../../img/F6RD.jpeg'
 import { IInstruccionFaseProps } from '../../../models/IProps';
 
 const InstruccionFase: React.FC<IInstruccionFaseProps> = ({ role }) => {
 
-    const imagesGD = [F1GD, F2GD, F3GD, F4GD, F5GD, F6GD];
-    const imagesRD = [F1RD, F2RD, F3RD, F4RD, F5RD, F6RD];
+    const imagesGD = [
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F1GD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F2GD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F3GD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F4GD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F5GD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F6GD.jpeg",
+    ];
 
+    const imagesRD = [
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F1RD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F2RD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F3RD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F4RD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F5RD.jpeg",
+        "https://appuadminbucket.s3.us-east-1.amazonaws.com/SOURCES_APP/IMAGE_FASES_APP/F6RD.jpeg",
+    ];
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const selectImage = (index: number) => {

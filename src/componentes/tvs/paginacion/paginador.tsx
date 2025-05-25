@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { IPaginacion, IPaginadorProps } from '../../../models/IProps'
 
-export const Paginador: React.FC<IPaginadorProps> = ({ elementsPaginacion, setElementsPaginacion }) => {
+export const Paginador: React.FC<IPaginadorProps> = ({ elementsPaginacion, setElementsPaginacion, setExecuteConsultaSolicitudes, executeConsultaSolicitudes }) => {
 
     const paginasBaseInfo = 10;
     const { totalElementos, elementosPorPagina, paginaActual } = elementsPaginacion
@@ -63,6 +63,7 @@ export const Paginador: React.FC<IPaginadorProps> = ({ elementsPaginacion, setEl
             ...elementsPaginacion,
             paginaActual: e.currentTarget.id
         })
+        setExecuteConsultaSolicitudes(!executeConsultaSolicitudes)
     }
 
     const avanzaPage = () => {
@@ -70,6 +71,7 @@ export const Paginador: React.FC<IPaginadorProps> = ({ elementsPaginacion, setEl
             ...elementsPaginacion,
             paginaActual: (paginaActual < paginacion.totalPaginas) ? parseInt(paginaActual, 10) + 1 : paginaActual
         })
+        setExecuteConsultaSolicitudes(!executeConsultaSolicitudes)
     }
 
     const regresaPage = () => {
@@ -77,6 +79,7 @@ export const Paginador: React.FC<IPaginadorProps> = ({ elementsPaginacion, setEl
             ...elementsPaginacion,
             paginaActual: (paginaActual > 1) ? parseInt(paginaActual, 10) - 1 : paginaActual
         })
+        setExecuteConsultaSolicitudes(!executeConsultaSolicitudes)
     }
 
     return (

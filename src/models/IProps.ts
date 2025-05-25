@@ -137,6 +137,9 @@ export interface IFitrosSolicitudesProps {
 export interface IPaginadorProps {
     elementsPaginacion: any
     setElementsPaginacion: React.Dispatch<React.SetStateAction<any>>;
+
+    setExecuteConsultaSolicitudes: React.Dispatch<React.SetStateAction<boolean>>;
+    executeConsultaSolicitudes: boolean
 }
 
 export interface IMenuLateralProps {
