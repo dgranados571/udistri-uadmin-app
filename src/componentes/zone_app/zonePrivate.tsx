@@ -3,14 +3,24 @@ import ZoneRoot from '../zone_root/zoneRoot'
 import { Cargando } from '../tvs/loader/cargando'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { IZoneProps } from '../../models/IProps';
+import { IlPropsModal, IZoneProps } from '../../models/IProps';
 import ZoneAdmin from '../zone_admin/zoneAdmin';
 import ZoneRole1 from '../zone_role_1/zoneRole1';
 import ZoneRole2 from '../zone_role_2/zoneRole2';
+import Modal from '../tvs/modal/modal';
+import { useNavigate } from 'react-router-dom';
 
 const ZonePrivate: React.FC<IZoneProps> = () => {
 
+    const navigate = useNavigate();
+
     const [cargando, setCargando] = useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
+    const [tipoModal, setTipoModal] = useState('')
+    const [propsModal, setPropsModal] = useState<IlPropsModal>({
+        titulo: '',
+        descripcion: '',
+    })
 
     const [redirectZone, setRedirectZone] = useState('')
 
@@ -26,8 +36,6 @@ const ZonePrivate: React.FC<IZoneProps> = () => {
         let usuarioLocalStorage = sessionStorage.getItem('usuarioApp');
         if (!!usuarioLocalStorage) {
             const usuarioLocalStorageObj = JSON.parse(usuarioLocalStorage)
-
-            
             setInfoMenuUsuario({
                 usuario: usuarioLocalStorageObj.usuario,
                 nombre_completo: usuarioLocalStorageObj.nombre + ' ' + usuarioLocalStorageObj.apellidos,
@@ -38,8 +46,19 @@ const ZonePrivate: React.FC<IZoneProps> = () => {
             setCargando(false);
         } else {
             setCargando(false);
+            setTipoModal('MODAL_CONTROL_1')
+            setPropsModal({
+                titulo: 'Sesión requerida',
+                descripcion: 'Para continuar, es necesario iniciar sesión nuevamente.'
+            })
+            setModalOpen(true)
         }
     }, [])
+
+    const cerrarSesion = () => {
+        sessionStorage.clear();
+        navigate('/login');
+    }
 
     const validateRedirect = () => {
         switch (redirectZone) {
@@ -75,6 +94,12 @@ const ZonePrivate: React.FC<IZoneProps> = () => {
             <ToastContainer autoClose={8000} hideProgressBar={true} />
             {
                 validateRedirect()
+            }
+            {
+                modalOpen ?
+                    <Modal tipoModal={tipoModal} modalSi={() => { }} modalNo={() => { cerrarSesion() }} propsModal={propsModal} />
+                    :
+                    <></>
             }
             {
                 cargando ?
