@@ -4,11 +4,18 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { IConfiguracionProps, IGenericResponse, IListasSelect, IlPropsModal } from '../../../models/IProps'
 import { AuthServices } from '../../services/authServices'
 import Modal from '../../tvs/modal/modal'
+import { Paginador } from '../../tvs/paginacion/paginador'
 
 const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando, zonaConsulta }) => {
 
     const rolesPermitenEliminar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN']
     const [showBotomElimina, setShowBotomElimina] = useState(false);
+
+    const [paginacionSolicitudes, setPaginacionSolicitudes] = useState(
+        { totalElementos: '', elementosPorPagina: '20', paginaActual: '1' }
+    );
+
+    const [executeConsultaSolicitudes, setExecuteConsultaSolicitudes] = useState(true)
 
     const [modalOpen, setModalOpen] = useState(false)
     const [propsModal, setPropsModal] = useState<IlPropsModal>({
@@ -41,7 +48,7 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando, zonaCon
         }
         obtieneDepartamentoService()
         obtieneMunicipioService()
-    }, [])
+    }, [executeConsultaSolicitudes])
 
     const guardarDepartamentoAction = () => {
         let formValidado = [];
@@ -131,9 +138,13 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando, zonaCon
         setCargando(true);
         const authServices = new AuthServices();
         try {
-            const response: IGenericResponse = await authServices.requestPost({}, 15);
+            const body = {
+                "elementosPorPagina": '0',
+                "paginaActual": '0',
+            }
+            const response: IGenericResponse = await authServices.requestPost(body, 15);
             if (response.estado) {
-                const arrayDepartamentos = Array.from(response.objeto);
+                const arrayDepartamentos = Array.from(response.objeto.departamentosApp);
                 const departamentosList = arrayDepartamentos.map((element: any) => {
                     return {
                         value: element.id_departamento,
@@ -177,9 +188,17 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando, zonaCon
         setCargando(true);
         const authServices = new AuthServices();
         try {
-            const response: IGenericResponse = await authServices.requestPost({}, 17);
+            const body = {
+                "elementosPorPagina": paginacionSolicitudes.elementosPorPagina,
+                "paginaActual": paginacionSolicitudes.paginaActual,
+            }
+            const response: IGenericResponse = await authServices.requestPost(body, 17);
             if (response.estado) {
-                setMunicipiosList(response.objeto)
+                setMunicipiosList(response.objeto.municipiosDtoList)
+                setPaginacionSolicitudes({
+                    ...paginacionSolicitudes,
+                    totalElementos: response.objeto.totalElementos
+                })
             } else {
                 toast(response.mensaje)
             }
@@ -206,7 +225,7 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando, zonaCon
     }
 
     const modalNo = () => {
-        setModalOpen(false)        
+        setModalOpen(false)
     }
 
     const eliminarMunicipioService = async () => {
@@ -339,6 +358,16 @@ const ConfigMod1: React.FC<IConfiguracionProps> = ({ toast, setCargando, zonaCon
                         }
                     </tbody>
                 </table>
+            </div>
+            <div className="row ">
+                <div className="col-12 col-sm-12 col-md-12 col-lg-3" ></div>
+                <div className="col-12 col-sm-12 col-md-12 col-lg-6" >
+                    <Paginador elementsPaginacion={paginacionSolicitudes} setElementsPaginacion={setPaginacionSolicitudes}
+                        setExecuteConsultaSolicitudes={setExecuteConsultaSolicitudes} executeConsultaSolicitudes={executeConsultaSolicitudes} />
+                </div>
+                <div className="col-12 col-sm-12 col-md-12 col-lg-3" >
+                    <p className="p-info-elementos-paginador">Total elementos {paginacionSolicitudes.totalElementos} </p>
+                </div>
             </div>
             {
                 modalOpen ?
