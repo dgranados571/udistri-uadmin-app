@@ -289,6 +289,10 @@ p {
   position: relative;
 }
 
+.border-div-targer-admin {
+  border: 1px solid rgb(200, 192, 228);
+}
+
 .div-targer-admin-sin-hover {
   width: 12rem;
   height: 6rem;
