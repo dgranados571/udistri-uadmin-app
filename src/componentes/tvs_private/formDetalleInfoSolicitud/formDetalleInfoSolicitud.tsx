@@ -146,7 +146,7 @@ const FormDetalleInfoSolicitud: React.ForwardRefRenderFunction<FormDetalleInfoSo
         try {
             const response: IGenericResponse = await authServices.requestPost({}, 15);
             if (response.estado) {
-                const arrayDepartamentos = Array.from(response.objeto);
+                const arrayDepartamentos = Array.from(response.objeto.departamentosApp);
                 const departamentosList = arrayDepartamentos.map((element: any) => {
                     return {
                         value: element.id_departamento,
