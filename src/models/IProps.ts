@@ -85,6 +85,8 @@ export interface IListaSolicitudesProps {
 
     setExecuteConsultaSolicitudes: React.Dispatch<React.SetStateAction<boolean>>;
     executeConsultaSolicitudes: boolean
+
+    descargarExcel: Function,
 }
 
 export interface IDetalleSolicitudProps {

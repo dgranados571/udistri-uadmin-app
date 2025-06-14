@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faTrash, faFileExcel } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../../tvs/modal/modal';
 import { IGenericResponse, IListaSolicitudesProps, IlPropsModal } from '../../../models/IProps';
 import { AuthServices } from '../../services/authServices';
 
 const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando, setRedirectSolicitudes, setIdDetalleSolicitud, zonaConsulta, solicitudesList,
-    setExecuteConsultaSolicitudes, executeConsultaSolicitudes
+    setExecuteConsultaSolicitudes, executeConsultaSolicitudes, descargarExcel
 }) => {
 
     const rolesPermitenEliminar = ['USUARIO_ROOT', 'USUARIO_ROLE_ADMIN']
@@ -76,7 +76,13 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
 
     return (
         <>
-            <h4>Solicitudes de aplicación</h4>
+            <div className="div-descarga-excel">
+                <h4>Solicitudes de aplicación</h4>
+                <button className='btn btn-link bottom-custom-link' onClick={() => descargarExcel()}>
+                    <FontAwesomeIcon className='icons-table-ds' icon={faFileExcel} /><p className='margin-icons'>Excel</p>
+                </button>
+            </div>
+
             {
                 solicitudesList.length > 0 ?
                     <>

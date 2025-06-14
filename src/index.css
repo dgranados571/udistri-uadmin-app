@@ -361,6 +361,11 @@ p {
   margin-right: 1rem;
 }
 
+.div-descarga-excel {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (min-width: 760px) {
 
   .bottom-custom {

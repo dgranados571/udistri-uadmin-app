@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import * as XLSX from "xlsx";
 import ListaSolicitudes from './listaSolicitudes'
 import DetalleSolicitud from './detalleSolicitud'
 import { IGenericResponse, ISolicitudesProps } from '../../../models/IProps'
@@ -67,6 +68,43 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
         }
     }
 
+    const descargarExcel = async () => {
+        const usuarioSession = sessionStorage.getItem('usuarioApp');
+        if (!!usuarioSession) {
+            setCargando(true)
+            const usuarioLocalStorage = JSON.parse(usuarioSession);
+            const authServices = new AuthServices();
+            const body = {
+                "usuarioApp": usuarioLocalStorage.usuario,
+                "elementosPorPagina": paginacionSolicitudes.elementosPorPagina,
+                "paginaActual": paginacionSolicitudes.paginaActual,
+                "faseFiltro": faseFiltro,
+                "eventoFiltro": eventoFiltro,
+                "nombreFiltro": nombreFiltro.trim(),
+                "departamentoFiltro": departamentoFiltro,
+                "municipioFiltro": municipioFiltro,
+                "diasUltimaActualizacionFiltro": diasUltimaActualizacionFiltro
+            }
+            try {
+                const response: IGenericResponse = await authServices.requestPost(body, 28);
+                if (response.estado) {
+                    const hoja = XLSX.utils.aoa_to_sheet(response.objeto);
+                    const libro = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(libro, hoja, "Solicitudes");
+                    XLSX.writeFile(libro, "datos.xlsx");
+                } else {
+                    toast(response.mensaje)
+                }
+                setCargando(false)
+            } catch (error) {
+                toast('No es posible consultar la información, contacte al administrador')
+                setCargando(false)
+            }
+        } else {
+            toast('No es posible consultar la información, contacte al administrador')
+        }
+    }
+
     const validateRedirectSolcitudes = () => {
         switch (redirectSolicitudes) {
             case 'LISTA_SOLICITUDES':
@@ -83,7 +121,7 @@ const Solicitudes: React.FC<ISolicitudesProps> = ({ toast, setCargando, zonaCons
                         </div>
                         <div className='div-style-form mt-3'>
                             <ListaSolicitudes toast={toast} setCargando={setCargando} setRedirectSolicitudes={setRedirectSolicitudes} setIdDetalleSolicitud={setIdDetalleSolicitud}
-                                zonaConsulta={zonaConsulta} solicitudesList={solicitudesList}
+                                zonaConsulta={zonaConsulta} solicitudesList={solicitudesList} descargarExcel={descargarExcel}
                                 setExecuteConsultaSolicitudes={setExecuteConsultaSolicitudes} executeConsultaSolicitudes={executeConsultaSolicitudes} />
                             <div className="row ">
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-3" ></div>
