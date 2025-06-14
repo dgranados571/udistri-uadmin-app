@@ -10,6 +10,17 @@
     color: blueviolet;
 }
 
+.icons-excel {
+    margin: 0px 0px 0px 8px;
+    color: green;
+    font-size: 20px;
+}
+
+.icons-label-excel {
+    margin: 0px 0px 0px 5px;
+    color: green;
+}
+
 .icons-table-ds:hover {
     color: orange;
     margin: 0px 0px 0px 8px;

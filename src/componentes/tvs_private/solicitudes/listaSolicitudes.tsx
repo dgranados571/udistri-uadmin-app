@@ -79,7 +79,7 @@ const ListaSolicitudes: React.FC<IListaSolicitudesProps> = ({ toast, setCargando
             <div className="div-descarga-excel">
                 <h4>Solicitudes de aplicación</h4>
                 <button className='btn btn-link bottom-custom-link' onClick={() => descargarExcel()}>
-                    <FontAwesomeIcon className='icons-table-ds' icon={faFileExcel} /><p className='margin-icons'>Excel</p>
+                    <FontAwesomeIcon className='icons-excel' icon={faFileExcel} /><p className='icons-label-excel '>Excel</p>
                 </button>
             </div>
 
